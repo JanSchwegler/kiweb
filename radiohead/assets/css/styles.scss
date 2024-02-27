@@ -1,0 +1,21 @@
+// Colors
+
+// Reset
+* {box-sizing: border-box;}
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, img, form, label, article, aside, figure, figcaption, footer, header, nav, section {
+	margin: 0;
+	padding: 0;
+	border: none;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+article, figcaption, figure, footer, header, nav, section {
+	display: block;
+}
+
+// Font
+h1, h2, h3, h4, h5, h6, p, a, label {
+	font-family: "Roboto", sans-serif;
+}
+
