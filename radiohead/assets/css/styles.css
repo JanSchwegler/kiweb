@@ -1,0 +1,34 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, img, form, label, article, aside, figure, figcaption, footer, header, nav, section {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article, figcaption, figure, footer, header, nav, section {
+  display: block;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, label {
+  font-family: "Roboto", sans-serif;
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 21.7vw;
+  position: absolute;
+  bottom: -6vw;
+  left: -2vw;
+}
+
+body {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}/*# sourceMappingURL=styles.css.map */
