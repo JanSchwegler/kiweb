@@ -17,18 +17,46 @@ article, figcaption, figure, footer, header, nav, section {
 
 h1, h2, h3, h4, h5, h6, p, a, label {
   font-family: "Roboto", sans-serif;
+  font-weight: 600;
 }
 
 h1 {
-  font-weight: 600;
-  font-size: 21.7vw;
-  position: absolute;
-  bottom: -6vw;
-  left: -2vw;
+  font-size: 23.1vw;
 }
 
 body {
   height: 100vh;
   width: 100%;
   overflow: hidden;
-}/*# sourceMappingURL=styles.css.map */
+  position: relative;
+  background-color: #dfe1d6;
+}
+
+main {
+  padding-top: 20px;
+  position: absolute;
+  bottom: -6vw;
+  left: -2vw;
+}
+
+main h1 {
+  font-weight: 600;
+  font-size: 23.1vw;
+  color: #b80a13;
+}
+
+main div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 23vw 0 5vw;
+  margin-bottom: -10px;
+}
+
+main div p {
+  font-size: 1.2rem;
+}
+
+#barsAnimate div {
+  background-color: #000;
+}

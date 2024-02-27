@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .container > div {
+    background-color: black;
+    margin-bottom: 50px;
+    flex-grow: 1;
+  }
+  
+  /* Beispielhöhe für die Divs zwischen 100 und 200 Pixel */
+  .container > div {
+    min-height: calc(100px + (100px * var(--factor)));
+  }
