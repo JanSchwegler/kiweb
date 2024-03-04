@@ -23,6 +23,7 @@ function createBars() {
         barContainer.appendChild(div);
     }
 
+    // Diesr Teil in das obere Array schieben?
     Array.from(barContainer.getElementsByTagName('div')).forEach(div => {
         div.style.height = barAdaptHeight + 'px';
         div.style.marginBottom = barSpaceing + 'px';
@@ -33,8 +34,8 @@ function createBars() {
 
 // Call Functions
 createBars();
-console.log(window.innerHeight - document.getElementsByTagName("main")[0].clientHeight);
-console.log(document.getElementsByTagName("main")[0].clientHeight);
+//console.log(window.innerHeight - document.getElementsByTagName("main")[0].clientHeight);
+//console.log(document.getElementsByTagName("main")[0].clientHeight);
 
 // Window Resize
 window.addEventListener('resize', function() {
