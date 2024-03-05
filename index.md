@@ -34,17 +34,17 @@ Für den Aufbau in HTML habe ich den Inhalt in zwei Teile unterteilt. Den Bereic
 Neben den genannten Positionierungen habe ich in CSS ebenfalls die Schriftfamilie, Schriftschnitt, Schriftfarbe, Hintergrundfarben und Browserrests definiert.
 
 ## Adaptive generierung der Balken mit JavaScript
-Ich wollte, dass die schwarzen Balken den gesamten freien Bereien über dem Textblock veralufen. Alle Balken sollten ca. so Breit wie auf dem Plakat sein und wenn möglich dessen Breite auch nicht verändern. Da der Obere Bereich, je nach Fenstergrösse unterschiedlich hoch ist, bedeutet das, dass sich die Anzahl der Balken verändern muss, solange wie Höhe dieser und dessen Abstände zueinander statisch ist. Somit habe ich versucht ein JavaScript-Code zu schreiben, welcher den freien oberen Bereich abmisst und mit den Balken auffüllt. Das stellte sich jeodch als viel komplexer heraus als gedacht, denn es tauchten laufend Fehler auf. Beispielsweise wurde aus verschiedenen Gründen Teilweise der Gesamte Body nach oben oder unten verschoben. Das komische war ebenfalls, dass diese Verschiebung oder auch andere Fehler nicht konsistens waren, sondern sich auch ohne Codeanpassung beim nächsten Neuladen etwas veränderten. Somit konnte das Problem auch mit entgegenwirkenden Abständen nicht behoben werden.
+Ich wollte, dass die schwarzen Balken über den gesamten freien Bereich über dem Textblock verlaufen. Alle Balken sollten ca. so breit wie auf dem Plakat sein und wenn möglich dessen Breite auch nicht verändern. Da der obere Bereich je nach Fenstergrösse unterschiedlich hoch ist, bedeutet das, dass sich die Anzahl der Balken verändern muss, solange wie Höhe dieser und dessen Abstände zueinander statisch ist. Somit habe ich versucht, ein JavaScript-Code zu schreiben, welcher den freien oberen Bereich abmisst und mit den Balken auffüllt. Das stellte sich jedoch als viel komplexer heraus als gedacht, denn es tauchten laufend Fehler auf. Beispielsweise wurde aus verschiedenen Gründen teilweise der gesamte Body nach oben oder unten verschoben. Das spezielle daran war ebenfalls, dass diese Verschiebung oder auch andere Fehler nicht konsistent waren, sondern sich auch ohne Codeanpassung beim nächsten Neuladen etwas veränderten. Somit konnte das Problem auch mit entgegenwirkenden Abständen nicht behoben werden.
 
 Aktuell werden die Balken nun wie folgt generiert:
 - Um die Anzahl der Balken zu bestimmen, wird die Höhe der Fläche durch die optimale Balkenhöhe geteilt.
-- Mit der berechneten Anzahl und der gesamten Höhe, wird die effektive Höhe der Balken berechnet und in jedem Fall die gesame Fläche zu füllen.
+- Mit der berechneten Anzahl und der gesamten Höhe wird die effektive Höhe der Balken berechnet und in jedem Fall die gesamte Fläche zu füllen.
 - Im letzten Schritt wir die berechnete Anzahl der Balken mit der berechneten Höhe erstellt und ins HTML eingefügt.
 
 ## Responsive
-Da die Balken basierend auf den Bildschimdimensionen berechnet werden, müssen diese angepasst werden, soblad sich die Fesntergrösse verändert. Dadurch werden bei jeder Veränderung die Balken entfernt und neu generiert.
+Da die Balken basierend auf den Bildschimdimensionen berechnet werden, müssen diese angepasst werden, sobald sich die Fenstergrösse verändert. Dadurch werden bei jeder Veränderung die Balken entfernt und neu generiert.
 
-Die drei Informationsblöcke müssen sich ebenfalls auf schmaleren Geräten verändern, da diese ansonsten sehr zusammengedrückt werden und unleserlich sind. Für resposive CSS Veränderungen habe ich 2 Breakpoints definert:
+Die drei Informationsblöcke müssen sich ebenfalls auf schmaleren Geräten verändern, da diese ansonsten sehr zusammengedrückt werden und unleserlich sind. Für responsiv CSS Veränderungen habe ich 2 Breakpoints definiert:
 
 Tablet:
 `@media screen and (max-width: 991px)`
@@ -52,10 +52,10 @@ Tablet:
 Mobile:
 `@media screen and (max-width: 767px)`
 
-Beim Welchsel auf Tabletgrössen wurden zum aktuellen Stand nur Abstände angepasst. Hingegen bei den Mobilegrössen wurden die Informationsblöcke übereinander statt zuvor nebeneinander angeordnet.
+Beim Wechsel auf Tabletgrössen wurden zum aktuellen Stand nur Abstände angepasst. Hingegen bei den Mobilegrössen wurden die Informationsblöcke übereinander statt zuvor nebeneinander angeordnet.
 
 ## Erste CSS Animationen
-Schon von Beginn an war mir klar, dass ich die Breite der Balken animieren möchte. Für den Start habe ich mich entschieden die Animationen mit CSS zu erstellen. Visuell wollte ich, dass sich wie beim Plakat die Balken nur rechts und links kürzen und in der Mitte fortlaufend stehen bleiben. Da sich die Anzahl der Balken verändert, konnte ich die Animationen nicht für alle Möglichkeiten durchplanen. Somit habe ich, umd eine Varianz beizubehalten, 6 verschiedene Animationen erstellt, 3 welche den Balken auf der linken Seite kürzen und 3 auf der Rechten.
+Schon von Beginn an war mir klar, dass ich die Breite der Balken animieren möchte. Für den Start habe ich mich entschieden, die Animationen mit CSS zu erstellen. Visuell wollte ich, dass sich wie beim Plakat die Balken nur rechts und links kürzen und in der Mitte fortlaufend stehen bleiben. Da sich die Anzahl der Balken verändert, konnte ich die Animationen nicht für alle Möglichkeiten durchplanen. Somit habe ich, um eine Varianz beizubehalten, 6 verschiedene Animationen erstellt, 3 welche den Balken auf der linken Seite kürzen und 3 auf der rechten.
 
 Beispiel:
 ```
@@ -72,10 +72,10 @@ Beispiel:
 }
 ```
 
-Diese Animationen werden nun während der Genierierung der Balken zufällig zugewiesen, mit einer zufälligen dauer von 3 - 6 Sekunden. So konnte ich relativ rasch und ohne ernsthafte Komplikationen einbinden, welche nun das Plakat stark aufwerten.
+Diese Animationen werden nun während der Generierung der Balken zufällig zugewiesen, mit einer zufälligen Dauer von 3 - 6 Sekunden. So konnte ich relativ rasch und ohne ernsthafte Komplikationen einbinden, welche nun das Plakat stark aufwerten.
 `div.style.animationName = "bar" + (Math.floor(Math.random() * 6) + 1);`
 `div.style.animationDuration = (Math.floor(Math.random() * 4) + 3) + "s";`
 
-Da es zwischendurch vorkahm, dass mehrere Balken die exakt gleiche Animation und Dauer erhalten haben ich ich nun die Anzahl der Animationen von gesamthaft 6 auf 10 erhöt. Somit sollte dieser Fall unwarscheinlicher werden, ist jedoch nicht auszuschiessen.
+Da es öfter als gedacht vorkam, dass mehrere Balken die exakt gleiche Animation und Dauer erhalten haben, habe ich nun die Anzahl der Animationen von gesamthaft 6 auf 10 erhöht. Somit sollte dieser Fall unwahrscheinlicher werden.
 
 [Link in new Tab](radiohead/){:target="_blank"}
