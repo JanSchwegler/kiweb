@@ -73,5 +73,8 @@ Beispiel:
 ```
 
 Diese Animationen werden nun während der Genierierung der Balken zufällig zugewiesen, mit einer zufälligen dauer von 3 - 6 Sekunden. Diese Animationen konnte ich relativ rasch und ohne ernsthafte Komplikationen einbinden, welche nun das Plakat stark aufwerten.
+`div.style.animationName = "bar" + (Math.floor(Math.random() * 6) + 1);`
+`div.style.animationDuration = (Math.floor(Math.random() * 4) + 3) + "s";`
+
 
 [Link in new Tab](radiohead/){:target="_blank"}
