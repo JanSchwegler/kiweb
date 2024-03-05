@@ -36,7 +36,23 @@ Neben den genannten Positionierungen habe ich in CSS ebenfalls die Schriftfamili
 ## Adaptive generierung der Balken mit JavaScript
 Ich wollte, dass die schwarzen Balken den gesamten freien Bereien über dem Textblock veralufen. Alle Balken sollten ca. so Breit wie auf dem Plakat sein und wenn möglich dessen Breite auch nicht verändern. Da der Obere Bereich, je nach Fenstergrösse unterschiedlich hoch ist, bedeutet das, dass sich die Anzahl der Balken verändern muss, solange wie Höhe dieser und dessen Abstände zueinander statisch ist. Somit habe ich versucht ein JavaScript-Code zu schreiben, welcher den freien oberen Bereich abmisst und mit den Balken auffüllt. Das stellte sich jeodch als viel komplexer heraus als gedacht, denn es tauchten laufend Fehler auf. Beispielsweise wurde aus verschiedenen Gründen Teilweise der Gesamte Body nach oben oder unten verschoben. Das komische war ebenfalls, dass diese Verschiebung oder auch andere Fehler nicht konsistens waren, sondern sich auch ohne Codeanpassung beim nächsten Neuladen etwas veränderten. Somit konnte das Problem auch mit entgegenwirkenden Abständen nicht behoben werden.
 
+Aktuell werden die Balken nun wie folgt generiert:
+- Um die Anzahl der Balken zu bestimmen, wird die Höhe der Fläche durch die optimale Balkenhöhe geteilt.
+- Mit der berechneten Anzahl und der gesamten Höhe, wird die effektive Höhe der Balken berechnet und in jedem Fall die gesame Fläche zu füllen.
+- Im letzten Schritt wir die berechnete Anzahl der Balken mit der berechneten Höhe erstellt und ins HTML eingefügt.
 
+## Responsive
+Da die Balken basierend auf den Bildschimdimensionen berechnet werden, müssen diese angepasst werden, soblad sich die Fesntergrösse verändert. Dadurch werden bei jeder Veränderung die Balken entfernt und neu generiert.
+
+Die drei Informationsblöcke müssen sich ebenfalls auf schmaleren Geräten verändern, da diese ansonsten sehr zusammengedrückt werden und unleserlich sind. Für resposive CSS Veränderungen habe ich 2 Breakpoints definert:
+
+Tablet:
+`@media screen and (max-width: 991px)`
+
+Mobile:
+`@media screen and (max-width: 767px)`
+
+Beim Welchsel auf Tabletgrössen wurden zum aktuellen Stand nur Abstände angepasst. Hingegen bei den Mobilegrössen wurden die Informationsblöcke übereinander statt zuvor nebeneinander angeordnet.
 
 ## Erste CSS Animationen
 
