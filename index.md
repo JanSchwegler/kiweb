@@ -55,6 +55,23 @@ Mobile:
 Beim Welchsel auf Tabletgrössen wurden zum aktuellen Stand nur Abstände angepasst. Hingegen bei den Mobilegrössen wurden die Informationsblöcke übereinander statt zuvor nebeneinander angeordnet.
 
 ## Erste CSS Animationen
+Schon von Beginn an war mir klar, dass ich die Breite der Balken animieren möchte. Für den Start habe ich mich entschieden die Animationen mit CSS zu erstellen. Visuell wollte ich, dass sich wie beim Plakat die Balken nur rechts und links kürzen und in der Mitte fortlaufend stehen bleiben. Da sich die Anzahl der Balken verändert, konnte ich die Animationen nicht für alle Möglichkeiten durchplanen. Somit habe ich, umd eine Varianz beizubehalten, 6 verschiedene Animationen erstellt, 3 welche den Balken auf der linken Seite kürzen und 3 auf der Rechten.
 
+Beispiel:
+```
+@keyframes bar1 {
+  0%   {
+    margin-left: -20%;
+  }
+  50%  {
+    margin-left: -40%;
+  }
+  100% {
+    margin-left: -20%;
+  }
+}
+```
+
+Diese Animationen werden nun während der Genierierung der Balken zufällig zugewiesen, mit einer zufälligen dauer von 3 - 6 Sekunden. Diese Animationen konnte ich relativ rasch und ohne ernsthafte Komplikationen einbinden, welche nun das Plakat stark aufwerten.
 
 [Link in new Tab](radiohead/){:target="_blank"}
