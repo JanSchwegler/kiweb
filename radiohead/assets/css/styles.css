@@ -95,6 +95,10 @@ h1 {
 }
 
 /* Content */
+html {
+  overflow: hidden;
+}
+
 body {
   height: 100vh;
   max-height: 100vh;
