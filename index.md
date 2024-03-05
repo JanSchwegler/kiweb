@@ -73,7 +73,9 @@ Beispiel:
 ```
 
 Diese Animationen werden nun während der Generierung der Balken zufällig zugewiesen, mit einer zufälligen Dauer von 3 - 6 Sekunden. So konnte ich relativ rasch und ohne ernsthafte Komplikationen einbinden, welche nun das Plakat stark aufwerten.
+
 `div.style.animationName = "bar" + (Math.floor(Math.random() * 6) + 1);`
+
 `div.style.animationDuration = (Math.floor(Math.random() * 4) + 3) + "s";`
 
 Da es öfter als gedacht vorkam, dass mehrere Balken die exakt gleiche Animation und Dauer erhalten haben, habe ich nun die Anzahl der Animationen von gesamthaft 6 auf 10 erhöht. Somit sollte dieser Fall unwahrscheinlicher werden.

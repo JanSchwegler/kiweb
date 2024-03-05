@@ -32,6 +32,14 @@ function createBars() {
     });
 }
 
+window.addEventListener('mousemove', function(event) {
+    var mouseX = event.clientX;
+    var windowWidth = window.innerWidth;
+    var relativePosition = (mouseX / windowWidth) * 2 - 1;
+    relativePosition = 20 * (Math.max(-1, Math.min(1, relativePosition)));
+    console.log(relativePosition);
+});
+
 // Call Functions
 createBars();
 //console.log(window.innerHeight - document.getElementsByTagName("main")[0].clientHeight);
