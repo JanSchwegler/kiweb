@@ -27,7 +27,7 @@ function createBars() {
     Array.from(barContainer.getElementsByTagName('div')).forEach(div => {
         div.style.height = barAdaptHeight + 'px';
         div.style.marginBottom = barSpaceing + 'px';
-        div.style.animationName = "bar" + (Math.floor(Math.random() * 6) + 1);
+        div.style.animationName = "bar" + (Math.floor(Math.random() * 10) + 1);
         div.style.animationDuration = (Math.floor(Math.random() * 4) + 3) + "s";
     });
 }

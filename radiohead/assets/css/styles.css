@@ -52,6 +52,28 @@ article, figcaption, figure, footer, header, nav, section {
 }
 @keyframes bar4 {
   0%   {
+    margin-left: -25%;
+  }
+  50%  {
+    margin-left: -35%;
+  }
+  100% {
+    margin-left: -25%;
+  }
+}
+@keyframes bar5 {
+  0%   {
+    margin-left: -15%;
+  }
+  50%  {
+    margin-left: -40%;
+  }
+  100% {
+    margin-left: -15%;
+  }
+}
+@keyframes bar6 {
+  0%   {
     margin-left: 20%;
   }
   50%  {
@@ -61,7 +83,7 @@ article, figcaption, figure, footer, header, nav, section {
     margin-left: 20%;
   }
 }
-@keyframes bar5 {
+@keyframes bar7 {
   0%   {
     margin-left: 15%;
   }
@@ -72,7 +94,7 @@ article, figcaption, figure, footer, header, nav, section {
     margin-left: 15%;
   }
 }
-@keyframes bar6 {
+@keyframes bar8 {
   0%   {
     margin-left: 10%;
   }
@@ -81,6 +103,28 @@ article, figcaption, figure, footer, header, nav, section {
   }
   100% {
     margin-left: 10%;
+  }
+}
+@keyframes bar9 {
+  0%   {
+    margin-left: 25%;
+  }
+  50%  {
+    margin-left: 35%;
+  }
+  100% {
+    margin-left: 25%;
+  }
+}
+@keyframes bar10 {
+  0%   {
+    margin-left: 15%;
+  }
+  50%  {
+    margin-left: 40%;
+  }
+  100% {
+    margin-left: 15%;
   }
 }
 
