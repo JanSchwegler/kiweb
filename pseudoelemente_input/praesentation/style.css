@@ -138,3 +138,32 @@ section#container .button-1:hover::after {
     width: 100%;
     left: 0;
 }
+
+@media screen and (max-width: 991px) {
+    body {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    section:not(#container) {
+        width: 100%;
+    }
+
+    section#container {
+        position: inherit;
+        top: inherit;
+        right: inherit;
+        width: 100%;
+        margin-bottom: 120px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    body {
+        padding: 50px 25px 100px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}

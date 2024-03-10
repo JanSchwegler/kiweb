@@ -13,15 +13,32 @@
 <body>
     <section>
         <h1>Pseudoklassen</h1>
-        <p>Mithilfe von Pseudoklassen kann ein Element nur dann verändert werden, wenn dieses bestimmte Vorgaben verfüllt. Pseudoklassen werden als erweiterung zu den normalen CSS Selektoren verwendet um so die Auswahl des Elementes zu spezifizieren. Häufig werden Pseudoklassen verwendet um beispielsweise jedes Zweite Element anzupassen oder das Element zu verändern sobald mensch mit dem Cursor darüber fährt. Das zweite beschriebene Szenario wird "hover" genannt. Nach dem normalen CSS Selektor wird mit einem ":" die Pseudoklasse angehängt. Das sieht beispielsweise wie folgt aus:</p>
-        <code>.button<span>:hover</span> {<br>&ensp;background-color: #0d6158;<br>}</code>
-        <p>Mit diesem Code wird allem Elementen mit der Klasse "button" eine Hintergrundfarbe vergeben, faslls ein User mit der Maus über das Element fährt.</p>
+        <p>Pseudoklassen sind wie Spezialregeln, mit denen du bestimmte Elemente auf einer Webseite ändern kannst, basierend auf bestimmten Situationen. Sie werden zusammen mit normalen CSS-Selektoren verwendet, um genau zu sagen, in welcher Situation dieses Element angepasst werden soll. Zum Beispiel kannst du damit jedes zweite Element anders gestalten oder das Aussehen ändern, wenn jemand mit der Maus darüber fährt (das nennt man "hover"). Die Syntax dafür ist einfach: Du hängst sie einfach an den normalen CSS-Selektor mit einem Doppelpunkt (:) an. Ein Beispiel dafür wäre:</p>
+        <code>.button<span>:hover</span> {<br>&emsp;background-color: #0d6158;<br>}</code>
+        <p>Mit diesem Code wird allem Elementen mit der Klasse "button" eine Hintergrundfarbe vergeben, falls du mit der Maus über das Element fährst.</p>
         <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes#alphabetical_index" target="_blank">Liste mit Pseudoklassen</a>
         <h1>Pseudoelemente</h1>
-        <p>Grundsätzlich wird der Inhalt einer Website in HTML defineirt und nur diese Elemente (HTML-Tags) können mithilfe von CSS bearbeitet und gestaltet werden. Mit den sogenannten Pseudoelementen können jedoch Abschnitte bearbeitet werden, welche nicht den HTML Tags entsprechen. Aus meiner Sicht lassen sich Pseudoelemente in zwei Kategorien einteilen. Denn mit Pseudoelemten lassen sich auf der einen Seite nur einzelne Teile eines bestehenden Elementes auswählen und bearbeiten aber auf der anderen Seite können auf diese Weise auch per CSS eigene Elemente erzeugt werden welche nicht im HTML ersichtlich sind. Pseudoelemente werden im Vergleich zu Pseudoklassen mit zwei ":" angegeben. Mit diesem Wissen können Pseudoklassen und Pseudoelemente eifach voneinander differenziert werden.</p>
-        <p>Beispielsweise kann mit dem Pseudoelement "::fist-line" die Erste Zeile eines Textes ausgewählt und verändert werden:</p>
-        <code>p<span>::first-letter</span> {<br>&ensp;font-size: 5rem;<br>}</code>
-        <p>Mithilfe von "::before" & "::after" können Elemente in CSS erstellt und definiert werden. Diese können beide pro Element je nur 1 mal vergeben werden und werden vor bzw. nach dem eigentlichen Inhalt des Elements eingefügt. Um Before und After auf der Website sichtbar zu haben, müssen diese einen defineirten Inhalt haben. Sobald der Inhalt gelöscht wird, verschwindet das gesamte Pseudoelement.</p>
+        <p>Grundsätzlich wird der Inhalt einer Webseite mit HTML erstellt, und nur diese Elemente können mit CSS bearbeitet werden. Mit sogenannten Pseudoelementen kannst du jedoch auch Teile der Webseite gestalten, die nicht direkt in HTML-Tags stehen. Aus meiner Sicht, gibt es zwei Arten von Pseudoelementen: Mit machen kannst nur bestimmte Teile eines vorhandenen Elements bearbeiten, während andere komplett neue Elemente erstellen, die nicht in HTML erstellt wurden. Pseudoelemente werden durch zwei Doppelpunkte (::) gekennzeichnet, im Gegensatz zu Pseudoklassen. Damit kannst du Pseudoklassen und Pseudoelemente leicht unterscheiden.</p>
+        <p>Beispielsweise kann mit dem Pseudoelement "::fist-line" nur die Erste Zeile eines Textes ausgewählt und verändert werden:</p>
+        <code>p<span>::first-letter</span> {<br>&emsp;font-size: 5rem;<br>}</code>
+        <p>Mithilfe von "::before" & "::after" kannst du neue Elemente in CSS erstellen und bearbeiten. Before und After können beide pro Element je nur einmal vergeben werden. Damit Before und After auf der Website sichtbar sind, musst du ihnen einen Inhalt zuweisen (content:). Selbst wenn du nur die Hintergrundfarbe verwenden möchtest, musst du trotzdem einen Inhalt festlegen. Dieser kann sogar leer sein (contetnt : "";), aber wenn kein Inhalt angegeben wird, verschwindet das Element von der Website. Das neue Element mit seinem Inhalt wird vor bzw. nach dem eigentlichen Inhalt des Elements eingefügt.</p>
+        <p>Before und After werden meistens für Design-Elemente verwendet oder um kleine Akzente zu setzen. Wichtig ist, dass du alle relevanten Informationen direkt im HTML definierst. Beispielsweise können mit diesen Pseudoelementen Hovereffekte erstellt werden, die ein zusätzliches Element benötigen:</p>
+        <code>#container .button-2<span>::after</span> {<br>
+            &emsp;content: "";<br>
+            &emsp;position: absolute;<br>
+            &emsp;top: 0;<br>
+            &emsp;left: 0;<br>
+            &emsp;width: 0%;<br>
+            &emsp;height: 100%;<br>
+            &emsp;background-color: #0d6158;<br>
+            &emsp;z-index: -1;<br>
+        }<br><br>
+        
+        #container .button-2:hover<span>::after</span> {<br>
+            &emsp;width: 100%;<br>
+            &emsp;left: 0;<br>
+        }</code>
+        <p>Ein Nachteil von Pseudoelementen ist, dass du diese nicht direkt mit JavaScript verändern kannst.</p>
         <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements#list_of_pseudo-elements" target="_blank">Liste mit Pseudoelementen</a>
     </section>
     <section id="container">
