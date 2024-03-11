@@ -23,7 +23,7 @@ function createBars() {
         barContainer.appendChild(div);
     }
 
-    // Diesr Teil in das obere Array schieben?
+    // Dieser Teil in das obere Array schieben?
     Array.from(barContainer.getElementsByTagName('div')).forEach(div => {
         div.style.height = barAdaptHeight + 'px';
         div.style.marginBottom = barSpaceing + 'px';
@@ -33,17 +33,31 @@ function createBars() {
 }
 
 window.addEventListener('mousemove', function(event) {
-    var mouseX = event.clientX;
-    var windowWidth = window.innerWidth;
-    var relativePosition = (mouseX / windowWidth) * 2 - 1;
-    relativePosition = 20 * (Math.max(-1, Math.min(1, relativePosition)));
-    console.log(relativePosition);
+    let mouseX = event.clientX;
+    let windowWidth = window.innerWidth;
+    let relativePosition = (mouseX / windowWidth) * 2 - 1;
+    let barContainer = document.getElementById("barsAnimate");
+    
+
+    if (relativePosition >= 0) {
+        barContainer.style.marginRight = relativePosition * -10 + "%";
+        barContainer.style.marginLeft = "0%";
+    } else {
+        barContainer.style.marginLeft = relativePosition * 10 + "%";
+        barContainer.style.marginRight = "0%";
+    }
+
+    barContainer.style.transition = "0s";
+});
+document.addEventListener('mouseleave', function(event) {
+    let barContainer = document.getElementById("barsAnimate");
+    barContainer.style.transition = "0.3s";
+    barContainer.style.marginLeft = "0%";
+    barContainer.style.marginRight = "0%";
 });
 
 // Call Functions
 createBars();
-//console.log(window.innerHeight - document.getElementsByTagName("main")[0].clientHeight);
-//console.log(document.getElementsByTagName("main")[0].clientHeight);
 
 // Window Resize
 window.addEventListener('resize', function() {
