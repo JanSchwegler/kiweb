@@ -13,7 +13,7 @@ Aus den 8 vorausgewählten Plakaten habe ich mich für folgendes Plakat für Rad
 
 ![Radiohead Plakat](doku/posters/radiohead.jpeg)
 
-# Umsetzung
+# Umsetzung 1
 ## Planung & Vorarbeit
 ### Schrift
 Bevor ich mit der Umsetzung startete, brauchte ich eine passende Schrift, um das Plakat umzusetzen. Die im Plakat verwendete Schrift ist nicht gratis verfügbar und ich habe mich somit für eine Alternative umgesehen. Nach ein paar Vergleichen, habe ich mich für die Schrift ["Roboto"](https://fonts.google.com/specimen/Roboto){:target="_blank"} entschieden. Diese konnte ich später mit Google Fonts sehr simpel einbinden.
@@ -81,3 +81,13 @@ Diese Animationen werden nun während der Generierung der Balken zufällig zugew
 Da es öfter als gedacht vorkam, dass mehrere Balken die exakt gleiche Animation und Dauer erhalten haben, habe ich nun die Anzahl der Animationen von gesamthaft 6 auf 10 erhöht. Somit sollte dieser Fall unwahrscheinlicher werden.
 
 [Link in new Tab](radiohead/){:target="_blank"}
+
+## Reaktiv zur Mauposition
+
+Text
+
+# Umsetzung 2
+
+Warum Umsetzung 2
+
+## Konzept
