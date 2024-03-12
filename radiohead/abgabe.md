@@ -1,4 +1,4 @@
-### Abgabe Sprint 1
+# Abgabe Sprint 1
 
 [Website Semesterprojekt](index.html){:target="_blank"}
 

@@ -86,8 +86,6 @@ Da es öfter als gedacht vorkam, dass mehrere Balken die exakt gleiche Animation
 
 Text
 
-# Umsetzung 2
+## Überarbeitung Konzept
 
-Warum Umsetzung 2
-
-## Konzept
+Warum Konzept 2
