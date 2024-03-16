@@ -112,7 +112,7 @@ Klar war für mich, dass ich die Website über das im Plakat beworbene Konzert m
 
 Schon im Voraus war mir bewusst, dass die Musik erst nach einer Interaktion des Users abgespielt werden kann und somit leider nicht bereits beim laden der Webiste. Somit war sicher, dass beim Einstieg eine ein Playbutton oder eine Musikauswahl erscheinen soll. Um die "Echtheit"
 
-Um meine Ideen zu visualisieren habe ich diese in Figma grob umbesetzt.  
+Um meine Ideen zu visualisieren habe ich diese in Figma grob umbesetzt.
 
 
 Warum Konzept 2
