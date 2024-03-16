@@ -37,7 +37,6 @@ window.addEventListener('mousemove', function(event) {
     let windowWidth = window.innerWidth;
     let relativePosition = (mouseX / windowWidth) * 2 - 1;
     let barContainer = document.getElementById("barsAnimate");
-    
 
     if (relativePosition >= 0) {
         barContainer.style.marginRight = relativePosition * -10 + "%";
