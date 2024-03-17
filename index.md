@@ -110,7 +110,7 @@ Wie bereits beim ersten Konzept habe ich das Plakat mit dessen Eigenschaften ana
 
 Klar war für mich, dass ich die Website über das im Plakat beworbene Konzert mache und somit nicht detailliert auf die Band eingehe. Da meine Website die Musik und dessen immersität zeigen sollte, um das interesse am Konzert zu wecken. Damit war für mich ebenfalls klar, dass ich die Musik der Band in der Website einbinde. Um die visuellen Eigenschaften vom Plakat aufzugreiffen, inludierte ich wie bei der ersten Umsetzung die schwarzen horizontalen Balken.
 
-Schon im Voraus war mir bewusst, dass die Musik erst nach einer Interaktion des Users abgespielt werden kann und somit leider nicht bereits beim laden der Webiste. Somit war sicher, dass beim Einstieg eine ein Playbutton oder eine Musikauswahl erscheinen soll. Um die "Echtheit"
+Schon im Voraus war mir bewusst, dass die Musik erst nach einer Interaktion des Users abgespielt werden kann und somit leider nicht bereits beim laden der Webiste. Dadurch war sicher, dass beim Einstieg eine ein Playbutton oder eine Musikauswahl erscheinen soll. Um die "Echtheit"
 
 Um meine Ideen zu visualisieren habe ich diese in Figma grob umbesetzt.
 
