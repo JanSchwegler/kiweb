@@ -1,15 +1,111 @@
+<!-- https://upload.wikimedia.org/wikipedia/en/d/dc/Strawberry_Fields_Forever_(Beatles_song_-_sample).ogg -->    
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="stlye.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audio Player</title>
+<style>
+    #audio-controls {
+        display: flex;
+        align-items: center;
+    }
+    #scrubber {
+        width: 100px;
+        height: 100px;
+        background-color: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+        touch-action: none; /* Disable browser default touch action */
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Divs werden hier durch JavaScript eingefügt -->
-      </div>
+<audio id="audio" controls>
+    <source src="https://upload.wikimedia.org/wikipedia/en/d/dc/Strawberry_Fields_Forever_(Beatles_song_-_sample).ogg" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<div id="audio-controls">
+    <button id="playpause">Play/Pause</button>
+</div>
+
+<div id="scrubber"></div>
+
+<script>
+    const audio = document.getElementById('audio');
+    const playPauseButton = document.getElementById('playpause');
+    const scrubber = document.getElementById('scrubber');
+    let isScrubbing = false;
+    let wasPlaying = false;
+
+    playPauseButton.addEventListener('click', () => {
+        if (audio.paused || audio.ended) {
+            audio.play();
+            playPauseButton.textContent = 'Pause';
+        } else {
+            audio.pause();
+            playPauseButton.textContent = 'Play';
+        }
+    });
+
+    // Function to rotate the scrubber based on mouse/touch movement
+    function rotateScrubber(event) {
+        const rect = scrubber.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+        scrubber.style.transform = `rotate(${angle}rad)`;
+        const progress = (angle + Math.PI) / (2 * Math.PI); // Calculate progress between 0 and 1
+        audio.currentTime = progress * audio.duration; // Set audio current time
+
+        // If audio is not playing, manually update the audio playback
+        if (audio.paused || audio.ended) {
+            audio.play();
+        }
+    }
+
+    scrubber.addEventListener('mousedown', (event) => {
+        event.preventDefault(); // Prevent text selection
+        wasPlaying = !audio.paused && !audio.ended;
+        isScrubbing = true;
+        rotateScrubber(event);
+        window.addEventListener('mousemove', rotateScrubber);
+        window.addEventListener('mouseup', () => {
+            isScrubbing = false;
+            window.removeEventListener('mousemove', rotateScrubber);
+            if (!wasPlaying) {
+                audio.pause(); // Pause if audio was not playing before scrubbing
+            }
+        });
+    });
+
+    scrubber.addEventListener('touchstart', (event) => {
+        event.preventDefault(); // Prevent scrolling
+        wasPlaying = !audio.paused && !audio.ended;
+        const touch = event.touches[0];
+        isScrubbing = true;
+        rotateScrubber(touch);
+        window.addEventListener('touchmove', (event) => {
+            const touch = event.touches[0];
+            rotateScrubber(touch);
+        });
+        window.addEventListener('touchend', () => {
+            isScrubbing = false;
+            window.removeEventListener('touchmove', rotateScrubber);
+            if (!wasPlaying) {
+                audio.pause(); // Pause if audio was not playing before scrubbing
+            }
+        });
+    });
+
+    audio.addEventListener('timeupdate', () => {
+        if (!isScrubbing) {
+            const progress = audio.currentTime / audio.duration; // Calculate progress between 0 and 1
+            scrubber.style.transform = `rotate(${progress * 360}deg)`;
+        }
+    });
+</script>
 </body>
-<script src="js.js"></script>
 </html>
