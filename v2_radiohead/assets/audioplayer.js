@@ -1,3 +1,4 @@
+// Slider
 const slider = document.querySelector('.slider-container'),
     slides = Array.from(document.querySelectorAll('.slide'))
 
@@ -37,12 +38,11 @@ function touchEnd() {
   
     const movedBy = currentTranslate - prevTranslate
   
-    if (movedBy < -60 && currentIndex < slides.length - 1)
-        currentIndex += 1
+    if (movedBy < -(window.innerWidth * 0.5) && currentIndex < slides.length - 1)
+        currentIndex += 1;
   
-    if (movedBy > 60 && currentIndex > 0)
-        currentIndex -= 1
-  
+    if (movedBy > (window.innerWidth * 0.5) && currentIndex > 0)
+        currentIndex -= 1;
     setPositionByIndex()
 }
 
@@ -93,3 +93,77 @@ document.getElementById('audioplayer-arrow-right').onclick = function() {
         currentIndex += 1
         setPositionByIndex()
 }
+
+// Audio player
+let audio = document.getElementById('audio'),
+    audioDuration = audio.duration,
+    scrubber = slides[currentIndex],
+    secondsPerRotate = 5;
+
+let rect = scrubber.getBoundingClientRect(),
+    centerX = rect.left + rect.width / 2,
+    centerY = rect.top + rect.height / 2,
+    startingpoint;
+
+ let playPauseButton = document.getElementById('playpause');
+
+playPauseButton.addEventListener('click', () => {
+    if (audio.paused || audio.ended) {
+        audio.play();
+        playPauseButton.textContent = 'Pause';
+    } else {
+        audio.pause();
+        playPauseButton.textContent = 'Play';
+    }
+});
+
+function rotateScrubber(event) {
+    let currentAngle = 0;
+
+    if (scrubber.style && scrubber.style.transform) {
+        currentAngle = parseFloat(scrubber.style.transform.match(/-?\d*\.?\d+/)[0]);
+    }
+    
+    const angle = (Math.atan2(event.clientY - centerY, event.clientX - centerX) - startingpoint);
+
+    console.log(currentAngle);
+    //console.log(angle);
+    //console.log(startingpoint);
+
+    scrubber.style.transform = `rotate(${angle}rad)`;
+    const progress = (angle + Math.PI) / (2 * Math.PI); // Calculate progress between 0 and 1
+    audio.currentTime = progress * audio.duration; // Set audio current time
+}
+
+// Scrubb envents
+scrubber.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+    //rotateScrubber(event); //-> start scrubb on move not click
+    // mouse rotation startingpoint
+    startingpoint = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+
+    window.addEventListener('mousemove', rotateScrubber);
+    window.addEventListener('mouseup', () => {
+        window.removeEventListener('mousemove', rotateScrubber);
+    });
+});
+
+scrubber.addEventListener('touchstart', (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    rotateScrubber(touch);
+    window.addEventListener('touchmove', (event) => {
+        const touch = event.touches[0];
+        rotateScrubber(touch);
+    });
+    window.addEventListener('touchend', () => {
+        window.removeEventListener('touchmove', rotateScrubber(touch));
+    });
+});
+
+// Update scrubber position
+audio.addEventListener('timeupdate', () => {
+    // TODO change scrubber position calculation
+    const progress = audio.currentTime / audio.duration;
+    scrubber.style.transform = `rotate(${progress * (2 * Math.PI)}rad)`;
+});
