@@ -139,9 +139,12 @@ aside#audioplayer .slider-container {
 aside#audioplayer .slider-container .slide {
     height: 100%;
     width: 40vw;
-    background-color: rgb(192, 192, 192);
     cursor: grab;
     margin-right: 10vw;
+    background-image: url("img/vinyl.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
 main {
