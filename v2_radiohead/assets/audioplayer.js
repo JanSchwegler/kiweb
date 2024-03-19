@@ -1,11 +1,10 @@
-// Window resize
+// Window resize ---------------------------------------------------------------------------------------------------------
 window.addEventListener('resize', () => {
     setPositionByIndex();
     updateScrubberCenter();
 });
 
-
-// Slider
+// Slider ---------------------------------------------------------------------------------------------------------------
 let slider = document.querySelector('.slider-container'),
     slides = Array.from(document.querySelectorAll('.slide'))
 
@@ -27,17 +26,21 @@ slides.forEach((slide, index) => {
     slide.addEventListener('mouseup', touchEnd)
     slide.addEventListener('mouseleave', touchEnd)
     slide.addEventListener('mousemove', touchMove)
+
+    // Listeners for scrubbing
+    slide.addEventListener('touchstart', scrubberTouchstart);
+    slide.addEventListener('touchmove', scrubberTouchmove);
+    slide.addEventListener('touchend', scrubberTouchend);
+    slide.addEventListener('mousedown', scrubberMousedown);
 });
 
 function touchStart(index) {
     return function (event) {
         if(currentIndex != index) {
-            console.log("now" + index);
-            // call async function for the animation to rotate to 0
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            currentIndex = index;
-            console.log(currentIndex);
-            updateScrubberElement();
+            scrubberResetRotation(currentIndex).then((e) => {
+                animateRotation(slides[e]);
+                updateScrubberCenter();
+            });
         }
         currentIndex = index
         startPos = getPositionX(event)
@@ -49,20 +52,6 @@ function touchStart(index) {
 function touchEnd() {
     isDragging = false
     cancelAnimationFrame(animationID)
-    updateScrubberElement();
-    /*
-    let movedBy = currentTranslate - prevTranslate
-    if (movedBy < -(window.innerWidth * 0.5) && currentIndex < slides.length - 1) {
-        currentIndex += 1;
-        updateScrubberElement();
-        //console.log("now" + currentIndex);
-    }
-    if (movedBy > (window.innerWidth * 0.5) && currentIndex > 0) {
-        currentIndex -= 1;
-        updateScrubberElement();
-        //console.log("now" + currentIndex);
-    }*/
-        
     setPositionByIndex()
 }
 
@@ -105,13 +94,15 @@ function setPositionByIndex() {
 document.getElementById('audioplayer-arrow-left').onclick = function() {
     if (currentIndex > 0)
         currentIndex -= 1
-        setPositionByIndex()
+        setPositionByIndex();
+        updateScrubberCenter();
 }
 
 document.getElementById('audioplayer-arrow-right').onclick = function() {
     if (currentIndex < slides.length - 1)
         currentIndex += 1
-        setPositionByIndex()
+        setPositionByIndex();
+        updateScrubberCenter();
 }
 
 // Audio player ---------------------------------------------------------------------------------------------------------
@@ -122,6 +113,17 @@ let scrubber = slides[currentIndex],
     centerY = scrubber.offsetTop + scrubber.offsetHeight / 2,
     dragging = false;
     
+async function scrubberResetRotation(e) {
+    return new Promise(resolve => {
+        let releaseHandler = () => {
+            resolve(e);
+            window.removeEventListener('mouseup', releaseHandler);
+            window.removeEventListener('touchend', releaseHandler);
+        };
+        window.addEventListener('mouseup', releaseHandler);
+        window.addEventListener('touchend', releaseHandler);
+    });
+}
 
 function updateScrubberCenter() {
     slides = Array.from(document.querySelectorAll('.slide'));
@@ -134,43 +136,6 @@ function updateScrubberCenter() {
     }
     centerX = (scrubber.offsetLeft + sliderTranslate) + scrubber.offsetWidth / 2;
     centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
-}
-
-function updateScrubberElement() {
-    //removeScrubberEventListener();
-    let scrubberOld = scrubber;
-    updateScrubberCenter();
-    addScrubberEventListener();
-
-    // TODO -> Add eventlisteners to all elements at the beginning
-
-    // old
-    //scrubberOld.style.transition = "0.5s ease-out";
-    //scrubberOld.style.transform= "rotate(0deg)";
-
-    // new
-    //initialTouchAngle = 0;
-    //initialElementAngle = 0;
-
-    // reset
-    setTimeout(function() {
-        scrubberOld.style.transition = "0s";
-    }, 500);
-    
-}
-
-function removeScrubberEventListener() {
-    scrubber.removeEventListener('touchstart', scrubberTouchstart);
-    scrubber.removeEventListener('touchmove', scrubberTouchmove);
-    scrubber.removeEventListener('touchend', scrubberTouchend);
-    scrubber.removeEventListener('mousedown', scrubberMousedown);
-}
-
-function addScrubberEventListener() {
-    scrubber.addEventListener('touchstart', scrubberTouchstart);
-    scrubber.addEventListener('touchmove', scrubberTouchmove);
-    scrubber.addEventListener('touchend', scrubberTouchend);
-    scrubber.addEventListener('mousedown', scrubberMousedown);
 }
 
 function scrubberTouchstart(event) {
@@ -193,6 +158,7 @@ function scrubberTouchmove(event) {
 
 function scrubberTouchend() {
     dragging = false;
+    updateScrubberCenter();
 }
 
 function scrubberMousedown(event) {
@@ -212,9 +178,9 @@ document.addEventListener('mousemove', function(event) {
 
 document.addEventListener('mouseup', function() {
     dragging = false;
+    updateScrubberCenter();
 });
 
-// Function to get the current rotation angle of an element
 function getRotationDegrees(element) {
     let transform = window.getComputedStyle(element).getPropertyValue('transform');
     let matrix = transform.match(/^matrix\((.+)\)$/);
@@ -227,7 +193,35 @@ function getRotationDegrees(element) {
     }
     return 0;
 }
-addScrubberEventListener();
+
+// Animation Functions ---------------------------------------------------------------------------------------------------
+function animateRotation(e) {
+    let start = performance.now();
+    let startRotation = getCurrentRotation(e);
+    let duration = (startRotation - 500) * -4;
+    let endRotation = 360;
+    function animate(currentTime) {
+        let elapsed = currentTime - start;
+        let progress = Math.min(elapsed / duration, 1); 
+        let interpolatedRotation = easeOut(progress) * (endRotation - startRotation) + startRotation;
+        e.style.transform = `rotate(${interpolatedRotation}deg)`;
+        if (elapsed < duration) {
+            requestAnimationFrame(animate);
+        }
+    }
+    requestAnimationFrame(animate);
+}
+
+function getCurrentRotation(e) {
+    let transformValue = window.getComputedStyle(e).getPropertyValue('transform');
+    let matrix = transformValue.match(/^matrix\((.*)\)$/)[1].split(', ');
+    let angle = Math.round(Math.atan2(matrix[1], matrix[0]) * (180 / Math.PI));
+    return angle >= 0 ? angle : angle + 360; // Ensure positive angle
+}
+
+function easeOut(t) {
+    return 1 - Math.pow(1 - t, 2);
+}
 
 
 
@@ -240,8 +234,6 @@ addScrubberEventListener();
 
 
 
-
-;
 
 /* OLD -------------------------------------------------------------------------------------------------------------------------------------
 let audio = document.getElementById('audio'),
