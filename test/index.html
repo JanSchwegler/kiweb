@@ -5,106 +5,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Audio Player</title>
+<title>Rotate Div Around Center</title>
 <style>
-    #audio-controls {
-        display: flex;
-        align-items: center;
-    }
     #scrubber {
-        width: 100px;
-        height: 100px;
-        background-color: #007bff;
-        border-radius: 50%;
+        width: 500px;
+        height: 300px;
+        background-color: blue;
+        position: absolute;
+        top: 20%;
+        left: 20%;
         cursor: pointer;
-        touch-action: none; /* Disable browser default touch action */
     }
 </style>
 </head>
 <body>
-<audio id="audio" controls>
-    <source src="https://upload.wikimedia.org/wikipedia/en/d/dc/Strawberry_Fields_Forever_(Beatles_song_-_sample).ogg" type="audio/mpeg">
-</audio>
-
-<div id="audio-controls">
-    <button id="playpause">Play/Pause</button>
-</div>
 
 <div id="scrubber"></div>
 
 <script>
-    const audio = document.getElementById('audio');
-    const playPauseButton = document.getElementById('playpause');
-    const scrubber = document.getElementById('scrubber');
-    let isScrubbing = false;
-    let wasPlaying = false;
+    // Get the scrubber element
+    var scrubber = document.getElementById('scrubber');
 
-    playPauseButton.addEventListener('click', () => {
-        if (audio.paused || audio.ended) {
-            audio.play();
-            playPauseButton.textContent = 'Pause';
-        } else {
-            audio.pause();
-            playPauseButton.textContent = 'Play';
+    // Variables to store initial values
+    var initialTouchAngle = 0;
+    var initialElementAngle = 0;
+    var centerX = scrubber.offsetLeft + scrubber.offsetWidth / 2;
+    var centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
+
+    // Boolean to track whether dragging is active
+    var dragging = false;
+
+    // Event listener for touch events
+    scrubber.addEventListener('touchstart', function(event) {
+        dragging = true;
+        var touch = event.touches[0];
+        initialTouchAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX);
+        initialElementAngle = getRotationDegrees(scrubber);
+    });
+
+    scrubber.addEventListener('touchmove', function(event) {
+        event.preventDefault();
+        if (dragging) {
+            var touch = event.touches[0];
+            var currentTouchAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX);
+            var angleDiff = currentTouchAngle - initialTouchAngle;
+            var newRotation = (angleDiff * (180 / Math.PI)) + initialElementAngle;
+            scrubber.style.transform = 'rotate(' + newRotation + 'deg)';
         }
     });
 
-    // Function to rotate the scrubber based on mouse/touch movement
-    function rotateScrubber(event) {
-        const rect = scrubber.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
-        scrubber.style.transform = `rotate(${angle}rad)`;
-        const progress = (angle + Math.PI) / (2 * Math.PI); // Calculate progress between 0 and 1
-        audio.currentTime = progress * audio.duration; // Set audio current time
+    scrubber.addEventListener('touchend', function() {
+        dragging = false;
+    });
 
-        // If audio is not playing, manually update the audio playback
-        if (audio.paused || audio.ended) {
-            audio.play();
+    // Event listeners for mouse events
+    scrubber.addEventListener('mousedown', function(event) {
+        dragging = true;
+        initialTouchAngle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+        initialElementAngle = getRotationDegrees(scrubber);
+    });
+
+    document.addEventListener('mousemove', function(event) {
+        if (dragging) {
+            var currentTouchAngle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+            var angleDiff = currentTouchAngle - initialTouchAngle;
+            var newRotation = (angleDiff * (180 / Math.PI)) + initialElementAngle;
+            scrubber.style.transform = 'rotate(' + newRotation + 'deg)';
         }
+    });
+
+    document.addEventListener('mouseup', function() {
+        dragging = false;
+    });
+
+    // Function to get the current rotation angle of an element
+    function getRotationDegrees(element) {
+        var transform = window.getComputedStyle(element).getPropertyValue('transform');
+        var matrix = transform.match(/^matrix\((.+)\)$/);
+        if (matrix) {
+            var values = matrix[1].split(',');
+            var a = values[0];
+            var b = values[1];
+            var angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
+            return (angle < 0) ? angle + 360 : angle;
+        }
+        return 0;
     }
-
-    scrubber.addEventListener('mousedown', (event) => {
-        event.preventDefault(); // Prevent text selection
-        wasPlaying = !audio.paused && !audio.ended;
-        isScrubbing = true;
-        rotateScrubber(event);
-        window.addEventListener('mousemove', rotateScrubber);
-        window.addEventListener('mouseup', () => {
-            isScrubbing = false;
-            window.removeEventListener('mousemove', rotateScrubber);
-            if (!wasPlaying) {
-                audio.pause(); // Pause if audio was not playing before scrubbing
-            }
-        });
-    });
-
-    scrubber.addEventListener('touchstart', (event) => {
-        event.preventDefault(); // Prevent scrolling
-        wasPlaying = !audio.paused && !audio.ended;
-        const touch = event.touches[0];
-        isScrubbing = true;
-        rotateScrubber(touch);
-        window.addEventListener('touchmove', (event) => {
-            const touch = event.touches[0];
-            rotateScrubber(touch);
-        });
-        window.addEventListener('touchend', () => {
-            isScrubbing = false;
-            window.removeEventListener('touchmove', rotateScrubber);
-            if (!wasPlaying) {
-                audio.pause(); // Pause if audio was not playing before scrubbing
-            }
-        });
-    });
-
-    audio.addEventListener('timeupdate', () => {
-        if (!isScrubbing) {
-            const progress = audio.currentTime / audio.duration; // Calculate progress between 0 and 1
-            scrubber.style.transform = `rotate(${progress * 360}deg)`;
-        }
-    });
 </script>
+
 </body>
 </html>
