@@ -258,12 +258,12 @@ playPauseButton.addEventListener('click', () => {
 
 function initialAudio(newAudio) {
     if (audio != null) {
-        audio.removeEventListener('timeupdate', audioTimeupdate);
+        audio.removeEventListener('play', audioPlay);
         audio.removeEventListener('pause', audioPause);
         audio.removeEventListener('ended', audioEnded);
     }
     audio = newAudio;
-    audio.addEventListener('timeupdate', audioTimeupdate);
+    audio.addEventListener('play', audioPlay);
     audio.addEventListener('pause', audioPause);
     audio.addEventListener('ended', audioEnded);
     lastRotationAngle = 0;
@@ -271,7 +271,7 @@ function initialAudio(newAudio) {
 }
 
 function updateScrubber() {
-    const rotationAngle = (360 / secondsPerRotate) * (audio.currentTime % secondsPerRotate);
+    let rotationAngle = (360 / secondsPerRotate) * (audio.currentTime % secondsPerRotate);
     let shortestPath = rotationAngle - lastRotationAngle;
     if (Math.abs(shortestPath) > 180) {
         shortestPath += shortestPath > 0 ? -360 : 360;
@@ -279,20 +279,23 @@ function updateScrubber() {
     rotationStep = shortestPath / 10;
     lastRotationAngle += rotationStep;
     scrubber.style.transform = `rotate(${lastRotationAngle}deg)`;
-    //scrubberUpdateAnimationID = requestAnimationFrame(updateScrubber);
+    // keep animating if audio is playing
+    if (!audio.paused && !audio.ended) {
+        requestAnimationFrame(updateScrubber);
+    }
 }
 
-function audioTimeupdate() {
-    updateScrubber();
+function audioPlay() {
+    requestAnimationFrame(updateScrubber);
 }
 
 function audioPause() {
-    cancelAnimationFrame(scrubberUpdateAnimationID);
+    //cancelAnimationFrame(scrubberUpdateAnimationID);
 }
 
 function audioEnded() {
-    cancelAnimationFrame(scrubberUpdateAnimationID);
-    animateRotation(slides[e]);
+    //cancelAnimationFrame(scrubberUpdateAnimationID);
+    animateRotation(slides[currentIndex]); // can be removed if transition is added sucessfully
     // TODO: restart / start next song
 }
 

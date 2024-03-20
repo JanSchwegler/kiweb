@@ -37,6 +37,7 @@
     const scrubber = document.getElementById('scrubber');
     let wasPlaying = false;
 
+    // Playbutton
     playPauseButton.addEventListener('click', () => {
         if (audio.paused || audio.ended) {
             audio.play();
@@ -47,6 +48,7 @@
         }
     });
 
+    // Update audio time while scrubbing
     function updateAudioTime(angle) {
         const progress = angle / (2 * Math.PI); 
         const currentTime = progress * audio.duration; 
@@ -58,6 +60,7 @@
         }
     }
 
+    // Calc Scrubber Pos and Animate
     function rotateScrubber(event) {
         const rect = scrubber.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
@@ -73,6 +76,7 @@
         }
     }
 
+    // Call Scrubber animation while mouse is down
     scrubber.addEventListener('mousedown', (event) => {
         event.preventDefault(); 
         wasPlaying = !audio.paused && !audio.ended;
@@ -88,6 +92,7 @@
         });
     });
 
+    // Call Scrubber animation while touching
     scrubber.addEventListener('touchstart', (event) => {
         event.preventDefault(); 
         wasPlaying = !audio.paused && !audio.ended;
@@ -107,20 +112,22 @@
         });
     });
 
+    // Animate Scrubber while audio is playing
     let lastTime = null;
     function animateScrubber(timestamp) {
         if (!lastTime) {
             lastTime = timestamp;
         }
-        const deltaTime = timestamp - lastTime;
-        const progress = audio.currentTime / audio.duration;
-        const angle = progress * (2 * Math.PI);
+        //let deltaTime = timestamp - lastTime;
+        let progress = audio.currentTime / audio.duration;
+        let angle = progress * (2 * Math.PI);
         scrubber.style.transform = `rotate(${angle}rad)`;
         lastTime = timestamp;
         if (!audio.paused && !audio.ended) {
             requestAnimationFrame(animateScrubber);
         }
     }
+
 
     audio.addEventListener('play', () => {
         lastTime = null;
