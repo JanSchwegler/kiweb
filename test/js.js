@@ -1,27 +1,94 @@
-console.log("test");
-const container = document.querySelector('.container');
-const containerWidth = container.offsetWidth;
-const divWidth = 100; // Breite eines Divs
-const marginWidth = 50; // Breite des Abstands zwischen den Divs
+let slides = Array.from(document.querySelectorAll('.slide'));
+let currentIndex = 0;
 
-// Anzahl der Divs berechnen, die in eine Zeile passen
-const divsPerRow = Math.floor(containerWidth / (divWidth + marginWidth));
+let audio = document.getElementById('audio'),
+    audioDuration = audio.duration,
+    scrubber = slides[currentIndex],
+    secondsPerRotate = 5;
 
-// Anzahl der Divs berechnen, um die Fläche zu füllen
-const totalDivs = Math.ceil(container.childElementCount / divsPerRow) * divsPerRow;
+    //const scrubber = document.getElementById('scrubber');
+    let centerX = scrubber.offsetLeft + scrubber.offsetWidth / 2;
+    let centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
+    let startingPoint = 0;
+    let lastX = 0;
+    let lastY = 0;
 
-// Divs hinzufügen oder entfernen, um die Fläche zu füllen
-while (container.childElementCount < totalDivs) {
-  const div = document.createElement('div');
-  container.appendChild(div);
+ let playPauseButton = document.getElementById('playpause');
+
+playPauseButton.addEventListener('click', () => {
+    if (audio.paused || audio.ended) {
+        audio.play();
+        playPauseButton.textContent = 'Pause';
+    } else {
+        audio.pause();
+        playPauseButton.textContent = 'Play';
+    }
+});
+
+function updateCenter() {
+    centerX = scrubber.offsetLeft + scrubber.offsetWidth / 2;
+    centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
 }
 
-while (container.childElementCount > totalDivs) {
-  container.lastElementChild.remove();
+function rotateScrubber(event) {
+    const deltaX = event.clientX - centerX - lastX;
+    const deltaY = event.clientY - centerY - lastY;
+    const angleChange = Math.atan2(deltaY, deltaX); // Calculate angle change based on mouse movement
+
+    let angle;
+
+    if (scrubber.style && scrubber.style.transform) {
+        let currentAngle = parseFloat(scrubber.style.transform.match(/-?\d*\.?\d+/)[0]);
+        angle = currentAngle + angleChange;
+    } else {
+        angle = angleChange;
+    }
+
+    scrubber.style.transform = `rotate(${angle}rad)`;
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    const progress = (angle + Math.PI) / (2 * Math.PI); // Calculate progress between 0 and 1
+    // audio.currentTime = progress * audio.duration; // Set audio current time
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    lastX = event.clientX - centerX;
+    lastY = event.clientY - centerY;
 }
 
-// Faktor berechnen, um die Höhe der Divs zwischen 100 und 200 Pixel zu variieren
-const factor = Math.random(); // Beispiel für zufälligen Faktor zwischen 0 und 1
+// Scrubb envents
+scrubber.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+    updateCenter(); // Update center position
+    startingPoint = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+    lastX = event.clientX - centerX;
+    lastY = event.clientY - centerY;
+    
+    window.addEventListener('mousemove', rotateScrubber);
+    window.addEventListener('mouseup', () => {
+        window.removeEventListener('mousemove', rotateScrubber);
+    });
+});
 
-// CSS Variable setzen, um die Höhe der Divs zu steuern
-container.style.setProperty('--factor', factor);
+// Update center position on window resize
+window.addEventListener('resize', updateCenter);
+
+scrubber.addEventListener('touchstart', (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    rotateScrubber(touch);
+    window.addEventListener('touchmove', (event) => {
+        const touch = event.touches[0];
+        rotateScrubber(touch);
+    });
+    window.addEventListener('touchend', () => {
+        window.removeEventListener('touchmove', rotateScrubber(touch));
+    });
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Update scrubber position
+audio.addEventListener('timeupdate', () => {
+    // TODO change scrubber position calculation
+    const progress = audio.currentTime / audio.duration;
+    scrubber.style.transform = `rotate(${progress * (2 * Math.PI)}rad)`;
+});

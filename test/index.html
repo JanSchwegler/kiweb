@@ -1,97 +1,139 @@
-<!-- https://upload.wikimedia.org/wikipedia/en/d/dc/Strawberry_Fields_Forever_(Beatles_song_-_sample).ogg -->    
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rotate Div Around Center</title>
+<title>Audio Player</title>
 <style>
+    #audio-controls {
+        display: flex;
+        align-items: center;
+    }
     #scrubber {
         width: 500px;
         height: 300px;
-        background-color: blue;
-        position: absolute;
-        top: 20%;
-        left: 20%;
+        background-color: #007bff;
+        border-radius: 50%;
         cursor: pointer;
+        touch-action: none; /* Disable browser default touch action */
     }
 </style>
 </head>
 <body>
+<audio id="audio" controls>
+    <source src="https://upload.wikimedia.org/wikipedia/en/d/dc/Strawberry_Fields_Forever_(Beatles_song_-_sample).ogg" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<div id="audio-controls">
+    <button id="playpause">Play/Pause</button>
+</div>
 
 <div id="scrubber"></div>
 
 <script>
-    // Get the scrubber element
-    var scrubber = document.getElementById('scrubber');
+    const audio = document.getElementById('audio');
+    const playPauseButton = document.getElementById('playpause');
+    const scrubber = document.getElementById('scrubber');
+    let wasPlaying = false;
 
-    // Variables to store initial values
-    var initialTouchAngle = 0;
-    var initialElementAngle = 0;
-    var centerX = scrubber.offsetLeft + scrubber.offsetWidth / 2;
-    var centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
-
-    // Boolean to track whether dragging is active
-    var dragging = false;
-
-    // Event listener for touch events
-    scrubber.addEventListener('touchstart', function(event) {
-        dragging = true;
-        var touch = event.touches[0];
-        initialTouchAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX);
-        initialElementAngle = getRotationDegrees(scrubber);
-    });
-
-    scrubber.addEventListener('touchmove', function(event) {
-        event.preventDefault();
-        if (dragging) {
-            var touch = event.touches[0];
-            var currentTouchAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX);
-            var angleDiff = currentTouchAngle - initialTouchAngle;
-            var newRotation = (angleDiff * (180 / Math.PI)) + initialElementAngle;
-            scrubber.style.transform = 'rotate(' + newRotation + 'deg)';
+    playPauseButton.addEventListener('click', () => {
+        if (audio.paused || audio.ended) {
+            audio.play();
+            playPauseButton.textContent = 'Pause';
+        } else {
+            audio.pause();
+            playPauseButton.textContent = 'Play';
         }
     });
 
-    scrubber.addEventListener('touchend', function() {
-        dragging = false;
-    });
-
-    // Event listeners for mouse events
-    scrubber.addEventListener('mousedown', function(event) {
-        dragging = true;
-        initialTouchAngle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
-        initialElementAngle = getRotationDegrees(scrubber);
-    });
-
-    document.addEventListener('mousemove', function(event) {
-        if (dragging) {
-            var currentTouchAngle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
-            var angleDiff = currentTouchAngle - initialTouchAngle;
-            var newRotation = (angleDiff * (180 / Math.PI)) + initialElementAngle;
-            scrubber.style.transform = 'rotate(' + newRotation + 'deg)';
+    function updateAudioTime(angle) {
+        const progress = angle / (2 * Math.PI); 
+        const currentTime = progress * audio.duration; 
+        if (currentTime >= audio.duration) {
+            audio.pause();
+            audio.currentTime = audio.duration;
+        } else {
+            audio.currentTime = currentTime;
         }
-    });
-
-    document.addEventListener('mouseup', function() {
-        dragging = false;
-    });
-
-    // Function to get the current rotation angle of an element
-    function getRotationDegrees(element) {
-        var transform = window.getComputedStyle(element).getPropertyValue('transform');
-        var matrix = transform.match(/^matrix\((.+)\)$/);
-        if (matrix) {
-            var values = matrix[1].split(',');
-            var a = values[0];
-            var b = values[1];
-            var angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
-            return (angle < 0) ? angle + 360 : angle;
-        }
-        return 0;
     }
-</script>
 
+    function rotateScrubber(event) {
+        const rect = scrubber.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        let angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+        if (angle < 0) {
+            angle += 2 * Math.PI;
+        }
+        scrubber.style.transform = `rotate(${angle}rad)`;
+        updateAudioTime(angle);
+        if (audio.paused || audio.ended) {
+            audio.play();
+        }
+    }
+
+    scrubber.addEventListener('mousedown', (event) => {
+        event.preventDefault(); 
+        wasPlaying = !audio.paused && !audio.ended;
+        isScrubbing = true;
+        rotateScrubber(event);
+        window.addEventListener('mousemove', rotateScrubber);
+        window.addEventListener('mouseup', () => {
+            isScrubbing = false;
+            window.removeEventListener('mousemove', rotateScrubber);
+            if (!wasPlaying) {
+                audio.pause();
+            }
+        });
+    });
+
+    scrubber.addEventListener('touchstart', (event) => {
+        event.preventDefault(); 
+        wasPlaying = !audio.paused && !audio.ended;
+        const touch = event.touches[0];
+        isScrubbing = true;
+        rotateScrubber(touch);
+        window.addEventListener('touchmove', (event) => {
+            const touch = event.touches[0];
+            rotateScrubber(touch);
+        });
+        window.addEventListener('touchend', () => {
+            isScrubbing = false;
+            window.removeEventListener('touchmove', rotateScrubber);
+            if (!wasPlaying) {
+                audio.pause();
+            }
+        });
+    });
+
+    let lastTime = null;
+    function animateScrubber(timestamp) {
+        if (!lastTime) {
+            lastTime = timestamp;
+        }
+        const deltaTime = timestamp - lastTime;
+        const progress = audio.currentTime / audio.duration;
+        const angle = progress * (2 * Math.PI);
+        scrubber.style.transform = `rotate(${angle}rad)`;
+        lastTime = timestamp;
+        if (!audio.paused && !audio.ended) {
+            requestAnimationFrame(animateScrubber);
+        }
+    }
+
+    audio.addEventListener('play', () => {
+        lastTime = null;
+        requestAnimationFrame(animateScrubber);
+    });
+
+    audio.addEventListener('pause', () => {
+        lastTime = null;
+    });
+
+    audio.addEventListener('ended', () => {
+        lastTime = null;
+    });
+</script>
 </body>
 </html>

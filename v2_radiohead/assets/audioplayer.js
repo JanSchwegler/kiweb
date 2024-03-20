@@ -93,19 +93,21 @@ function setPositionByIndex() {
 
 document.getElementById('audioplayer-arrow-left').onclick = function() {
     if (currentIndex > 0)
-        currentIndex -= 1
+        animateRotation(slides[currentIndex]);
+        currentIndex -= 1;
         setPositionByIndex();
         updateScrubberCenter();
 }
 
 document.getElementById('audioplayer-arrow-right').onclick = function() {
     if (currentIndex < slides.length - 1)
+        animateRotation(slides[currentIndex]);
         currentIndex += 1
         setPositionByIndex();
         updateScrubberCenter();
 }
 
-// Audio player ---------------------------------------------------------------------------------------------------------
+// vinyl rotate ---------------------------------------------------------------------------------------------------------
 let scrubber = slides[currentIndex],
     initialTouchAngle = 0,
     initialElementAngle = 0,
@@ -139,6 +141,7 @@ function updateScrubberCenter() {
 }
 
 function scrubberTouchstart(event) {
+    event.preventDefault();
     dragging = true;
     let touch = event.touches[0];
     initialTouchAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX);
@@ -162,6 +165,7 @@ function scrubberTouchend() {
 }
 
 function scrubberMousedown(event) {
+    event.preventDefault();
     dragging = true;
     initialTouchAngle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
     initialElementAngle = getRotationDegrees(scrubber);
@@ -194,7 +198,7 @@ function getRotationDegrees(element) {
     return 0;
 }
 
-// Animation Functions ---------------------------------------------------------------------------------------------------
+// rotation rest animation ---------------------------------------------------------------------------------------------------
 function animateRotation(e) {
     let start = performance.now();
     let startRotation = getCurrentRotation(e);
@@ -214,21 +218,83 @@ function animateRotation(e) {
 
 function getCurrentRotation(e) {
     let transformValue = window.getComputedStyle(e).getPropertyValue('transform');
-    let matrix = transformValue.match(/^matrix\((.*)\)$/)[1].split(', ');
-    let angle = Math.round(Math.atan2(matrix[1], matrix[0]) * (180 / Math.PI));
-    return angle >= 0 ? angle : angle + 360; // Ensure positive angle
+    let angle;
+    if (transformValue != "none") {
+        let matrix = transformValue.match(/^matrix\((.*)\)$/)[1].split(', ');
+        angle = Math.round(Math.atan2(matrix[1], matrix[0]) * (180 / Math.PI));
+    } else {
+        angle = 0;
+    }
+    return angle > 0 ? angle : angle + 360;
 }
 
 function easeOut(t) {
     return 1 - Math.pow(1 - t, 2);
 }
 
+// audio play
 
+// let audios = Get all audio elements;
+let audio, 
+    secondsPerRotate = 10,
+    scrubberUpdateAnimationID,
+    lastRotationAngle = 0,
+    rotationStep = 0,
+    isScrubbing = false,
+    wasPlaying = false,
+    playPauseButton = document.getElementById('playpause');
 
+initialAudio(document.getElementById('audio'));
 
+playPauseButton.addEventListener('click', () => {
+    if (audio.paused || audio.ended) {
+        audio.play();
+        playPauseButton.textContent = 'Pause';
+    } else {
+        audio.pause();
+        playPauseButton.textContent = 'Play';
+    }
+});
 
+function initialAudio(newAudio) {
+    if (audio != null) {
+        audio.removeEventListener('timeupdate', audioTimeupdate);
+        audio.removeEventListener('pause', audioPause);
+        audio.removeEventListener('ended', audioEnded);
+    }
+    audio = newAudio;
+    audio.addEventListener('timeupdate', audioTimeupdate);
+    audio.addEventListener('pause', audioPause);
+    audio.addEventListener('ended', audioEnded);
+    lastRotationAngle = 0;
+    rotationStep = 0;
+}
 
+function updateScrubber() {
+    const rotationAngle = (360 / secondsPerRotate) * (audio.currentTime % secondsPerRotate);
+    let shortestPath = rotationAngle - lastRotationAngle;
+    if (Math.abs(shortestPath) > 180) {
+        shortestPath += shortestPath > 0 ? -360 : 360;
+    }
+    rotationStep = shortestPath / 10;
+    lastRotationAngle += rotationStep;
+    scrubber.style.transform = `rotate(${lastRotationAngle}deg)`;
+    //scrubberUpdateAnimationID = requestAnimationFrame(updateScrubber);
+}
 
+function audioTimeupdate() {
+    updateScrubber();
+}
+
+function audioPause() {
+    cancelAnimationFrame(scrubberUpdateAnimationID);
+}
+
+function audioEnded() {
+    cancelAnimationFrame(scrubberUpdateAnimationID);
+    animateRotation(slides[e]);
+    // TODO: restart / start next song
+}
 
 
 
@@ -280,8 +346,11 @@ function rotateScrubber(event) {
     }
 
     scrubber.style.transform = `rotate(${angle}rad)`;
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const progress = (angle + Math.PI) / (2 * Math.PI); // Calculate progress between 0 and 1
     // audio.currentTime = progress * audio.duration; // Set audio current time
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     lastX = event.clientX - centerX;
     lastY = event.clientY - centerY;
@@ -317,9 +386,11 @@ scrubber.addEventListener('touchstart', (event) => {
     });
 });
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update scrubber position
 audio.addEventListener('timeupdate', () => {
     // TODO change scrubber position calculation
     const progress = audio.currentTime / audio.duration;
     scrubber.style.transform = `rotate(${progress * (2 * Math.PI)}rad)`;
 }); */
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
