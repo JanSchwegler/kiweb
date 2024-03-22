@@ -25,11 +25,11 @@
   let currentRotation = 0;
 
   function updateRotation(e) {
-    const rect = rotatingDiv.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
-    const degrees = angle * (180 / Math.PI);
+    let rect = rotatingDiv.getBoundingClientRect();
+    let centerX = rect.left + rect.width / 2;
+    let centerY = rect.top + rect.height / 2;
+    let angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+    let degrees = angle * (180 / Math.PI);
     currentRotation = degrees;
     rotatingDiv.style.transform = `rotate(${rotationCount * 360 + currentRotation}deg)`;
   }

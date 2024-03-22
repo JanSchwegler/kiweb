@@ -10,8 +10,8 @@
     height: 300px;
     background-color: blue;
     position: absolute;
-    left: 50%;
-    top: 50%;
+    left: 30%;
+    top: 30%;
     transform-origin: 50% 50%;
   }
 </style>
@@ -21,9 +21,11 @@
 <script>
   const rotateDiv = document.getElementById('rotate-div');
   let scrubbing = false;
-  let initialScrubberAngle = 0; // angle of div / reset at audio change
-  let initialMouseAngle = 0; // angle of div / reset at audio change
-  let scrubbAngle = 0;
+  let initialScrubberAngle = 0; // initial angle of div / reset at audio change
+  let initialMouseAngle = 0; // initial angle of mosue / reset at audio change
+  let scrubbAngle = 0; // reset at new press
+  let fullRotationCount = 0; // reset at audio change
+  let maxSrubberAngle = 1440; // reset at audio change
 
   let initialAngle = 0; // del?
   let currentAngle = 0; // del?
@@ -57,14 +59,47 @@
     let centerX = rect.left + rect.width / 2;
     let centerY = rect.top + rect.height / 2;
     let mouseAngle = ((Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
+    if (mouseAngle - scrubbAngle < -180) { // forward
+      fullRotationCount++;
+      scrubbAngle -= 360;
+      console.log("test");
+    } else if (mouseAngle - scrubbAngle > 180) { // backward
+      //fullRotationCount--;
+      if (fullRotationCount > 0) { 
+        fullRotationCount--;
+        scrubbAngle += 360;
+        
+      } else {
+        console.log("fullRotationCount smaller than 0");
+      }
+    }
+    /*
+    if (fullRotationCount == 0 && mouseAngle - initialMouseAngle < 0) {
+      scrubbAngle = 0;
+    } else {
+      scrubbAngle = mouseAngle;
+    }*/
 
-    scrubbAngle += mouseAngle - scrubbAngle;
-    console.log(scrubbAngle - initialMouseAngle);
+    //console.log("OLD:" + scrubbAngle);
+    scrubbAngle = mouseAngle;
+    //console.log("NEW" + scrubbAngle);
 
+    if (initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle) < 0) {
+      console.log("smaller than 0");
+    } else if (initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle) > maxSrubberAngle) {
+      //console.log("bigger than 1800");
+    }
+
+    console.log(initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle));
+    //console.log(scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle);
+
+    // - initialMouseAngle -> add this at the end of the correct cintinuous rotation calculation to correct the angle
+
+    // OLD Code ?
     let angle = mouseAngle;
     const angleChange = angle - initialAngle;
     currentAngle += angleChange;
-
+     
     // Update total angle
     totalAngle += angleChange;
 
