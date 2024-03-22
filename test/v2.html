@@ -61,17 +61,17 @@
     let mouseAngle = ((Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
     if (mouseAngle - scrubbAngle < -180) { // forward
       fullRotationCount++;
-      scrubbAngle -= 360;
-      console.log("test");
+      //scrubbAngle -= 360;
     } else if (mouseAngle - scrubbAngle > 180) { // backward
-      //fullRotationCount--;
-      if (fullRotationCount > 0) { 
+      fullRotationCount--;
+      //scrubbAngle += 360;
+      /*if (fullRotationCount > 0) { 
         fullRotationCount--;
         scrubbAngle += 360;
         
       } else {
         console.log("fullRotationCount smaller than 0");
-      }
+      }*/
     }
     /*
     if (fullRotationCount == 0 && mouseAngle - initialMouseAngle < 0) {
@@ -84,12 +84,16 @@
     scrubbAngle = mouseAngle;
     //console.log("NEW" + scrubbAngle);
 
+    /*
     if (initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle) < 0) {
       console.log("smaller than 0");
     } else if (initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle) > maxSrubberAngle) {
-      //console.log("bigger than 1800");
-    }
+      console.log("bigger than maxSrubberAngle");
+    } else {
+      scrubbAngle = mouseAngle;
+    }*/
 
+    console.log("SCRUBB: " + scrubbAngle);
     console.log(initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle));
     //console.log(scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle);
 

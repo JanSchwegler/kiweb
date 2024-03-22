@@ -294,7 +294,7 @@ function updateScrubber() {
     let rotationAngle = (360 / secondsPerRotate) * (audio.currentTime % secondsPerRotate);
     let shortestPath = rotationAngle - lastRotationAngle;
     if (Math.abs(shortestPath) > 180) {
-        //shortestPath += shortestPath > 0 ? -360 : 360;
+        shortestPath += shortestPath > 0 ? -360 : 360;
     }
     rotationStep = shortestPath / 10;
     lastRotationAngle += rotationStep;
