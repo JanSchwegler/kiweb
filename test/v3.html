@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rotate Div Around Center</title>
+<style>
+  #rotatingDiv {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center center;
+  }
+</style>
+</head>
+<body>
+<div id="rotatingDiv"></div>
+<script>
+  const rotatingDiv = document.getElementById('rotatingDiv');
+
+  let rotationCount = 0;
+  let currentRotation = 0;
+
+  function updateRotation(e) {
+    const rect = rotatingDiv.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+    const degrees = angle * (180 / Math.PI);
+    currentRotation = degrees;
+    rotatingDiv.style.transform = `rotate(${rotationCount * 360 + currentRotation}deg)`;
+  }
+
+  document.addEventListener('mousemove', updateRotation);
+
+  rotatingDiv.addEventListener('transitionend', () => {
+    rotationCount += 1;
+  });
+</script>
+</body>
+</html>
