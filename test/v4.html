@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Read Rotation Angle</title>
+</head>
+<body>
+<div id="rotate-div" style="transform: rotate(807.823deg);"></div>
+
+<script>
+window.onload = function() {
+    // Get the element
+    var rotateDiv = document.getElementById('rotate-div');
+    
+    // Extract the rotation value from the style attribute
+    var transformValue = rotateDiv.style.transform;
+    
+    // Extract the rotation value from the transform property if it exists
+    if (transformValue && transformValue !== 'none') {
+        var matches = transformValue.match(/rotate\(([-\d.]+)deg\)/);
+        
+        if (matches && matches.length > 1) {
+            var angle = parseFloat(matches[1]);
+            
+            // Save the rotation angle
+            var initialScrubberAngle = angle;
+            
+            console.log("Initial Scrubber Angle: " + initialScrubberAngle);
+        } else {
+            console.log("Unable to extract rotation angle.");
+        }
+    } else {
+        // If there is no transform, set initialScrubberAngle to 0 or any other default value
+        var initialScrubberAngle = 0; // You can set any default value here
+        console.log("Initial Scrubber Angle not found, setting to default: " + initialScrubberAngle);
+    }
+};
+</script>
+</body>
+</html>

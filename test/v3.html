@@ -5,40 +5,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rotate Div Around Center</title>
 <style>
-  #rotatingDiv {
-    width: 100px;
-    height: 100px;
-    background-color: red;
+  #rotate-div {
+    width: 500px;
+    height: 300px;
+    background-color: blue;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: center center;
+    left: 30%;
+    top: 30%;
+    transform-origin: 50% 50%;
   }
 </style>
 </head>
 <body>
-<div id="rotatingDiv"></div>
+<div id="rotate-div"></div>
 <script>
-  const rotatingDiv = document.getElementById('rotatingDiv');
+  const rotateDiv = document.getElementById('rotate-div');
+  let scrubbing = false;
+  let initialScrubberAngle = 0; // initial angle of div / reset at audio change
+  let scrubbMove = 0; // Used to track every movment and calc the current offset / reset at scrubb start to initial mouse angle
+  let scrubbAngle = 0; // current scrubb movement in the allowed range / reset at scrubb start
+  let maxSrubberAngle = 1440; // reset at audio change
 
-  let rotationCount = 0;
-  let currentRotation = 0;
+  rotateDiv.addEventListener('mousedown', (e) => {
+    // Rest
+    scrubbing = true;
+    scrubbAngle = 0;
 
-  function updateRotation(e) {
-    let rect = rotatingDiv.getBoundingClientRect();
+    // initialScrubberAngle
+    let transformValue = rotateDiv.style.transform;
+    if (transformValue && transformValue !== 'none') {
+      transformValue = transformValue.match(/rotate\(([-\d.]+)deg\)/);
+      if (transformValue && transformValue.length > 1) {
+        initialScrubberAngle = parseFloat(transformValue[1]);
+      }
+    }
+
+    // initialMouseAngle -> scrubbMove
+    let rect = rotateDiv.getBoundingClientRect();
     let centerX = rect.left + rect.width / 2;
     let centerY = rect.top + rect.height / 2;
-    let angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
-    let degrees = angle * (180 / Math.PI);
-    currentRotation = degrees;
-    rotatingDiv.style.transform = `rotate(${rotationCount * 360 + currentRotation}deg)`;
-  }
+    scrubbMove = ((Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
 
-  document.addEventListener('mousemove', updateRotation);
-
-  rotatingDiv.addEventListener('transitionend', () => {
-    rotationCount += 1;
+    document.addEventListener('mousemove', rotate);
+    document.addEventListener('mouseup', () => {
+        document.removeEventListener('mousemove', rotate);
+        scrubbing = false;
+    });
   });
+
+  function rotate(e) {
+    let rect = rotateDiv.getBoundingClientRect();
+    let centerX = rect.left + rect.width / 2;
+    let centerY = rect.top + rect.height / 2;
+    let mouseAngle = ((Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
+    let angleDiffrence;
+    if (mouseAngle - scrubbMove < -180) { // forward
+      scrubbMove -= 360;
+    } else if (mouseAngle - scrubbMove > 180) { // backward
+      scrubbMove += 360;
+    }
+    angleDiffrence = mouseAngle - scrubbMove;
+    scrubbMove += angleDiffrence;
+
+    // --------- LIMITCHECK -----------------------------------------------------------
+
+    if (scrubbAngle + angleDiffrence + initialScrubberAngle > 0 && scrubbAngle + angleDiffrence + initialScrubberAngle < maxSrubberAngle) {
+      scrubbAngle += angleDiffrence;
+    }
+    rotateDiv.style.transform = `rotate(${scrubbAngle + initialScrubberAngle}deg)`;
+  }
 </script>
 </body>
 </html>

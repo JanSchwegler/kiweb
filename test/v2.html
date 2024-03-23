@@ -33,7 +33,7 @@
 
   rotateDiv.addEventListener('mousedown', (e) => {
     scrubbing = true;
-    scrubbAngle = 0;
+    //scrubbAngle = 0;
     // initialScrubberAngle
     let transform = window.getComputedStyle(rotateDiv).getPropertyValue('transform');
     let matrix = transform.match(/^matrix\((.+)\)$/);
@@ -46,6 +46,7 @@
     let centerX = rect.left + rect.width / 2;
     let centerY = rect.top + rect.height / 2;
     initialMouseAngle = ((Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
+    scrubbAngle = initialMouseAngle;
 
     document.addEventListener('mousemove', rotate);
     document.addEventListener('mouseup', () => {
@@ -59,12 +60,15 @@
     let centerX = rect.left + rect.width / 2;
     let centerY = rect.top + rect.height / 2;
     let mouseAngle = ((Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
+    let angleDiffrence;
     if (mouseAngle - scrubbAngle < -180) { // forward
       fullRotationCount++;
-      //scrubbAngle -= 360;
+      //angleDiffrence = mouseAngle - (scrubbAngle + 360);
+      mouseAngle += 360;
     } else if (mouseAngle - scrubbAngle > 180) { // backward
       fullRotationCount--;
-      //scrubbAngle += 360;
+      //angleDiffrence = mouseAngle - (scrubbAngle - 360);
+      mouseAngle -= 360;
       /*if (fullRotationCount > 0) { 
         fullRotationCount--;
         scrubbAngle += 360;
@@ -73,6 +77,21 @@
         console.log("fullRotationCount smaller than 0");
       }*/
     }
+    angleDiffrence = mouseAngle - scrubbAngle;
+    
+
+    // --------- LIMITCHECK -----------------------------------------------------------
+
+    if (initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle) < 0) {
+      console.log("test");
+      console.log(angleDiffrence);
+      console.log(scrubbAngle);
+    } else {
+      scrubbAngle += angleDiffrence;
+      console.log(initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle));
+    }
+    
+    
     /*
     if (fullRotationCount == 0 && mouseAngle - initialMouseAngle < 0) {
       scrubbAngle = 0;
@@ -81,7 +100,7 @@
     }*/
 
     //console.log("OLD:" + scrubbAngle);
-    scrubbAngle = mouseAngle;
+    //scrubbAngle = mouseAngle;
     //console.log("NEW" + scrubbAngle);
 
     /*
@@ -93,8 +112,8 @@
       scrubbAngle = mouseAngle;
     }*/
 
-    console.log("SCRUBB: " + scrubbAngle);
-    console.log(initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle));
+    //console.log("SCRUBB: " + scrubbAngle);
+    //console.log(initialScrubberAngle + (scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle));
     //console.log(scrubbAngle + (fullRotationCount * 360) - initialScrubberAngle);
 
     // - initialMouseAngle -> add this at the end of the correct cintinuous rotation calculation to correct the angle
