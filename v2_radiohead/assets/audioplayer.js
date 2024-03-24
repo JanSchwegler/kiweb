@@ -28,10 +28,8 @@ slides.forEach((slide, index) => {
     slide.addEventListener('mousemove', touchMove)
 
     // Listeners for scrubbing
-    slide.addEventListener('touchstart', scrubberTouchstart);
-    slide.addEventListener('touchmove', scrubberTouchmove);
-    slide.addEventListener('touchend', scrubberTouchend);
-    slide.addEventListener('mousedown', scrubberMousedown);
+    slide.addEventListener('touchstart', scrubbingDisc);
+    slide.addEventListener('mousedown', scrubbingDisc);
 });
 
 function touchStart(index) {
@@ -108,15 +106,15 @@ document.getElementById('audioplayer-arrow-right').onclick = function() {
 }
 
 // vinyl rotate ---------------------------------------------------------------------------------------------------------
-let scrubber = slides[currentIndex],
-    initialTouchAngle = 0,
-    initialElementAngle = 0,
-    initialAudioTime = 0,
+let scrubber = slides[currentIndex], // current vinyl
+    scrubbing = false // bool to tell if currently scrubbing
+    initialScrubberAngle = 0, // initial angle of div / reset at audio change
+    scrubbMove = 0, // Used to track every movment and calc the current offset / reset at scrubb start to initial mouse angle
+    scrubbAngle = 0, // current scrubb movement in the allowed range / reset at scrubb start
+    maxSrubberAngle = 0; // reset at audio change
     centerX = scrubber.offsetLeft + scrubber.offsetWidth / 2,
-    centerY = scrubber.offsetTop + scrubber.offsetHeight / 2,
-    dragging = false;
+    centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
 
-    
 async function scrubberResetRotation(e) {
     return new Promise(resolve => {
         let releaseHandler = () => {
@@ -142,85 +140,82 @@ function updateScrubberCenter() {
     centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
 }
 
-function scrubberTouchstart(event) {
+function scrubbingDisc(event) {
     event.preventDefault();
-    dragging = true;
-    let touch = event.touches[0];
-    initialTouchAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX);
-    initialElementAngle = getRotationDegrees(scrubber);
-}
-
-function scrubberTouchmove(event) {
-    event.preventDefault();
-    if (dragging) {
-        let touch = event.touches[0];
-        let currentTouchAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX);
-        let angleDiff = currentTouchAngle - initialTouchAngle;
-        let newRotation = (angleDiff * (180 / Math.PI)) + initialElementAngle;
-        scrubber.style.transform = 'rotate(' + newRotation + 'deg)';
-    }
-}
-
-function scrubberTouchend() {
-    dragging = false;
-    updateScrubberCenter();
-}
-
-function scrubberMousedown(event) {
-    event.preventDefault();
-    dragging = true;
+    // Reset
+    scrubbing = true;
+    scrubbAngle = 0;
     wasPlaying = !audio.paused && !audio.ended;
-    initialTouchAngle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
-    initialAudioTime = audio.currentTime;
-    initialElementAngle = getCurrentRotation(scrubber);
-    if (audio.paused || audio.ended) {
-        //audio.play();
+    // initialScrubberAngle
+    let transformValue = scrubber.style.transform;
+    if (transformValue && transformValue !== 'none') {
+      transformValue = transformValue.match(/rotate\(([-\d.]+)deg\)/);
+      if (transformValue && transformValue.length > 1) {
+        initialScrubberAngle = parseFloat(transformValue[1]);
+      }
+    }
+    if (event.type === 'touchstart') {
+        let touch = event.touches[0];
+        scrubbMove = ((Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
+        document.addEventListener('touchmove', rotate);
+        document.addEventListener('touchend', () => {
+            document.removeEventListener('touchmove', rotate);
+            scrubbing = false;
+            if (!wasPlaying) {
+                audio.pause();
+            }
+        });
+    } else {
+        scrubbMove = ((Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
+        document.addEventListener('mousemove', rotate);
+        document.addEventListener('mouseup', () => {
+            document.removeEventListener('mousemove', rotate);
+            scrubbing = false;
+            if (!wasPlaying) {
+                audio.pause();
+            }
+        });
     }
 }
-
-document.addEventListener('mousemove', function(event) {
-    if (dragging) {
-        let currentTouchAngle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
-        let angleDiff = (currentTouchAngle - initialTouchAngle) * (180 / Math.PI);
-        let newRotation = (angleDiff) + initialElementAngle;
-        scrubber.style.transform = 'rotate(' + newRotation + 'deg)';
-        
-        //console.log(angleDiff / 360 * secondsPerRotate);
-        let audioChange = angleDiff / 360 * secondsPerRotate;
-        console.log(audioChange);
-        if (initialAudioTime + audioChange >= audio.duration) {
-            //audio.currentTime = (audio.duration - 1);
-        } else {
-            //audio.currentTime = initialAudioTime + audioChange;
-        }
+function rotate(event) {
+    let mouseAngle;
+    if (event.type === 'touchmove') {
+        let touch = event.touches[0];
+        mouseAngle = ((Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
+    } else {
+        mouseAngle = ((Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
     }
-});
-
-document.addEventListener('mouseup', function() {
-    dragging = false;
-    if (!wasPlaying) {
-        audio.pause();
+    let angleDiffrence;
+    if (mouseAngle - scrubbMove < -180) {
+        scrubbMove -= 360;
+    } else if (mouseAngle - scrubbMove > 180) {
+        scrubbMove += 360;
     }
-    updateScrubberCenter();
-});
-
-function getRotationDegrees(element) {
-    let transform = window.getComputedStyle(element).getPropertyValue('transform');
-    let matrix = transform.match(/^matrix\((.+)\)$/);
-    if (matrix) {
-        let values = matrix[1].split(',');
-        let a = values[0];
-        let b = values[1];
-        let angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
-        return (angle < 0) ? angle + 360 : angle;
+    angleDiffrence = mouseAngle - scrubbMove;
+    scrubbMove += angleDiffrence;
+    // check limits
+    if (scrubbAngle + angleDiffrence + initialScrubberAngle > 0 && scrubbAngle + angleDiffrence + initialScrubberAngle < maxSrubberAngle) {
+        scrubbAngle += angleDiffrence;
     }
-    return 360;
+    scrubber.style.transform = `rotate(${scrubbAngle + initialScrubberAngle}deg)`;
+    audio.currentTime = (scrubbAngle + initialScrubberAngle) / 360 * secondsPerRotate;
 }
+
 
 // rotation rest animation ---------------------------------------------------------------------------------------------------
 function animateRotation(e) {
     let start = performance.now();
-    let startRotation = getCurrentRotation(e);
+
+    let transformValue = window.getComputedStyle(e).getPropertyValue('transform');
+    let angle;
+    if (transformValue != "none") {
+        let matrix = transformValue.match(/^matrix\((.*)\)$/)[1].split(', ');
+        angle = Math.round(Math.atan2(matrix[1], matrix[0]) * (180 / Math.PI));
+    } else {
+        angle = 360;
+    }
+    let startRotation = angle > 0 ? angle : angle + 360;
+
     let duration = (startRotation - 500) * -4;
     let endRotation = 360;
     function animate(currentTime) {
@@ -230,21 +225,11 @@ function animateRotation(e) {
         e.style.transform = `rotate(${interpolatedRotation}deg)`;
         if (elapsed < duration) {
             requestAnimationFrame(animate);
+        } else {
+            e.style.transform = "rotate(0deg)";
         }
     }
     requestAnimationFrame(animate);
-}
-
-function getCurrentRotation(e) {
-    let transformValue = window.getComputedStyle(e).getPropertyValue('transform');
-    let angle;
-    if (transformValue != "none") {
-        let matrix = transformValue.match(/^matrix\((.*)\)$/)[1].split(', ');
-        angle = Math.round(Math.atan2(matrix[1], matrix[0]) * (180 / Math.PI));
-    } else {
-        angle = 360;
-    }
-    return angle > 0 ? angle : angle + 360;
 }
 
 function easeOut(t) {
@@ -259,7 +244,6 @@ let audio,
     scrubberUpdateAnimationID,
     lastRotationAngle = 0,
     rotationStep = 0,
-    isScrubbing = false,
     wasPlaying = false,
     playPauseButton = document.getElementById('playpause');
 
@@ -278,27 +262,21 @@ playPauseButton.addEventListener('click', () => {
 function initialAudio(newAudio) {
     if (audio != null) {
         audio.removeEventListener('play', audioPlay);
-        //audio.removeEventListener('pause', audioPause);
         audio.removeEventListener('ended', audioEnded);
     }
     audio = newAudio;
     audio.addEventListener('play', audioPlay);
-    //audio.addEventListener('pause', audioPause);
     audio.addEventListener('ended', audioEnded);
     lastRotationAngle = 0;
     rotationStep = 0;
+    audio.addEventListener('loadedmetadata', function() {
+        maxSrubberAngle = (360 / secondsPerRotate) * audio.duration;
+        console.log(maxSrubberAngle);
+    });
 }
 
 function updateScrubber() {
-    // insert an if for not dragging?
-    let rotationAngle = (360 / secondsPerRotate) * (audio.currentTime % secondsPerRotate);
-    let shortestPath = rotationAngle - lastRotationAngle;
-    if (Math.abs(shortestPath) > 180) {
-        shortestPath += shortestPath > 0 ? -360 : 360;
-    }
-    rotationStep = shortestPath / 10;
-    lastRotationAngle += rotationStep;
-    scrubber.style.transform = `rotate(${lastRotationAngle}deg)`;
+    scrubber.style.transform = `rotate(${(360 / secondsPerRotate) * audio.currentTime}deg)`;
     // keep animating if audio is playing
     if (!audio.paused && !audio.ended) {
         requestAnimationFrame(updateScrubber);
@@ -309,113 +287,8 @@ function audioPlay() {
     requestAnimationFrame(updateScrubber);
 }
 
-function audioPause() {
-    //cancelAnimationFrame(scrubberUpdateAnimationID);
-}
-
 function audioEnded() {
-    console.log("test");
-    //cancelAnimationFrame(scrubberUpdateAnimationID);
     animateRotation(slides[currentIndex]); // can be removed if transition is added sucessfully
     initialAudio(audio);
     // TODO: restart / start next song
 }
-
-
-
-
-
-
-/* OLD -------------------------------------------------------------------------------------------------------------------------------------
-let audio = document.getElementById('audio'),
-    audioDuration = audio.duration,
-    scrubber = slides[currentIndex],
-    secondsPerRotate = 5;
-
-    //const scrubber = document.getElementById('scrubber');
-    let centerX = scrubber.offsetLeft + scrubber.offsetWidth / 2;
-    let centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
-    let startingPoint = 0;
-    let lastX = 0;
-    let lastY = 0;
-
- let playPauseButton = document.getElementById('playpause');
-
-playPauseButton.addEventListener('click', () => {
-    if (audio.paused || audio.ended) {
-        audio.play();
-        playPauseButton.textContent = 'Pause';
-    } else {
-        audio.pause();
-        playPauseButton.textContent = 'Play';
-    }
-});
-
-function updateCenter() {
-    centerX = scrubber.offsetLeft + scrubber.offsetWidth / 2;
-    centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
-}
-
-function rotateScrubber(event) {
-    const deltaX = event.clientX - centerX - lastX;
-    const deltaY = event.clientY - centerY - lastY;
-    const angleChange = Math.atan2(deltaY, deltaX); // Calculate angle change based on mouse movement
-
-    let angle;
-
-    if (scrubber.style && scrubber.style.transform) {
-        let currentAngle = parseFloat(scrubber.style.transform.match(/-?\d*\.?\d+/)[0]);
-        angle = currentAngle + angleChange;
-    } else {
-        angle = angleChange;
-    }
-
-    scrubber.style.transform = `rotate(${angle}rad)`;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const progress = (angle + Math.PI) / (2 * Math.PI); // Calculate progress between 0 and 1
-    // audio.currentTime = progress * audio.duration; // Set audio current time
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    lastX = event.clientX - centerX;
-    lastY = event.clientY - centerY;
-}
-
-// Scrubb envents
-scrubber.addEventListener('mousedown', (event) => {
-    event.preventDefault();
-    updateCenter(); // Update center position
-    startingPoint = Math.atan2(event.clientY - centerY, event.clientX - centerX);
-    lastX = event.clientX - centerX;
-    lastY = event.clientY - centerY;
-    
-    window.addEventListener('mousemove', rotateScrubber);
-    window.addEventListener('mouseup', () => {
-        window.removeEventListener('mousemove', rotateScrubber);
-    });
-});
-
-// Update center position on window resize
-window.addEventListener('resize', updateCenter);
-
-scrubber.addEventListener('touchstart', (event) => {
-    event.preventDefault();
-    const touch = event.touches[0];
-    rotateScrubber(touch);
-    window.addEventListener('touchmove', (event) => {
-        const touch = event.touches[0];
-        rotateScrubber(touch);
-    });
-    window.addEventListener('touchend', () => {
-        window.removeEventListener('touchmove', rotateScrubber(touch));
-    });
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Update scrubber position
-audio.addEventListener('timeupdate', () => {
-    // TODO change scrubber position calculation
-    const progress = audio.currentTime / audio.duration;
-    scrubber.style.transform = `rotate(${progress * (2 * Math.PI)}rad)`;
-}); */
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
