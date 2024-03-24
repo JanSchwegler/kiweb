@@ -4,6 +4,63 @@ window.addEventListener('resize', () => {
     updateScrubberCenter();
 });
 
+// open and close the player ---------------------------------------------------------------------------------------------
+function openPlayer(event) {
+    event.preventDefault();
+    let clickStartPosition = [], clickEndPosition = [];
+    if (event.type === 'touchstart') {
+        let touch = event.touches[0];
+        clickStartPosition = [touch.clientX, touch.clientY];
+        document.addEventListener('touchend', clickEnd);
+    } else {
+        clickStartPosition = [event.clientX, event.clientY];
+        document.addEventListener('mouseup', clickEnd);
+    }
+    function clickEnd (event) {
+        if (event.type === 'touchend') {
+            let touch = event.touches[0];
+            clickEndPosition = [touch.clientX, touch.clientY];
+            document.removeEventListener('touchend', clickEnd);
+        } else {
+            clickEndPosition = [event.clientX, event.clientY];
+            document.removeEventListener('mouseup', clickEnd);
+        }
+        if (Math.abs(clickStartPosition[0] - clickEndPosition[0]) <= 2 && Math.abs(clickStartPosition[1] - clickEndPosition[1]) <= 2) {
+            if (audioplayer.classList.contains('audioplayer-close')) {
+                audioplayer.classList.remove('audioplayer-close');
+            } else {
+                audioplayer.classList.add('audioplayer-close');
+            }
+        }
+    }
+}
+
+// mouse hover text -----------------------------------------------------------------------------------------------------
+let hoverText = document.getElementById("hoverText");
+function hoverText (event) {
+    if (audioplayer.classList.contains('audioplayer-close')) {
+        hoverText.innerHTML = "open";
+    } else {
+        hoverText.innerHTML = "play";
+    }
+    updatePosition(event);
+    hoverText.style.display = "block";
+    hoverText.style.opacity = "1";
+
+    document.addEventListener('mousemove', updatePosition);
+    document.addEventListener('mouseleave', () => {
+        hoverText.style.opacity = "1";
+        setTimeout(() => {
+            document.removeEventListener('mousemove', updatePosition);
+            hoverText.style.display = "block";
+        }, 1000);
+    });
+
+    function updatePosition (event) {
+
+    }
+}
+
 // Slider ---------------------------------------------------------------------------------------------------------------
 let slider = document.querySelector('.slider-container'),
     slides = Array.from(document.querySelectorAll('.slide'))
@@ -16,12 +73,12 @@ let isDragging = false,
     currentIndex = 0;
 
 slides.forEach((slide, index) => {
-    // Touch events
+    // Touch events slide
     slide.addEventListener('touchstart', touchStart(index))
     slide.addEventListener('touchend', touchEnd)
     slide.addEventListener('touchmove', touchMove)
 
-    // Mouse events
+    // Mouse events slide
     slide.addEventListener('mousedown', touchStart(index))
     slide.addEventListener('mouseup', touchEnd)
     slide.addEventListener('mouseleave', touchEnd)
@@ -30,12 +87,18 @@ slides.forEach((slide, index) => {
     // Listeners for scrubbing
     slide.addEventListener('touchstart', scrubbingDisc);
     slide.addEventListener('mousedown', scrubbingDisc);
+
+    // open and close player
+    slide.addEventListener('touchstart', openPlayer);
+    slide.addEventListener('mousedown', openPlayer);
 });
 
 function touchStart(index) {
     return function (event) {
         if(currentIndex != index) {
+            // Whait for no more touches -> then
             scrubberResetRotation(currentIndex).then((e) => {
+                initialAudio(audio);
                 animateRotation(slides[e]);
                 updateScrubberCenter();
             });
@@ -95,6 +158,7 @@ document.getElementById('audioplayer-arrow-left').onclick = function() {
         currentIndex -= 1;
         setPositionByIndex();
         updateScrubberCenter();
+        initialAudio(audio);
 }
 
 document.getElementById('audioplayer-arrow-right').onclick = function() {
@@ -103,15 +167,18 @@ document.getElementById('audioplayer-arrow-right').onclick = function() {
         currentIndex += 1
         setPositionByIndex();
         updateScrubberCenter();
+        initialAudio(audio);
 }
 
 // vinyl rotate ---------------------------------------------------------------------------------------------------------
 let scrubber = slides[currentIndex], // current vinyl
-    scrubbing = false // bool to tell if currently scrubbing
+    scrubberBackground = document.getElementById("slide-background"), // del?
+    scrubbing = false, // bool to tell if currently scrubbing
     initialScrubberAngle = 0, // initial angle of div / reset at audio change
     scrubbMove = 0, // Used to track every movment and calc the current offset / reset at scrubb start to initial mouse angle
     scrubbAngle = 0, // current scrubb movement in the allowed range / reset at scrubb start
-    maxSrubberAngle = 0; // reset at audio change
+    maxSrubberAngle = 0, // reset at audio change
+    movementTimer; // used to detect if there is no movement but a click
     centerX = scrubber.offsetLeft + scrubber.offsetWidth / 2,
     centerY = scrubber.offsetTop + scrubber.offsetHeight / 2;
 
@@ -142,10 +209,15 @@ function updateScrubberCenter() {
 
 function scrubbingDisc(event) {
     event.preventDefault();
+    // Backup get maxSrubberAngle
+    if (maxSrubberAngle < 2) {
+        maxSrubberAngle = (360 / secondsPerRotate) * audio.duration;
+    }
     // Reset
     scrubbing = true;
     scrubbAngle = 0;
     wasPlaying = !audio.paused && !audio.ended;
+    audio.pause();
     // initialScrubberAngle
     let transformValue = scrubber.style.transform;
     if (transformValue && transformValue !== 'none') {
@@ -160,24 +232,28 @@ function scrubbingDisc(event) {
         document.addEventListener('touchmove', rotate);
         document.addEventListener('touchend', () => {
             document.removeEventListener('touchmove', rotate);
+            clearTimeout(movementTimer);
             scrubbing = false;
-            if (!wasPlaying) {
-                audio.pause();
-            }
+            audio.play();
         });
     } else {
         scrubbMove = ((Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
         document.addEventListener('mousemove', rotate);
         document.addEventListener('mouseup', () => {
             document.removeEventListener('mousemove', rotate);
+            clearTimeout(movementTimer);
             scrubbing = false;
-            if (!wasPlaying) {
-                audio.pause();
-            }
+            audio.play();
         });
     }
 }
 function rotate(event) {
+    // start playing on scrubb
+    if (audio.paused || audio.ended) {
+        audio.play();
+    }
+    clearTimeout(movementTimer);
+    // calc scrubb move
     let mouseAngle;
     if (event.type === 'touchmove') {
         let touch = event.touches[0];
@@ -199,8 +275,11 @@ function rotate(event) {
     }
     scrubber.style.transform = `rotate(${scrubbAngle + initialScrubberAngle}deg)`;
     audio.currentTime = (scrubbAngle + initialScrubberAngle) / 360 * secondsPerRotate;
+    // set timer to check moves
+    movementTimer = setTimeout(function() {
+        audio.pause();
+    }, 10);
 }
-
 
 // rotation rest animation ---------------------------------------------------------------------------------------------------
 function animateRotation(e) {
@@ -236,19 +315,17 @@ function easeOut(t) {
     return 1 - Math.pow(1 - t, 2);
 }
 
-// audio play
+// audio play ---------------------------------------------------------------------------------------------------
 
-// let audios = Get all audio elements;
+let audios = Array.from(document.querySelectorAll('.slide audio'))
 let audio, 
     secondsPerRotate = 10,
     scrubberUpdateAnimationID,
-    lastRotationAngle = 0,
-    rotationStep = 0,
     wasPlaying = false,
     playPauseButton = document.getElementById('playpause');
-
 initialAudio(document.getElementById('audio'));
-
+// Triggr play and pause
+/*
 playPauseButton.addEventListener('click', () => {
     if (audio.paused || audio.ended) {
         audio.play();
@@ -257,27 +334,28 @@ playPauseButton.addEventListener('click', () => {
         audio.pause();
         playPauseButton.textContent = 'Play';
     }
-});
+});*/
 
 function initialAudio(newAudio) {
+    let wasPlaying = false;
     if (audio != null) {
+        wasPlaying = !audio.paused && !audio.ended;
         audio.removeEventListener('play', audioPlay);
         audio.removeEventListener('ended', audioEnded);
+        audio.pause();
+        audio.currentTime = 0;
     }
-    audio = newAudio;
+    audio = audios[currentIndex];
     audio.addEventListener('play', audioPlay);
     audio.addEventListener('ended', audioEnded);
-    lastRotationAngle = 0;
-    rotationStep = 0;
     audio.addEventListener('loadedmetadata', function() {
         maxSrubberAngle = (360 / secondsPerRotate) * audio.duration;
-        console.log(maxSrubberAngle);
     });
+    wasPlaying ? audio.play() : null;
 }
-
+// updateScrubber with animation called from audioPlay
 function updateScrubber() {
     scrubber.style.transform = `rotate(${(360 / secondsPerRotate) * audio.currentTime}deg)`;
-    // keep animating if audio is playing
     if (!audio.paused && !audio.ended) {
         requestAnimationFrame(updateScrubber);
     }
@@ -290,5 +368,21 @@ function audioPlay() {
 function audioEnded() {
     animateRotation(slides[currentIndex]); // can be removed if transition is added sucessfully
     initialAudio(audio);
-    // TODO: restart / start next song
+    // start next song / if last -> go to first
+    if (currentIndex < slides.length - 1) {
+        animateRotation(slides[currentIndex]);
+        currentIndex += 1;
+        setPositionByIndex();
+        updateScrubberCenter();
+        initialAudio(audio);
+    } else {
+        animateRotation(slides[currentIndex]);
+        currentIndex = 0;
+        setPositionByIndex();
+        updateScrubberCenter();
+        initialAudio(audio);
+    }
 }
+
+// TODO: 
+// Rotate background on scrubbing and play animation. NOT the reset to 0 deg
