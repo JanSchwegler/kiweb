@@ -18,7 +18,7 @@ function openPlayer(event) {
     }
     function clickEnd (event) {
         if (event.type === 'touchend') {
-            let touch = event.touches[0];
+            let touch = event.changedTouches[0];
             clickEndPosition = [touch.clientX, touch.clientY];
             document.removeEventListener('touchend', clickEnd);
         } else {
