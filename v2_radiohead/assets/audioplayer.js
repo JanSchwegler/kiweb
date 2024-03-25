@@ -70,7 +70,7 @@ function hoverText (event) {
         let x = event.clientX;
         let y = event.clientY;
         hoverTextElement.style.left = x + "px";
-        hoverTextElement.style.top = y + 20 + "px";
+        hoverTextElement.style.top = y + 30 + "px";
     }
 }
 
@@ -84,6 +84,9 @@ let isDragging = false,
     prevTranslate = 0,
     animationID = 0,
     currentIndex = 0;
+
+// add listener for mouse hover text
+slides[currentIndex].addEventListener('mouseenter', hoverText)
 
 slides.forEach((slide, index) => {
     // Touch events slide
@@ -115,10 +118,8 @@ function touchStart(index) {
                 animateRotation(slides[e]);
                 updateScrubberCenter();
                 // remove and add eventlistner from old slide
-                /*
-                console.log(slides[currentIndex]);
-                slides[currentIndex].removeEventListener('mouseenter', hoverText) // remove listener from old slide
-                slides[index].addEventListener('mouseenter', hoverText) // add listener to new slide*/
+                slides[e].removeEventListener('mouseenter', hoverText) // remove listener from old slide
+                slides[index].addEventListener('mouseenter', hoverText) // add listener to new slide
             });
         }
         currentIndex = index
@@ -344,8 +345,7 @@ let audios = Array.from(document.querySelectorAll('.slide audio'))
 let audio, 
     secondsPerRotate = 10,
     scrubberUpdateAnimationID,
-    wasPlaying = false,
-    playPauseButton = document.getElementById('playpause');
+    wasPlaying = false;
 initialAudio();
 // Triggr play and pause
 /*
