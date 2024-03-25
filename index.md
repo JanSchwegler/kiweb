@@ -194,7 +194,168 @@ Beispiel mit aktueller Rotation von 180 Grad und 4 vollen Drehungen:
 
 Zu diesem Zeitpunkt wurde jedoch die Schallplatte noch mit einer Spanne von 0 bis 360 Grad bewegt. Um die Sprung von 360 zu 0 zu meistern ohne zurück zu drehen wurde eeine funktion verwendet um den kürzesten Weg zu berechnen und diese Rotation zu nehmen. 
 
-Die noch grössere Herausvorderung stelle sich jedoch erst jetzt, als ein Maximum und Minimum an Rotation eingefügt werden sollte. Mir war hierbei wichtig, dass während des Scrubbings beim Erreichen des Starts und des Ende der Audio die Schallplatte stehen bleibt und nicht weiter dreht. Ein if-Statment einzufügen welches vor der Rotation die Werte prüft, war meine erste Idee. Hier war das Problem, dass im Hintergrund die Rotationen fortgesetzt wurden, was das zurückdrehen sehr unschön erscheinen lies. Ich wollte, dass die Schallplatte beim erreichen des Limits stehen bleibt. Während in diese Richtung gedreht wurd, passiert visuell nichts und auch die Werte im Hintergrund sollten unbeinflusst werden. Sobald eine Gegenrotaion ausgeführt wird, soll die Schallplatte sofort gedreht werden. Das zurücksetzen bzw. stehen lassen des Zählers der vollen Rotationen verursachte Probleme bei der Berechnung der aktuellen ROtation. Auch das Nicht-Aktualisieren der Rotationsposition funktionierte nicht, da somit die Refferenz für die nächste Rotationsdifferenz fehlte. Auch mit einer weiteren Variable löste sich das Problem nicht, denn man müsste mit der Maus bis zur entsprechenden Position zurück fahren, um die Schallplatte aufzugreiffen. Da die Schallplatte z.B. nur bis 4 Rotationen und 180 Grad fährt. falls ich nun bei 360 Grad mit der Maus umkehren würde, müsste ich bis 180 zurück rotieren, bis der Wert der Mausposition kleiner wird als die der Schallplatte. Dieses verhalten wollte ich umbedingt vermeiden. Die Schallplatte sollte direkt zurückgedreht werden. Da wurde es mir klar, es reicht nicht, die aktuelle Mausrotation und die vorherige Mausrotation für eine Differenz abzufragen. Ich musste unabhängig von der Rotation und jeglichen Limits, die Differenz der vorherigen und aktuellen Mausposition berechnen und separat abspeiuchern. Sobald die aktuelle Rotation + diese Differenz zu gross bzw. zu klein wird, darf die Schallplatte nicht bewegt werden. 
+Die noch grössere Herausvorderung stelle sich jedoch erst jetzt, als ein Maximum und Minimum an Rotation eingefügt werden sollte. Mir war hierbei wichtig, dass während des Scrubbings beim Erreichen des Starts und des Ende der Audio die Schallplatte stehen bleibt und nicht weiter dreht. Ein if-Statment einzufügen welches vor der Rotation die Werte prüft, war meine erste Idee. Hier war das Problem, dass im Hintergrund die Rotationen fortgesetzt wurden, was das zurückdrehen sehr unschön erscheinen lies. Ich wollte, dass die Schallplatte beim erreichen des Limits stehen bleibt. Während in diese Richtung gedreht wurd, passiert visuell nichts und auch die Werte im Hintergrund sollten unbeinflusst werden. Sobald eine Gegenrotaion ausgeführt wird, soll die Schallplatte sofort gedreht werden. Das zurücksetzen bzw. stehen lassen des Zählers der vollen Rotationen verursachte Probleme bei der Berechnung der aktuellen ROtation. Auch das Nicht-Aktualisieren der Rotationsposition funktionierte nicht, da somit die Refferenz für die nächste Rotationsdifferenz fehlte. Auch mit einer weiteren Variable löste sich das Problem nicht, denn mensch müsste mit der Maus bis zur entsprechenden Position zurück fahren, um die Schallplatte aufzugreiffen. Da die Schallplatte z.B. nur bis 4 Rotationen und 180 Grad fährt. falls ich nun bei 360 Grad mit der Maus umkehren würde, müsste ich bis 180 zurück rotieren, bis der Wert der Mausposition kleiner wird als die der Schallplatte. Dieses verhalten wollte ich umbedingt vermeiden. Die Schallplatte sollte direkt zurückgedreht werden. Da wurde es mir klar, es reicht nicht, die aktuelle Mausrotation und die vorherige Mausrotation für eine Differenz abzufragen. Ich musste unabhängig von der Rotation und jeglichen Limits, die Differenz der vorherigen und aktuellen Mausposition berechnen und separat abspeiuchern. Sobald die aktuelle Rotation + diese Differenz zu gross bzw. zu klein wird, darf die Schallplatte nicht bewegt werden. 
+
+In diesem Abschnitt wird bei jeder Bewegung des Scrubbings die Differenz des Winkels (angleDiffrence) berechnet:
+
+```
+let mouseAngle;
+let angleDiffrence;
+if (event.type === 'touchmove') {
+    let touch = event.touches[0];
+    mouseAngle = ((Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
+} else {
+    mouseAngle = ((Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
+}
+if (mouseAngle - scrubbMove < -180) {
+    scrubbMove -= 360;
+} else if (mouseAngle - scrubbMove > 180) {
+    scrubbMove += 360;
+}
+angleDiffrence = mouseAngle - scrubbMove;
+scrubbMove += angleDiffrence;
+```
+
+Nach der erfolgreichen Berechung wird der Winkel der Schallplatte sowie die Zeit der Audio angepasst:
+
+```
+scrubber.style.transform = `rotate(${scrubbAngle + initialScrubberAngle}deg)`;
+audio.currentTime = (scrubbAngle + initialScrubberAngle) / 360 * secondsPerRotate;
+```
+
+Während des erstellen des Codes musste ich stehts darauf acht geben, an den richtigen Stellen die Audio zu pausieren oder abspielen zu lassen. Beispielweise beim Wechsel der Schallplatten: Es wird wird geprüft ob die letzte Schallplatte abgespielt wurde oder nicht. Falls ja, wird die neue ebenfalls automatisch abgespielt:
+
+```
+wasPlaying ? audio.play() : null;
+```
+
+Wenn eine Schallplatte zuende Abgespielt wurde, wird der Slider ausgelöst, die Schallplatte gewechselt und automatisch abgespielt. Falls die letzte Schallplatte zu ende gespielt wurde, wird auf die Erste gewechselt:
+
+```
+function audioEnded() {
+  // start next song / if last -> go to first
+  if (currentIndex < slides.length - 1) {
+      animateRotation(slides[currentIndex]);
+      currentIndex += 1;
+      setPositionByIndex();
+      updateScrubberCenter();
+      initialAudio();
+  } else {
+      animateRotation(slides[currentIndex]);
+      currentIndex = 0;
+      setPositionByIndex();
+      updateScrubberCenter();
+      initialAudio();
+  }
+}
+```
+
+Natürlich muss auch während des abspielens der Audio die Schallplatte gedreht werden:
+
+```
+function updateScrubber() {
+  scrubber.style.transform = `rotate(${(360 / secondsPerRotate) * audio.currentTime}deg)`;
+  if (!audio.paused && !audio.ended) {
+      requestAnimationFrame(updateScrubber);
+  }
+}
+```
+
+### Minimierung
+Nach meinem Konzept wollte ich, dass durch die Schallplatten geschaut werden kann und ein Song angeklickt und somit abgespielt werden kann. Durch das Abspielen verkleinert sich die Auswahl und es ist nur noch die aktuelle Schallplatte am Festerrand ersichtlich. Mit einem Klick auf diese kann die Auswahl geöffnet und einen neuen Song gewählt werden. Durch meine Grundstruktur habe ich bereits den Audioplayer mit der Schallplattenauswahl absolut nach dem rechten Bildschirmrand platziert. Nun musste nur auf eine eher umständliche Art einen normalen Klick (kein Scrubbing) erkannt werden. Dadurch wird eine CSS-Klasse (audioplayer-close) dem PLayer hinzugefügt welche wenige CSS-Anpassungen vornimmt. Durch einen erneuten klick beim minimierten Player werden die CSS-Anpassungen entfernt:
+
+```
+function openPlayer(event) {
+  event.preventDefault();
+  let clickStartPosition = [], clickEndPosition = [];
+  if (event.type === 'touchstart') {
+    let touch = event.touches[0];
+    clickStartPosition = [touch.clientX, touch.clientY];
+    document.addEventListener('touchend', clickEnd);
+  } else {
+    clickStartPosition = [event.clientX, event.clientY];
+    document.addEventListener('mouseup', clickEnd);
+  }
+  function clickEnd (event) {
+    if (event.type === 'touchend') {
+      let touch = event.changedTouches[0];
+      clickEndPosition = [touch.clientX, touch.clientY];
+      document.removeEventListener('touchend', clickEnd);
+    } else {
+      clickEndPosition = [event.clientX, event.clientY];
+      document.removeEventListener('mouseup', clickEnd);
+    }
+    if (Math.abs(clickStartPosition[0] - clickEndPosition[0]) <= 2 && Math.abs(clickStartPosition[1] - clickEndPosition[1]) <= 2) {
+      if (audioplayer.classList.contains('audioplayer-close')) {
+        audioplayer.classList.remove('audioplayer-close');
+      } else {
+        audioplayer.classList.add('audioplayer-close');
+      }
+    }
+  }
+}
+```
+
+```
+aside#audioplayer.audioplayer-close {
+  width: calc(15vw + 10px);
+  background-color: initial;
+}
+aside#audioplayer.audioplayer-close #slide-background {
+  left: 0;
+}
+aside#audioplayer.audioplayer-close .slider-container {
+  padding-left: 10px;
+}
+aside#audioplayer.audioplayer-close .arrow {
+  opacity: 0;
+}
+```
+
+Hier gibt es noch kleine Punkte welche noch nicht behoben wurden, bevor ich zum nächsten Schritt gegangen bin. Beispielsweise funktioniert das Scrubbing im Minimierten Player noch nicht wie gewünscht, da das Zentrum nicht korrekt ist oder auch der Schallplattenwechsel sollte noch eine spezifische Animation für die minimierte Ansicht erhalten.
+
+### Hovertext
+Um den Audioplayer verständlicher zu machen, wollte ich einen Text bei der Maus einfügen welcher beispielsweise "play" zeigt. Hierfür habe ich ein div erstellt welches für soche Texte verwendet werden kann. in einer Funktion wird zuerst zwischen den möglichen Texten differenziert. Anschliessend wird der Text zu der Mausposition verschoben und zum Schluss der funktion wird das ein- und ausblenden des Textes gesteuert. Hierbei war eine Herausforderung das verzögerte Ausblanden. Wenn die Schallplatte verlassend wird, wird mit einer Verzögerung von 0.3s der Text ausgeblendet. Somit kann per CSS die Deckkraft in dieser Zeit reduziert werden. Das Problem hierbei war, falls in den 0.3s die Maus erneut über die Schallplatte fährt, wird der Text trotzdem ausgeblendet. Zuerst versucht ich das Problem mit `clearTimeout(hideTextTimeout);` zu lösen, jedoch hat das aus unerklährlichen gründen nicht geklappt. Nun habe ich eine zusaätzliche Varable erstellt, welche das Problem löst.
+
+```
+let hoverTextElement = document.getElementById("hoverText");
+let hoverTextAudioPLayed = false;
+let hideTextTimeout = null;
+let hotfixStopClear = false;
+function hoverText (event) {
+    hotfixStopClear = true;
+    if (audioplayer.classList.contains('audioplayer-close')) {
+        hoverTextElement.innerHTML = "open";
+    } else {
+        if (hoverTextAudioPLayed) {
+            hoverTextElement.innerHTML = "scrubb me!";
+        } else {
+            hoverTextElement.innerHTML = "play";
+        }
+    }
+    updatePosition(event);
+    hoverTextElement.style.display = "block";
+    hoverTextElement.style.opacity = "1";
+    document.addEventListener('mousemove', updatePosition);
+    event.target.addEventListener('mouseleave', () => {
+        hoverTextElement.style.opacity = "0";
+        hotfixStopClear = false;
+        hideTextTimeout = setTimeout(function() {
+            if (!hotfixStopClear) {
+                document.removeEventListener('mousemove', updatePosition);
+                hoverTextElement.style.display = "none";
+            }
+        }, 300);
+    });
+    function updatePosition (event) {
+        let x = event.clientX;
+        let y = event.clientY;
+        hoverTextElement.style.left = x + "px";
+        hoverTextElement.style.top = y + 30 + "px";
+    }
+}
+```
+
 
 
 

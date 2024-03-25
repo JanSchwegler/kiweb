@@ -65,7 +65,6 @@ function hoverText (event) {
             }
         }, 300);
     });
-
     function updatePosition (event) {
         let x = event.clientX;
         let y = event.clientY;
@@ -279,13 +278,13 @@ function rotate(event) {
     clearTimeout(movementTimer);
     // calc scrubb move
     let mouseAngle;
+    let angleDiffrence;
     if (event.type === 'touchmove') {
         let touch = event.touches[0];
         mouseAngle = ((Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
     } else {
         mouseAngle = ((Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
     }
-    let angleDiffrence;
     if (mouseAngle - scrubbMove < -180) {
         scrubbMove -= 360;
     } else if (mouseAngle - scrubbMove > 180) {
@@ -409,3 +408,4 @@ function audioEnded() {
 
 // TODO: 
 // Rotate background on scrubbing and play animation. NOT the reset to 0 deg
+// Change ResetCenter function to work when player is minimized
