@@ -1,3 +1,9 @@
+<!--
+    <audio id="audio1"><source src="../v2_radiohead/assets/audio/01_Creep.mp3" type="audio/mpeg"></audio>
+    <audio id="audio2"><source src="../v2_radiohead/assets/audio/02_No Surprises.mp3" type="audio/mpeg"></audio>
+    <audio id="audio3"><source src="../v2_radiohead/assets/audio/03_Karma Police.mp3" type="audio/mpeg"></audio>
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,14 +18,111 @@
     <style>
         input { width: 350px; display: block; }
     </style>
-    <audio><source src="assets/audio/01_Creep.mp3" type="audio/mpeg"></audio>
-    <audio><source src="assets/audio/02_No Surprises.mp3" type="audio/mpeg"></audio>
-    <audio><source src="assets/audio/03_Karma Police.mp3" type="audio/mpeg"></audio>
-    <input type="range" id="slider1" min="0" max="1" step="0.005" disabled>
-    <input type="range" id="slider2" min="0" max="1" step="0.005" disabled>
-    <input type="range" id="slider3" min="0" max="1" step="0.005" disabled>
-    <script>
+    <audio id="audio1"><source src="../v2_radiohead/assets/audio/01_Creep.mp3" type="audio/mpeg"></audio>
+    <audio id="audio2"><source src="../v2_radiohead/assets/audio/02_No Surprises.mp3" type="audio/mpeg"></audio>
+    <audio id="audio3"><source src="../v2_radiohead/assets/audio/03_Karma Police.mp3" type="audio/mpeg"></audio>
+    
+    <!-- Play/pause button for the first audio -->
+    <button id="playPauseButton1">Play</button>
+    <input type="range" id="slider1" min="0" max="1" step="0.005">
+    
+    <!-- Play/pause button for the second audio -->
+    <button id="playPauseButton2">Play</button>
+    <input type="range" id="slider2" min="0" max="1" step="0.005">
+    
+    <!-- Play/pause button for the third audio -->
+    <button id="playPauseButton3">Play</button>
+    <input type="range" id="slider3" min="0" max="1" step="0.005">
 
+    <script>
+        let audioCtx;
+
+        function createAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+        }
+
+        const audioElements = [
+            document.getElementById('audio1'),
+            document.getElementById('audio2'),
+            document.getElementById('audio3')
+        ];
+
+        const playPauseButtons = [
+            document.getElementById('playPauseButton1'),
+            document.getElementById('playPauseButton2'),
+            document.getElementById('playPauseButton3')
+        ];
+
+        const sliders = [
+            document.getElementById('slider1'),
+            document.getElementById('slider2'),
+            document.getElementById('slider3')
+        ];
+
+        const sources = [];
+
+        // Function to start or pause audio playback
+        function togglePlay(index) {
+            createAudioContext();
+            const audioElement = audioElements[index];
+            const playPauseButton = playPauseButtons[index];
+            const slider = sliders[index];
+            if (audioElement.paused || audioElement.ended) {
+                if (!sources[index]) {
+                    const source = audioCtx.createMediaElementSource(audioElement);
+                    source.connect(audioCtx.destination);
+                    sources[index] = source;
+                    audioElement.addEventListener('timeupdate', () => updateTime(index));
+                }
+                audioElement.play();
+                playPauseButton.textContent = 'Pause';
+            } else {
+                audioElement.pause();
+                playPauseButton.textContent = 'Play';
+            }
+        }
+
+        // Function to update slider position based on audio playback
+        function updateTime(index) {
+            const audioElement = audioElements[index];
+            const slider = sliders[index];
+            slider.value = audioElement.currentTime / audioElement.duration;
+            if (slider.value >= 1) {
+                audioElement.pause();
+                playPauseButtons[index].textContent = 'Play';
+            }
+        }
+
+        // Function to handle slider input during scrubbing
+        function handleScrubbing(index) {
+            const audioElement = audioElements[index];
+            const slider = sliders[index];
+            const scrubbingInterval = setInterval(() => {
+                audioElement.currentTime = slider.value * audioElement.duration;
+                if (!audioElement.paused && !audioElement.ended) {
+                    clearInterval(scrubbingInterval);
+                }
+            }, 250); // Update every 250 milliseconds during scrubbing
+        }
+
+        // Event listeners for play/pause buttons
+        playPauseButtons.forEach((button, index) => {
+            button.addEventListener('click', () => togglePlay(index));
+        });
+
+        // Event listeners for sliders
+        sliders.forEach((slider, index) => {
+            slider.addEventListener('input', () => {
+                const audioElement = audioElements[index];
+                audioElement.currentTime = slider.value * audioElement.duration;
+                // If the audio is paused or ended, start handling scrubbing
+                if (audioElement.paused || audioElement.ended) {
+                    handleScrubbing(index);
+                }
+            });
+        });
     </script>
 </body>
 </html>
