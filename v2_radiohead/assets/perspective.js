@@ -24,8 +24,8 @@ window.addEventListener('mousemove', function(event) {
     mouseY = event.clientY;
     let relativePositionX = (mouseX / windowW);
     let relativePositionY = (mouseY / windowH);
-    element.style.paddingLeft = "calc(10vw + " + (50 * relativePositionX) + "px)";
-    element.style.paddingTop = (50 * relativePositionY) + 25 + "px";
+    element.style.marginLeft = "calc(10vw + " + (50 * relativePositionX) + "px)";
+    element.style.paddingTop = (50 * relativePositionY) + 75 + "px";
 
     // TODO: add movement for player
 });

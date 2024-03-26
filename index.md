@@ -359,6 +359,11 @@ function hoverText (event) {
 ## Visualisierung der Audio
 Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. 
 
+# Anpassungen Aufgrund von Feedback
+- Audioplayer nicht an der Seite, nur statisch in der Seite
+- keine Persketive / Movement
+- 
+
 
 <!---
 [Link in new Tab](radiohead/){:target="_blank"}

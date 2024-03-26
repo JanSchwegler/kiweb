@@ -35,6 +35,7 @@
     <input type="range" id="slider3" min="0" max="1" step="0.005">
 
     <script>
+        /*
         const audioCtx1 = new AudioContext();
         const audioCtx2 = new AudioContext();
         const audioCtx3 = new AudioContext();
@@ -68,6 +69,64 @@
             })
             .catch(console.error);
         }
+
+        document.getElementById('playPauseButton1').onclick = () => {
+            console.log(sources);
+        };
+
+        console.log(sources);*/
+
+        
+        
+
+        const audioCtx1 = new AudioContext();
+        const audioCtx2 = new AudioContext();
+        const audioCtx3 = new AudioContext();
+
+        const sliders = document.querySelectorAll('input[type="range"]');
+        const audioSources = [
+            document.getElementById('audio1'),
+            document.getElementById('audio2'),
+            document.getElementById('audio3')
+        ];
+
+        const audioContexts = [audioCtx1, audioCtx2, audioCtx3];
+        const sources = [
+            audioContexts[0].createBufferSource(), 
+            audioContexts[1].createBufferSource(), 
+            audioContexts[2].createBufferSource()
+        ];
+        const analyzers = [
+            audioContexts[0].createAnalyser(), 
+            audioContexts[1].createAnalyser(), 
+            audioContexts[2].createAnalyser()
+        ];
+
+        sources[0].connect(analyzers[0]);
+        analyzers[0].connect(audioContexts[0].destination);
+
+
+        for (let i = 0; i < audioSources.length; i++) {
+            fetch(audioSources[i].querySelector('source').src)
+            .then(resp => resp.arrayBuffer())
+            .then(buf => audioContexts[i].decodeAudioData(buf))
+            .then(audioBuffer => {
+                let source = audioContexts[i].createBufferSource();
+                source.buffer = audioBuffer;
+                let slider = sliders[i];
+                sources[i] = source;
+                source.start(0, slider.value * audioBuffer.duration, 0.1);
+                slider.oninput = e => {
+                    if (sources[i]) {
+                        sources[i].stop(0);
+                    }
+                    source.start(0, slider.value * audioBuffer.duration, 0.1);
+                };
+            })
+            .catch(console.error);
+        }
+
+        console.log(sources);
 
     </script>
 </body>
