@@ -35,94 +35,40 @@
     <input type="range" id="slider3" min="0" max="1" step="0.005">
 
     <script>
-        let audioCtx;
+        const audioCtx1 = new AudioContext();
+        const audioCtx2 = new AudioContext();
+        const audioCtx3 = new AudioContext();
 
-        function createAudioContext() {
-            if (!audioCtx) {
-                audioCtx = new AudioContext();
-            }
-        }
-
-        const audioElements = [
+        const sliders = document.querySelectorAll('input[type="range"]');
+        const audioSources = [
             document.getElementById('audio1'),
             document.getElementById('audio2'),
             document.getElementById('audio3')
         ];
 
-        const playPauseButtons = [
-            document.getElementById('playPauseButton1'),
-            document.getElementById('playPauseButton2'),
-            document.getElementById('playPauseButton3')
-        ];
-
-        const sliders = [
-            document.getElementById('slider1'),
-            document.getElementById('slider2'),
-            document.getElementById('slider3')
-        ];
-
+        const audioContexts = [audioCtx1, audioCtx2, audioCtx3];
         const sources = [];
 
-        // Function to start or pause audio playback
-        function togglePlay(index) {
-            createAudioContext();
-            const audioElement = audioElements[index];
-            const playPauseButton = playPauseButtons[index];
-            const slider = sliders[index];
-            if (audioElement.paused || audioElement.ended) {
-                if (!sources[index]) {
-                    const source = audioCtx.createMediaElementSource(audioElement);
-                    source.connect(audioCtx.destination);
-                    sources[index] = source;
-                    audioElement.addEventListener('timeupdate', () => updateTime(index));
-                }
-                audioElement.play();
-                playPauseButton.textContent = 'Pause';
-            } else {
-                audioElement.pause();
-                playPauseButton.textContent = 'Play';
-            }
+        for (let i = 0; i < audioSources.length; i++) {
+            fetch(audioSources[i].querySelector('source').src)
+            .then(resp => resp.arrayBuffer())
+            .then(buf => audioContexts[i].decodeAudioData(buf))
+            .then(audioBuffer => {
+                const slider = sliders[i];
+                slider.oninput = e => {
+                    if (sources[i]) {
+                        sources[i].stop(0);
+                    }
+                    const source = audioContexts[i].createBufferSource();
+                    source.buffer = audioBuffer;
+                    source.connect(audioContexts[i].destination);
+                    sources[i] = source;
+                    source.start(0, slider.value * audioBuffer.duration, 0.1);
+                };
+            })
+            .catch(console.error);
         }
 
-        // Function to update slider position based on audio playback
-        function updateTime(index) {
-            const audioElement = audioElements[index];
-            const slider = sliders[index];
-            slider.value = audioElement.currentTime / audioElement.duration;
-            if (slider.value >= 1) {
-                audioElement.pause();
-                playPauseButtons[index].textContent = 'Play';
-            }
-        }
-
-        // Function to handle slider input during scrubbing
-        function handleScrubbing(index) {
-            const audioElement = audioElements[index];
-            const slider = sliders[index];
-            const scrubbingInterval = setInterval(() => {
-                audioElement.currentTime = slider.value * audioElement.duration;
-                if (!audioElement.paused && !audioElement.ended) {
-                    clearInterval(scrubbingInterval);
-                }
-            }, 250); // Update every 250 milliseconds during scrubbing
-        }
-
-        // Event listeners for play/pause buttons
-        playPauseButtons.forEach((button, index) => {
-            button.addEventListener('click', () => togglePlay(index));
-        });
-
-        // Event listeners for sliders
-        sliders.forEach((slider, index) => {
-            slider.addEventListener('input', () => {
-                const audioElement = audioElements[index];
-                audioElement.currentTime = slider.value * audioElement.duration;
-                // If the audio is paused or ended, start handling scrubbing
-                if (audioElement.paused || audioElement.ended) {
-                    handleScrubbing(index);
-                }
-            });
-        });
     </script>
 </body>
 </html>

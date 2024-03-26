@@ -356,7 +356,8 @@ function hoverText (event) {
 }
 ```
 
-
+## Visualisierung der Audio
+Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. 
 
 
 <!---
