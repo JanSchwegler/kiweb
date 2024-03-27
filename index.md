@@ -359,10 +359,12 @@ function hoverText (event) {
 ## Visualisierung der Audio
 Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. 
 
-# Anpassungen Aufgrund von Feedback
-- Audioplayer nicht an der Seite, nur statisch in der Seite
-- keine Persketive / Movement
-- 
+## überarbeitung Konzept
+Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich mir erneut gedanken zu meinem Konzept gemacht um die Wirkung zu optimieren. 
+- Aufgrund der Funktion mit der Verschiebung des Inhalt habe ich, im Gegensatz zur ersten Version, einen Abstand vom Bildschrimrand zum Inahlt erstellt. Dieser Abstand diente dazu, dass der Inhalt verschoben werden konnte, jedoch dieser nicht abgeschnitten wurde. Die Website verlohr durch diesen ABstand jedoch an Wirkung. Dieser Abstand soll nun entfernt werde. Somit wird ebenfalls die dazugehörige Funktion entfernt.
+- Wie bei der ersten Version und auch dem Plakat, soll der Inhalt den gesamten Platz ausfüllen. Dadurch soll auch die Schallplatte am Seitenrand entfernt werden. Der Player wird nun in die Seite eingebaut, anstatt in einem Popup über der Website zu schweben.
+
+
 
 
 <!---
