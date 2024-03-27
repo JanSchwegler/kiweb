@@ -17,10 +17,16 @@ function createBars() {
     // create bars
     let width = window.innerWidth;
     let height = window.innerHeight;
-    let barCount = Math.floor((height - ((0.23 * width + 50))) / 55) + 1;
-    barParent.forEach((e) => {
-        for (let i = 0; i < barCount; i++) {
-            e.appendChild(document.createElement("div"));
+    let barCount = Math.floor((height - (0.23 * width + 50)) / 55) + 1;
+    barParent.forEach((e, i) => {
+        if (barParent.length - 1 <= i) { // for last barParent
+            for (let i = 0; i < Math.floor(height / 55); i++) {
+                e.appendChild(document.createElement("div"));
+            }
+        } else { // all other barParent
+            for (let i = 0; i < barCount; i++) {
+                e.appendChild(document.createElement("div"));
+            }
         }
     });
     animateBars();
@@ -31,13 +37,17 @@ function animateBars() {
     let styleE = document.createElement("style");
     document.body.insertBefore(styleE, document.body.firstChild);
     bars.forEach((e, i) => {
-        let randomStart = Math.floor(Math.random() * 41) + 60; // do while function
+        let randomStart = (Math.random() * 41) + 60; // do while function
+        let randomEnd = (Math.random() * 41) + 60;
+        while (Math.abs(randomEnd - randomStart) < 15) {
+            randomEnd = (Math.random() * 41) + 60;
+        }
         styleE.innerHTML += `@keyframes bar${i} {
             0%   {
                 width: ${randomStart}%;
             }
             50%  {
-                width: ${Math.floor(Math.random() * 41) + 60}%;
+                width: ${randomEnd}%;
             }
             100% {
                 width: ${randomStart}%;
@@ -47,6 +57,6 @@ function animateBars() {
         if (Math.random() < 0.5) {
             e.style.alignSelf = "end";
         }
-        e.style.animation = `bar${i} ${(Math.random() * 5) + 2}s infinite linear`;
+        e.style.animation = `bar${i} ${(Math.random() * 5) + 2}s infinite ease-in-out`;
     });
 }
