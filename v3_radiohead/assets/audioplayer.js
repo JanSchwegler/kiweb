@@ -36,9 +36,9 @@ function openPlayer(event) {
 }
 
 // mouse hover text -----------------------------------------------------------------------------------------------------
-let hoverTextElement = document.getElementById("hoverText");
+//let hoverTextElement = document.getElementById("hoverText");
 let hoverTextAudioPLayed = false;
-let hideTextTimeout = null;
+//let hideTextTimeout = null;
 let hotfixStopClear = false;
 function hoverText (event) {
     hotfixStopClear = true;

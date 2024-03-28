@@ -10,26 +10,26 @@
     <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-    <div id="mouseText">play</div>
+    <div id="mouseText"></div>
     <main>
-        <section class="bars"></section>
+        <section class="bars" id="text1"></section>
         <section class="" id="audioplayer">
             <div class="arrow hidden" id="audioplayer-arrow-left"></div>
             <div class="arrow" id="audioplayer-arrow-right"></div>
             <div id="slide-background"></div>
             <div class="slider-container">
-                <section class="slide"><audio><source src="assets/audio/01_Creep.mp3" type="audio/mpeg"></audio></section>
-                <section class="slide"><audio><source src="assets/audio/02_No Surprises.mp3" type="audio/mpeg"></audio></section>
-                <section class="slide"><audio><source src="assets/audio/03_Karma Police.mp3" type="audio/mpeg"></audio></section>
-                <section class="slide"><audio><source src="assets/audio/04_High and Dry.mp3" type="audio/mpeg"></audio></section>
-                <section class="slide"><audio><source src="assets/audio/05_Jigsaw Falling Into Place.mp3" type="audio/mpeg"></audio></section>
-                <section class="slide"><audio><source src="assets/audio/06_Just.mp3" type="audio/mpeg"></audio></section>
-                <section class="slide"><audio><source src="assets/audio/07_Fake Plastic Trees.mp3" type="audio/mpeg"></audio></section>
-                <section class="slide"><audio><source src="assets/audio/08_Weird Fishes Arpeggi.mp3" type="audio/mpeg"></audio></section>
-                <section class="slide"><audio><source src="assets/audio/09_Exit Music (For A Film).mp3" type="audio/mpeg"></audio></section>
-                <section class="slide"><audio><source src="assets/audio/10_All I Need.mp3" type="audio/mpeg"></audio></section>
+                <article class="slide"><audio><source src="assets/audio/01_Creep.mp3" type="audio/mpeg"></audio></article>
+                <article class="slide"><audio><source src="assets/audio/02_No Surprises.mp3" type="audio/mpeg"></audio></article>
+                <article class="slide"><audio><source src="assets/audio/03_Karma Police.mp3" type="audio/mpeg"></audio></article>
+                <article class="slide"><audio><source src="assets/audio/04_High and Dry.mp3" type="audio/mpeg"></audio></article>
+                <article class="slide"><audio><source src="assets/audio/05_Jigsaw Falling Into Place.mp3" type="audio/mpeg"></audio></article>
+                <article class="slide"><audio><source src="assets/audio/06_Just.mp3" type="audio/mpeg"></audio></article>
+                <article class="slide"><audio><source src="assets/audio/07_Fake Plastic Trees.mp3" type="audio/mpeg"></audio></article>
+                <article class="slide"><audio><source src="assets/audio/08_Weird Fishes Arpeggi.mp3" type="audio/mpeg"></audio></article>
+                <article class="slide"><audio><source src="assets/audio/09_Exit Music (For A Film).mp3" type="audio/mpeg"></audio></article>
+                <article class="slide"><audio><source src="assets/audio/10_All I Need.mp3" type="audio/mpeg"></audio></article>
             </div>
-        </section>
+        </section><!--
         <section class="animation">
             <h1>Feel the rhythm</h1>
         </section>
@@ -38,9 +38,9 @@
         </section>
         <section class="animation">
             <h1>Let yourself go</h1>
-        </section>
-        <section class="bars"></section>
-        <section>
+        </section>-->
+        <section class="bars" id="text2"></section>
+        <section id="text3">
             <div class="infos">
                 <p>with<br/>teenage fanclub</p>
                 <p>sunday<br/>july 27 1997 / 8 pm</p>
@@ -68,6 +68,7 @@
         </section>
     </main>
     <script src="assets/bars.js"></script>
-    <script src="assets/audioplayer.js"></script>
+    <script src="assets/textToMouse.js"></script>
+    <!--<script src="assets/audioplayer.js"></script>-->
 </body>
 </html>

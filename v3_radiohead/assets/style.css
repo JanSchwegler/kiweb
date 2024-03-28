@@ -37,7 +37,7 @@ body, main, section {
 }
 
 /* Content - Audioplayer */
-#hoverText {
+#mouseText {
     position: fixed;
     top: 0;
     left: 0;
@@ -179,6 +179,9 @@ main h1 {
 }
 
 /* Content - Radiohead Informations */
+section {
+    padding: 50px 0;
+}
 section:last-of-type {
     margin-bottom: -1px;
     overflow: hidden;
