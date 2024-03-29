@@ -1,11 +1,3 @@
-window.onload = function() {
-    createBars();
-}
-
-window.addEventListener('resize', () => {
-    createBars();
-});
-
 function createBars() {
     let barParent = document.querySelectorAll(".bars");
     // del existing bars
@@ -29,15 +21,22 @@ function createBars() {
             }
         }
     });
-    animateBars();
+    setAnimationForBars();
 }
 
-function animateBars() {
+function setAnimationForBars() {
     let bars = document.querySelectorAll(".bars div");
-    let styleE = document.createElement("style");
-    document.body.insertBefore(styleE, document.body.firstChild);
+    let styleE;
+    // crete a style element if there is none
+    if (document.body.firstElementChild.tagName == "STYLE") {
+        styleE = document.querySelector("body > style");
+    } else {
+        styleE = document.createElement("style");
+        document.body.insertBefore(styleE, document.body.firstChild);
+    }
     bars.forEach((e, i) => {
-        let randomStart = (Math.random() * 41) + 60; // do while function
+        // set start and end width
+        let randomStart = (Math.random() * 41) + 60;
         let randomEnd = (Math.random() * 41) + 60;
         while (Math.abs(randomEnd - randomStart) < 15) {
             randomEnd = (Math.random() * 41) + 60;
@@ -54,9 +53,11 @@ function animateBars() {
             }
           }
         `;
+        // set side
         if (Math.random() < 0.5) {
             e.style.alignSelf = "end";
         }
+        // set duration and start animation
         e.style.animation = `bar${i} ${(Math.random() * 5) + 2}s infinite ease-in-out`;
     });
 }

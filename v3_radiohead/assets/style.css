@@ -179,7 +179,7 @@ main h1 {
 }
 
 /* Content - Radiohead Informations */
-section {
+section:not(:first-of-type):not(:last-of-type) {
     padding: 50px 0;
 }
 section:last-of-type {
