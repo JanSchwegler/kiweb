@@ -111,7 +111,7 @@ slides.forEach((slide, index) => {
 function touchStart(index) {
     return function (event) {
         if(currentIndex != index) {
-            // Whait for no more touches -> then
+            // wait for no more touches -> then
             scrubberResetRotation(currentIndex).then((e) => {
                 initialAudio();
                 animateRotation(slides[e]);

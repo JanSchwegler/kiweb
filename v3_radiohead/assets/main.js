@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // calls - textToMosue.js
     initialisingTextToMouse();
     // calls - audioplayer.js
-    
+    initialisingAudioFiles();
 });
 
 window.addEventListener('resize', () => {
@@ -35,3 +35,10 @@ function updateMosuePosition (event) {
     mouseX = event.clientX;
     mouseY = event.clientY;
 }
+
+// test stuff
+document.addEventListener("mousedown", function() {
+    //console.log("test");
+    //playNext()
+    //playBuffer(0)
+})

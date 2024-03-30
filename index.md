@@ -369,4 +369,9 @@ Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich
 
 <!---
 [Link in new Tab](radiohead/){:target="_blank"}
+
+TODO:
+- change text to mouse: while on audioplayer -> text only visible on the vinyl
+
+
 -->
