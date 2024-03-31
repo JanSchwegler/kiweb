@@ -4,7 +4,8 @@ let hoverTextElement,
     sectionElements, 
     textSpaceing = 5,
     x,
-    y;
+    y,
+    lastText = "";
 
 function initialisingTextToMouse () {
     // set elements
@@ -12,6 +13,7 @@ function initialisingTextToMouse () {
     sectionElements = document.querySelectorAll("section");
     // set evenetlisteners
     sectionElements.forEach(e => {
+        e.addEventListener("mouseleave", removeText);
         e.addEventListener('mouseenter', function(event) {
             setText(event.target);
         });
@@ -24,7 +26,7 @@ function mouseText () {
     clearTimeout(hideTextTimeout);
     if (mouseX && mouseY) {
         x = mouseX;
-        y = mouseY + 30;
+        y = mouseY - (hoverTextElement.clientHeight / 2);
         // create max or min movement based on textSpacing
         if (x > documentWidth - (hoverTextElement.clientWidth / 2) - textSpaceing) {
             x = documentWidth - (hoverTextElement.clientWidth / 2) - textSpaceing;
@@ -33,6 +35,8 @@ function mouseText () {
         }
         if (y > documentHeight - hoverTextElement.clientHeight - textSpaceing) {
             y = documentHeight - hoverTextElement.clientHeight - textSpaceing;
+        } else if (y < textSpaceing) {
+            y = textSpaceing;
         }
         // show text if hidden
         if (!displayText) {
@@ -48,27 +52,45 @@ function mouseText () {
     }
 }
 
-function setText (e) {
-    switch (e.id) {
-        case "audioplayer":
-            /*if (getPlayingState()) { // just var from other file?
-                text = "scrubb me";
-            } else {
-                text = "play me";
-            }*/
-            hoverTextElement.innerHTML = "play me";
-            break;
-        case "text1":
-            hoverTextElement.innerHTML = "text 1";
-            break;
-        case "text2":
-            hoverTextElement.innerHTML = "text 2";
-            break;
-        case "text3":
-            hoverTextElement.innerHTML = "Text 3";
-            break;
-        default:
-            hoverTextElement.innerHTML = "";
+function removeText () {
+    hoverTextElement.innerHTML = lastText;
+}
+
+function setText (e, index = null) {
+    lastText = hoverTextElement.innerHTML;
+    if (index == null) {
+        switch (e.id) {
+            case "audioplayer":
+                hoverTextElement.innerHTML = "Experience the energy";
+                break;
+            case "text1":
+                hoverTextElement.innerHTML = "Feel the rhythm";
+                break;
+            case "text2":
+                hoverTextElement.innerHTML = "Let yourself go";
+                break;
+            case "text3":
+                hoverTextElement.innerHTML = "Let yourself go";
+                break;
+            case "audioplayer-arrow-left":
+                hoverTextElement.innerHTML = "previous";
+                break;
+            case "audioplayer-arrow-right":
+                hoverTextElement.innerHTML = "next";
+                break;
+            default:
+                hoverTextElement.innerHTML = "";
+        }
+    } else {
+        if (index == currentIndex && !audioPlaying) {
+            hoverTextElement.innerHTML = "play";
+        } else if (index == currentIndex && audioPlaying) {
+            hoverTextElement.innerHTML = "scrubb me";
+        } else if (index > currentIndex) {
+            hoverTextElement.innerHTML = "next";
+        } else if (index < currentIndex) {
+            hoverTextElement.innerHTML = "previous";
+        }
     }
 }
 

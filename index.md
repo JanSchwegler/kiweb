@@ -372,7 +372,8 @@ Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich
 
 TODO:
 - change text to mouse: while on audioplayer -> text only visible on the vinyl
-- Change redirect location
+- Change redirect.html location
 - bug: switch audio -> reset rotation animation not working
+- create and rotate vinyl background layer
 
 -->

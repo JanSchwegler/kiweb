@@ -11,11 +11,11 @@ document.addEventListener("DOMContentLoaded", function() {
     updateClientSize();
     // calls - bars.js
     createBars();
-    // calls - textToMosue.js
-    initialisingTextToMouse();
     // calls - audioplayer.js
     initialisingAudioFiles();
     initialisingSlider();
+    // calls - textToMosue.js
+    initialisingTextToMouse(); // has the be after initialisingSlider. uses elements
 });
 
 window.addEventListener('resize', () => {

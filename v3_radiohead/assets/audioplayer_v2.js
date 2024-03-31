@@ -15,12 +15,12 @@ let audioFiles = [
     'assets/audio/02_No Surprises.mp3',
     'assets/audio/03_Karma Police.mp3',
     'assets/audio/04_High and Dry.mp3',
-    'assets/audio/05_Jigsaw Falling Into Place.mp3',
+    'assets/audio/05_Jigsaw Falling Into Place.mp3'/*,
     'assets/audio/06_Just.mp3',
     'assets/audio/07_Fake Plastic Trees.mp3',
     'assets/audio/08_Weird Fishes Arpeggi.mp3',
     'assets/audio/09_Exit Music (For A Film).mp3',
-    'assets/audio/10_All I Need.mp3'
+    'assets/audio/10_All I Need.mp3'*/
 ];
 
 // slider & rotation variables
@@ -41,7 +41,8 @@ let isDragging = false,
     scrubbAngle = 0, // current scrubb movement in the allowed range / reset at scrubb start
     maxSrubberAngle = 0, // reset at audio change
     centerX,
-    centerY;
+    centerY,
+    audioCurrentTime = 0;
 
 // functions - initialising --------------------------------------------------------------------------------
 async function initialisingAudioFiles() {
@@ -74,6 +75,15 @@ function initialisingSlider () {
     slides = Array.from(document.querySelectorAll('.slide'))
     sliderArrowLeft = document.getElementById('audioplayer-arrow-left');
     sliderArrowRight = document.getElementById('audioplayer-arrow-right');
+    // listeners for testToMouse
+    sliderArrowLeft.addEventListener("mouseleave", removeText);
+    sliderArrowLeft.addEventListener('mouseenter', function(event) {
+        setText(event.target);
+    });
+    sliderArrowRight.addEventListener("mouseleave", removeText);
+    sliderArrowRight.addEventListener('mouseenter', function(event) {
+        setText(event.target);
+    });
 
     // add eventlisteners
     sliderArrowLeft.addEventListener('click', handleArrowLeft);
@@ -93,6 +103,12 @@ function initialisingSlider () {
         // listeners for scrubbing
         slide.addEventListener('touchstart', scrubbingDisc);
         slide.addEventListener('mousedown', scrubbingDisc);
+
+        // listeners for testToMouse
+        slide.addEventListener("mouseleave", removeText);
+        slide.addEventListener('mouseenter', function(event) {
+            setText(event.target, index);
+        });
     });
     // rotation
     scrubber = slides[currentIndex];
@@ -116,10 +132,10 @@ function updateCurrentIndex(index, oldIndex) {
 }
 
 // functions - handle audio play --------------------------------------------------------------------------------
-function playBuffer(startTime = 0) {
+function playBuffer (startTime = 0) {
     audioPlaying = true;
     initialisingAudioBufferSources();
-    audioBufferSources[currentIndex].start(startTime);
+    audioBufferSources[currentIndex].start(0, startTime);
     audioStartTime = audioContext.currentTime - startTime;
     requestAnimationFrame(updateScrubber);
     //audioBufferSources[currentIndex].onended = () => { playNextBuffer(); };
@@ -273,7 +289,7 @@ function scrubbingDisc(event) {
         document.addEventListener('touchend', () => {
             document.removeEventListener('touchmove', rotate);
             scrubbing = false;
-            //audio.play();
+            playBuffer(audioCurrentTime);
         });
     } else {
         scrubbMove = ((Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
@@ -281,7 +297,7 @@ function scrubbingDisc(event) {
         document.addEventListener('mouseup', () => {
             document.removeEventListener('mousemove', rotate);
             scrubbing = false;
-            //audio.play();
+            playBuffer(audioCurrentTime);
         });
     }
 }
@@ -309,6 +325,10 @@ function rotate(event) {
     }
     scrubber.style.transform = `rotate(${scrubbAngle + initialScrubberAngle}deg)`;
     //audio.currentTime = (scrubbAngle + initialScrubberAngle) / 360 * secondsPerRotate;
+    initialisingAudioBufferSources();
+    audioCurrentTime = (scrubbAngle + initialScrubberAngle) / 360 * secondsPerRotate;
+    let duration = 0.1;
+    audioBufferSources[currentIndex].start(0, audioCurrentTime, duration);
 }
 
 // rotation reset animation
@@ -346,9 +366,9 @@ function easeOut(t) {
 function updateScrubber() {
     let currentTime = audioContext.currentTime - audioStartTime;
     scrubber.style.transform = `rotate(${(360 / secondsPerRotate) * currentTime}deg)`;
-    if (currentTime < audioBuffers[currentIndex].duration) {
+    if (!scrubbing && currentTime < audioBuffers[currentIndex].duration) {
         requestAnimationFrame(updateScrubber);
-    } else {
+    } else if (!scrubbing) {
         if (currentIndex < slides.length - 1) {
             updateCurrentIndex(currentIndex + 1, currentIndex);
             setPositionByIndex();
