@@ -25,8 +25,6 @@ window.addEventListener('resize', () => {
     // textToMosue.js
     mouseText();
     // audioplayer.js
-    setPositionByIndex();
-    updateScrubberCenter();
 });
 
 function updateClientSize () {
@@ -43,5 +41,5 @@ function updateMosuePosition (event) {
 document.addEventListener("mousedown", function() {
     //console.log("test");
     //playNext()
-    //playBuffer()
+    //playBuffer(0)
 })
