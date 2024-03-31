@@ -304,7 +304,7 @@ function rotate(event) {
     }, 10);
 }
 
-// rotation rest animation ---------------------------------------------------------------------------------------------------
+// rotation reset animation ---------------------------------------------------------------------------------------------------
 function animateRotation(e) {
     let start = performance.now();
 

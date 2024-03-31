@@ -257,20 +257,30 @@ function scrubbingDisc(event) {
     }
     if (event.type === 'touchstart') {
         let touch = event.touches[0];
+        let clickStartPosition = [touch.clientX, touch.clientY];
         scrubbMove = ((Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
         document.addEventListener('touchmove', rotate);
-        document.addEventListener('touchend', () => {
+        document.addEventListener('touchend', (event) => {
             document.removeEventListener('touchmove', rotate);
             scrubbing = false;
-            playBuffer(audioCurrentTime);
+            if (clickStartPosition[0] == touch.clientX && clickStartPosition[1] == touch.clientY) {
+                playBuffer(initialScrubberAngle / 360 * secondsPerRotate);
+            } else {
+                playBuffer(audioCurrentTime);
+            }
         });
     } else {
+        let clickStartPosition = [event.clientX, event.clientY];
         scrubbMove = ((Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
         document.addEventListener('mousemove', rotate);
-        document.addEventListener('mouseup', () => {
+        document.addEventListener('mouseup', (event) => {
             document.removeEventListener('mousemove', rotate);
             scrubbing = false;
-            playBuffer(audioCurrentTime);
+            if (clickStartPosition[0] == event.clientX && clickStartPosition[1] == event.clientY) {
+                playBuffer(initialScrubberAngle / 360 * secondsPerRotate);
+            } else {
+                playBuffer(audioCurrentTime);
+            }
         });
     }
 }

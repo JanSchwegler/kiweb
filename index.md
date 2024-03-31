@@ -373,7 +373,5 @@ Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich
 TODO:
 - Change redirect.html location
 - create and rotate vinyl background layer
-- When start playing audio -> update text to scrubb me
-- Track amount of bars and set a specific timeout on loading animation
 
 -->
