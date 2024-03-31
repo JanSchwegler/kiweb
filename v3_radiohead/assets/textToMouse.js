@@ -57,6 +57,7 @@ function removeText () {
 }
 
 function setText (e, index = null) {
+    document.body.style.cursor = "none";
     lastText = hoverTextElement.innerHTML;
     if (index == null) {
         switch (e.id) {
@@ -67,7 +68,7 @@ function setText (e, index = null) {
                 hoverTextElement.innerHTML = "Feel the rhythm";
                 break;
             case "text2":
-                hoverTextElement.innerHTML = "Let yourself go";
+                hoverTextElement.innerHTML = "Experience the energy";
                 break;
             case "text3":
                 hoverTextElement.innerHTML = "Let yourself go";

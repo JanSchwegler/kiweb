@@ -25,7 +25,6 @@ h1, h2, h3, h4, h5, h6, p, a, label, div, span {
 /* Content */
 body {
     background-color: #d6d9c8;
-    cursor: none;
 }
 
 body, main, section {
@@ -56,9 +55,11 @@ body, main, section {
 
 section#audioplayer {
     width: 100%;
-    height: calc(46vw + 100px); /* slide width + padding */
+    height: calc(46vw + 200px); /* slide width + padding */
     overflow: hidden;
     position: relative;
+    top: 23vw;
+    transition: 1s ease-in-out;
 }
 
 section#audioplayer .arrow {
@@ -66,7 +67,7 @@ section#audioplayer .arrow {
     width: 80px;
     position: absolute;
     top: calc(50% - 40px);
-    right: calc(25vw - 45px);
+    right: calc(25vw - 57px);
     z-index: 10;
     border-radius: 50%;
     -webkit-transition: 0.2s ease;
@@ -99,7 +100,7 @@ section#audioplayer .arrow::after {
 }
 
 section#audioplayer #audioplayer-arrow-left {
-    left: calc(25vw - 45px);
+    left: calc(25vw - 40px);
 }
 
 section#audioplayer #audioplayer-arrow-left::before {
@@ -131,7 +132,7 @@ section#audioplayer .slider-container {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: start;
-    padding-left: 26vw;
+    padding-left: 27vw;
     -webkit-transition: -webkit-transform 0.3s ease-out;
     transition: -webkit-transform 0.3s ease-out;
     transition: transform 0.3s ease-out;
@@ -168,7 +169,9 @@ main section.bars div {
     width: 100%; /* Animate */
     height: 50px;
     margin-top: 5px;
-    transition: background-color 0.6s;
+    margin-left: -100vw;
+    margin-right: -100vw;
+    transition: background-color 0.6s, margin 0.6s ease-in-out;
 }
 
 main section.bars div:hover {
@@ -195,4 +198,35 @@ section .infos {
 }
 section .title {
     margin-bottom: -9px;
+}
+
+/* test loader */
+@keyframes loadAnimation {
+    from {width: 100%;}
+    to {width: 0%;}
+}
+
+#loader {
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#loader::before, #loader::after {
+    content: "";
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #151515;
+    animation: loadAnimation 1.5s cubic-bezier(1, 0, 0.4, 1) forwards 0.5s;
+}
+
+#loader::before{
+    background-color: #a51d24;
+    animation-delay: 0.7s;
 }

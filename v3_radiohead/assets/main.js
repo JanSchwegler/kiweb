@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", function() {
     initialisingSlider();
     // calls - textToMosue.js
     initialisingTextToMouse(); // has the be after initialisingSlider. uses elements
+    // loading.js
+    domLoaded = true;
+    removeScrollPreventionListeners();
 });
 
 window.addEventListener('resize', () => {
@@ -38,10 +41,3 @@ function updateMosuePosition (event) {
     mouseX = event.clientX;
     mouseY = event.clientY;
 }
-
-// test stuff
-document.addEventListener("mousedown", function() {
-    //console.log("test");
-    //playNext()
-    //playBuffer()
-})

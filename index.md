@@ -371,9 +371,9 @@ Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich
 [Link in new Tab](radiohead/){:target="_blank"}
 
 TODO:
-- change text to mouse: while on audioplayer -> text only visible on the vinyl
 - Change redirect.html location
-- bug: switch audio -> reset rotation animation not working
 - create and rotate vinyl background layer
+- When start playing audio -> update text to scrubb me
+- Track amount of bars and set a specific timeout on loading animation
 
 -->

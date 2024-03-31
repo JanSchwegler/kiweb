@@ -1,3 +1,5 @@
+let bars;
+
 function createBars() {
     let barParent = document.querySelectorAll(".bars");
     // del existing bars
@@ -25,7 +27,7 @@ function createBars() {
 }
 
 function setAnimationForBars() {
-    let bars = document.querySelectorAll(".bars div");
+    bars = document.querySelectorAll(".bars div");
     let styleE;
     // crete a style element if there is none
     if (document.body.firstElementChild.tagName == "STYLE") {
