@@ -373,5 +373,7 @@ Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich
 TODO:
 - Change redirect.html location
 - create and rotate vinyl background layer
+- hight pitch scratch
+- links page
 
 -->

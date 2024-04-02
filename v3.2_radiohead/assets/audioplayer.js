@@ -12,15 +12,15 @@ let audioContext = new (window.AudioContext || window.webkitAudioContext)(),
 // Preload all audio files
 let audioFiles = [
     'assets/audio/01_Creep.mp3',
-    'assets/audio/02_No Surprises.mp3',
+    //'assets/audio/02_No Surprises.mp3',
     'assets/audio/03_Karma Police.mp3',
     'assets/audio/04_High and Dry.mp3',
-    'assets/audio/05_Jigsaw Falling Into Place.mp3'/*,
-    'assets/audio/06_Just.mp3',
-    'assets/audio/07_Fake Plastic Trees.mp3',
+    'assets/audio/05_Jigsaw Falling Into Place.mp3',
+    //'assets/audio/06_Just.mp3',
+    //'assets/audio/07_Fake Plastic Trees.mp3',
     'assets/audio/08_Weird Fishes Arpeggi.mp3',
-    'assets/audio/09_Exit Music (For A Film).mp3',
-    'assets/audio/10_All I Need.mp3'*/
+    'assets/audio/09_Exit Music (For A Film).mp3'//,
+    //'assets/audio/10_All I Need.mp3'
 ];
 
 // slider & rotation variables

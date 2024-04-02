@@ -77,7 +77,7 @@ section#audioplayer .arrow {
 
 section#audioplayer .arrow::before {
     content: "";
-    border-bottom: 2px solid #151515;
+    border-bottom: 3px solid #151515;
     height: 19px;
     width: 14px;
     position: absolute;
@@ -87,8 +87,8 @@ section#audioplayer .arrow::before {
 
 section#audioplayer .arrow::after {
     content: "";
-    border-bottom: 2px solid #151515;
-    border-left: 2px solid #151515;
+    border-bottom: 3px solid #151515;
+    border-left: 3px solid #151515;
     height: 10px;
     width: 10px;
     position: absolute;
@@ -121,7 +121,7 @@ section#audioplayer #slide-background {
     left: calc(30vw - 20px);  /* width calc */
     z-index: -1;
     transform: rotate(0deg);
-    background-image: url("img/vinyl.png");
+    background-image: url("img/table.webp");
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -147,11 +147,35 @@ section#audioplayer .slider-container .slide {
     height: 100%;
     width: 40vw; /* width calc */
     margin-right: 10vw;  /* width calc */
-    background-image: url("img/vinyl.png");
+    background-image: url("img/01_creep.webp");
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
     border-radius: 50%;
+}
+
+section#audioplayer .slider-container .slide:nth-child(1) {
+    background-image: url("img/01_creep.webp");
+}
+
+section#audioplayer .slider-container .slide:nth-child(2) {
+    background-image: url("img/03_karma_police.webp");
+}
+
+section#audioplayer .slider-container .slide:nth-child(3) {
+    background-image: url("img/04_hight_and_dry.webp");
+}
+
+section#audioplayer .slider-container .slide:nth-child(4) {
+    background-image: url("img/05_jigsaw_falling_into_places.webp");
+}
+
+section#audioplayer .slider-container .slide:nth-child(5) {
+    background-image: url("img/08_weird_fishes_arpeggi.webp");
+}
+
+section#audioplayer .slider-container .slide:nth-child(6) {
+    background-image: url("img/09_exit_music.webp");
 }
 
 /* Content - Bars Animation */
