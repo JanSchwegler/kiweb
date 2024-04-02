@@ -55,10 +55,10 @@ body, main, section {
 
 section#audioplayer {
     width: 100%;
-    height: calc(46vw + 200px); /* slide width + padding */
+    height: calc(46vw + 100px); /* slide width + padding */
     overflow: hidden;
     position: relative;
-    top: 23vw;
+    top: 26vw;
     transition: 1s ease-in-out;
 }
 
@@ -67,9 +67,8 @@ section#audioplayer .arrow {
     width: 80px;
     position: absolute;
     top: calc(50% - 40px);
-    right: calc(25vw - 57px);
+    right: calc(25vw - 57px);  /* width calc */
     z-index: 10;
-    border-radius: 50%;
     -webkit-transition: 0.2s ease;
     transition: 0.2s ease;
     opacity: 1;
@@ -100,7 +99,7 @@ section#audioplayer .arrow::after {
 }
 
 section#audioplayer #audioplayer-arrow-left {
-    left: calc(25vw - 40px);
+    left: calc(25vw - 40px);  /* width calc */
 }
 
 section#audioplayer #audioplayer-arrow-left::before {
@@ -115,13 +114,14 @@ section#audioplayer #audioplayer-arrow-left::after {
 
 /* width of slides: 23 / 4 / 46 / 4 / 23 */
 section#audioplayer #slide-background {
-    width: calc(46vw + 20px);
-    height: calc(100% - 180px);
+    width: calc(46vw + 40px);  /* width calc */
+    height: calc(100% - 60px);
     position: absolute;
-    top: 90px;
-    left: calc(27vw - 10px); /* 23 + 4 - 10px*/
+    top: 30px;  /* -20 offset + 50 padding */
+    left: calc(27vw - 20px);  /* width calc */
     z-index: -1;
     transform: rotate(0deg);
+    background-color: red;
     background-image: url("img/vinyl.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -137,7 +137,7 @@ section#audioplayer .slider-container {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: start;
-    padding-left: 27vw;
+    padding-left: 27vw; /* width calc */
     -webkit-transition: -webkit-transform 0.3s ease-out;
     transition: -webkit-transform 0.3s ease-out;
     transition: transform 0.3s ease-out;
@@ -146,8 +146,8 @@ section#audioplayer .slider-container {
 
 section#audioplayer .slider-container .slide {
     height: 100%;
-    width: 46vw;
-    margin-right: 4vw;
+    width: 46vw; /* width calc */
+    margin-right: 4vw;  /* width calc */
     background-image: url("img/vinyl.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -179,19 +179,12 @@ main section.bars div {
     transition: background-color 0.6s, margin 0.6s ease-in-out;
 }
 
-main section.bars div:hover {
-    background-color: rgba(21, 21, 21, 0.2);
-}
-
 /* Content - Text Animation */
 main h1 {
     font-size: 3rem;
 }
 
 /* Content - Radiohead Informations */
-section:not(:first-of-type):not(:last-of-type) {
-    padding: 50px 0;
-}
 section:last-of-type {
     margin-bottom: -1px;
     overflow: hidden;
@@ -205,33 +198,12 @@ section .title {
     margin-bottom: -9px;
 }
 
-/* test loader */
-@keyframes loadAnimation {
-    from {width: 100%;}
-    to {width: 0%;}
+/* Responsive - Tablet */
+@media screen and (max-width: 991px) {
+    
 }
+  
+/* Responsive - Mobile */
+@media screen and (max-width: 767px) {
 
-#loader {
-    height: 100vh;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}
-
-#loader::before, #loader::after {
-    content: "";
-    width: 100%;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: #151515;
-    animation: loadAnimation 1.5s cubic-bezier(1, 0, 0.4, 1) forwards 0.5s;
-}
-
-#loader::before{
-    background-color: #a51d24;
-    animation-delay: 0.7s;
 }
