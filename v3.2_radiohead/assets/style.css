@@ -55,7 +55,7 @@ body, main, section {
 
 section#audioplayer {
     width: 100%;
-    height: calc(46vw + 100px); /* slide width + padding */
+    height: calc(40vw + 100px); /* width calc */
     overflow: hidden;
     position: relative;
     top: 26vw;
@@ -67,7 +67,7 @@ section#audioplayer .arrow {
     width: 80px;
     position: absolute;
     top: calc(50% - 40px);
-    right: calc(25vw - 57px);  /* width calc */
+    left: calc(75vw - 30px);  /* width calc */
     z-index: 10;
     -webkit-transition: 0.2s ease;
     transition: 0.2s ease;
@@ -99,7 +99,7 @@ section#audioplayer .arrow::after {
 }
 
 section#audioplayer #audioplayer-arrow-left {
-    left: calc(25vw - 40px);  /* width calc */
+    left: calc(25vw - 50px)  /* width calc */
 }
 
 section#audioplayer #audioplayer-arrow-left::before {
@@ -112,16 +112,15 @@ section#audioplayer #audioplayer-arrow-left::after {
             transform: rotate(45deg);
 }
 
-/* width of slides: 23 / 4 / 46 / 4 / 23 */
+/* width of slides: 20 / 10 / 40 / 10 / 20 */
 section#audioplayer #slide-background {
-    width: calc(46vw + 40px);  /* width calc */
+    width: calc(40vw + 40px);  /* width calc */
     height: calc(100% - 60px);
     position: absolute;
     top: 30px;  /* -20 offset + 50 padding */
-    left: calc(27vw - 20px);  /* width calc */
+    left: calc(30vw - 20px);  /* width calc */
     z-index: -1;
     transform: rotate(0deg);
-    background-color: red;
     background-image: url("img/vinyl.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -137,7 +136,7 @@ section#audioplayer .slider-container {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: start;
-    padding-left: 27vw; /* width calc */
+    padding-left: 30vw; /* width calc */
     -webkit-transition: -webkit-transform 0.3s ease-out;
     transition: -webkit-transform 0.3s ease-out;
     transition: transform 0.3s ease-out;
@@ -146,8 +145,8 @@ section#audioplayer .slider-container {
 
 section#audioplayer .slider-container .slide {
     height: 100%;
-    width: 46vw; /* width calc */
-    margin-right: 4vw;  /* width calc */
+    width: 40vw; /* width calc */
+    margin-right: 10vw;  /* width calc */
     background-image: url("img/vinyl.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -205,5 +204,7 @@ section .title {
   
 /* Responsive - Mobile */
 @media screen and (max-width: 767px) {
-
+    section#audioplayer .arrow {
+        display: none;
+    }
 }
