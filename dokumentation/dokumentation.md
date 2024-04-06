@@ -1,3 +1,38 @@
+- [Auswahl Plakat](#auswahl-plakat)
+- [Umsetzung 1](#umsetzung-1)
+  - [Planung \& Vorarbeit](#planung--vorarbeit)
+    - [Schrift](#schrift)
+    - [Konzept](#konzept)
+    - [Github](#github)
+  - [Erster Nachbau mit HTML \& CSS](#erster-nachbau-mit-html--css)
+  - [Adaptive generierung der Balken mit JavaScript](#adaptive-generierung-der-balken-mit-javascript)
+  - [Responsive](#responsive)
+  - [Erste CSS Animationen](#erste-css-animationen)
+  - [Reaktiv zur Mauposition](#reaktiv-zur-mauposition)
+  - [Überarbeitung Konzept](#überarbeitung-konzept)
+- [Unsetzung 2](#unsetzung-2)
+  - [Grundstruktur](#grundstruktur)
+  - [Audioplayer](#audioplayer)
+    - [Slider](#slider)
+    - [Rotation der Schallplatten](#rotation-der-schallplatten)
+    - [Rotation synchron mit der Musik](#rotation-synchron-mit-der-musik)
+    - [Minimierung](#minimierung)
+    - [Hovertext](#hovertext)
+  - [Visualisierung der Audio](#visualisierung-der-audio)
+  - [Überarbeitung Konzept (2.2)](#überarbeitung-konzept-22)
+  - [Text als Maus](#text-als-maus)
+  - [Animierte Balken](#animierte-balken)
+  - [Audioplayer](#audioplayer-1)
+  - [Ladeanimation](#ladeanimation)
+  - [Weitere Schritte](#weitere-schritte)
+- [Meine Erkentnisse](#meine-erkentnisse)
+  - [Konzept](#konzept-1)
+  - [Github](#github-1)
+  - [JavaScript](#javascript)
+  - [Ziehen von Elementen \& Rotation](#ziehen-von-elementen--rotation)
+  - [Web Audio API](#web-audio-api)
+- [Fazit](#fazit)
+
 Diese Dokumentation zeigt meinen Arbeitsprozess bei der Entwicklung meines Semesterprojekts auf und bietet Einblicke in Herausforderungen, Erfolge und Fortschritte während des gesamten Moduls.
 
 [Hier geht es zur Übersicht](../dokumentation/dokumentation){:target="_blank"}
@@ -460,7 +495,7 @@ TODO:
 - rotate vinyl background layer -> done -> document
 - "Weitere Schritte" dokumentiere (Titel schon gesetzt)
 - Responsive -> done ?
-- 
+- Inhaltsverzeichnis in doku
 
 Future changes:
 - Change pitch on scratch
