@@ -357,14 +357,51 @@ function hoverText (event) {
 ```
 
 ## Visualisierung der Audio
-Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. 
+Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. Jedoch habe ich mich mit dem Code erst zu diesem Zeitpunkt tiefer auseinandergesetzt. Dabei wurde mir bewusst, dass die Visualisierung und Analyse der Audios mittels der "Web Audio API" durchgeführt wird. Schon früh habe ich bemerkt, wenn ich meine Audio-Tags mit der Web Audio API verbinde, diese nicht mehr als nomrale Audio-Tags funktionieren und somit meine bisher erstellten Scripts nicht mehr funktionierten. Auch wenn ich separate Audiodateien mit der Web Audio API laden würde, besteht das Problem, dass diese zwei Instanzen den aktuellen Zustand voneinander nicht kennen und nicht miteinander kommunizieren können. 
+
+Bis ich diese Problematik tiefer verstand und die Funktionsweise der Web Audio API teilweise verstehen konnte habe ich einige Stunden recherchiert und viele Test durchgeführt. Leider konnte auch ChatGPT 3.5 nicht zuverlässig mit dem Problem und mit der komplexen situation umgehen.
 
 ## überarbeitung Konzept
 Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich mir erneut gedanken zu meinem Konzept gemacht um die Wirkung zu optimieren. 
-- Aufgrund der Funktion mit der Verschiebung des Inhalt habe ich, im Gegensatz zur ersten Version, einen Abstand vom Bildschrimrand zum Inahlt erstellt. Dieser Abstand diente dazu, dass der Inhalt verschoben werden konnte, jedoch dieser nicht abgeschnitten wurde. Die Website verlohr durch diesen ABstand jedoch an Wirkung. Dieser Abstand soll nun entfernt werde. Somit wird ebenfalls die dazugehörige Funktion entfernt.
+- Aufgrund der Funktion mit der Verschiebung des Inhalt habe ich, im Gegensatz zur ersten Version, einen Abstand vom Bildschrimrand zum Inahlt erstellt. Dieser Abstand diente dazu, dass der Inhalt verschoben werden konnte, jedoch dieser nicht abgeschnitten wurde. Die Website verlohr durch diesen Abstand jedoch an Wirkung. Dieser Abstand soll nun entfernt werden. Somit wird ebenfalls die dazugehörige Funktion entfernt.
 - Wie bei der ersten Version und auch dem Plakat, soll der Inhalt den gesamten Platz ausfüllen. Dadurch soll auch die Schallplatte am Seitenrand entfernt werden. Der Player wird nun in die Seite eingebaut, anstatt in einem Popup über der Website zu schweben.
 
+[Konzept für Desktop](https://www.figma.com/proto/Jf3XwwHms7cNMmfXE3pFYC/kiweb-radioheaed?type=design&node-id=0-1&t=mkVTFhbNLKPSuHVB-0&scaling=min-zoom&starting-point-node-id=116%3A2&show-proto-sidebar=1){:target="_blank"}
 
+[Konzept für Mobile](https://www.figma.com/proto/Jf3XwwHms7cNMmfXE3pFYC/kiweb-radioheaed?type=design&node-id=0-1&t=mkVTFhbNLKPSuHVB-0&scaling=min-zoom&starting-point-node-id=116%3A56&show-proto-sidebar=1){:target="_blank"}
+
+Für eine saubere Umgebeung habe ich für das überarbeitet Konzept einen neuen leeren Ordner erstellt und alle notwendigen Dateien neu erstellt. In diesem Zug habe ich auch den Aufbau meiner JavaScript-Dateien neu strukturiert und aufgebaut. Da dieses wahrscheinlich mein grösstes JavaScript-Projekt beisher ist, ist mir erst jetzt bewusst geworden, dass funktionen wie "onload" ("DOMContentLoaded") und "resize" nur einmal und gut geplant eingesetzt werden. Aus diesen Erkentnissen, habe ich eine Hauptdatei "main.js" erstellt. Diese Datei verwaltet diese Funktionen und weitere zentrale und häufig verwendete variablen. Beispielsweise wird auch in dieser Datei die Variablen der Mausposition gesetzt und laufend aktualisiert. 
+
+## Text als Maus
+Mithilfe von JavaScript habe ich ein div-Tag mit position absolut an die Mausposition fixiert und den Cursor ausgeblendet. In diesem wird ein Text angezeigt, welcher sich verändert, je nachdem auf welchem Bereich sich die Maus befindet. Damit der Text nicht vom Briwserfenster abgeschnitten werden kann, habe ich jeweils ein Maximum und ein Minimum in der Höhe und Breite definiert. Somit bleibt der Text am Fensterrand kleben, anstatt der Maus weiter nach Aussen zu folgen.
+
+## Animierte Balken
+Es sollten, ähnlich wie bei der ersten Version, genau so viele Balken generiert werden, damit die Schallplatten darunter ca. bis zur Hälfte sichtbar sind. Somit wird neuer Inhalt angeschnitten welcher die Benutzenden zum Scrollen animiert. Einige Balken sollten links und einige rechts ausgerichtet sein. Die Bewebung der Balken beschränkt sich jeweis von 100% Breite bis zu minimal 60% Breite. Durch diese Limitierung ist die Mitte des Bildschirmes immer mit Balken bedeckt und die verkürtzung beschränkt sich nur auf die linke oder rechte Seite. Um die Animation spannender zu gestalten sollten diese Werte zufällig gesetzt werden (Das war bei der ersten Version nur teilweise der Fall). 
+
+Für diese Funktionsweise habe ich ein Script erstellt "bars.js" welche basierend auf der Bildschirmhöhe und -breite die korrekte Anzahl an Balken erstellt. Für die Animation mit den zufälligen Werten wird, falls nicht vorhanden, ein style-Tag erstellt. In deisem wird pro Balken eine eigene Animation mit zufälliger Start- und Endbreite erstellt. Für eine sichtbare Animation, wird darauf geschaut, dass der Abstand zwischen der Start- und Endbreite mindestens 15% beträgt. Zudem wird zufällig der Balken rechts oder links angeschlagen sowie eine zufällige Geschwindigkeit vergeben. Da die Balken basierend auf der Bildschirmhöhe und -breite generiert werden, müssen bei jeder grössenänderung die bestehenden Balken gelöscht und neu generiert werden. 
+
+Die Anzahl der Balken habe ich im Anschluss noch so angepasst, dass beim zweiten Abschnitt mit Balken die gesamte Bildschirmhöhe gefüllt wird.
+
+## Audioplayer
+Ich habe diese Gelegenheit vom Neuaufbau genutzt um mein Script für den Audioplayer neu mit der Web Audio API aufzubauen. Die grundlegende Logik habe ich zuvor bereits erstellt, jedoch war es herausfordernd die Grundlagen der Web Audio API zu verstehen und anzuwenden. Es stellte sich als wesentlich aufweniger heraus, eine Audio abzuspielen, zu pausieren, weiter abzuspielen und die  aktuelle Abspielzeit anzupassen. Denn eine Audio, so wie ich diese augebaut habe, konnte nicht pasiert und weiter abgespielt werden, genauso konnte die aktuelle Zeit nicht gelesen oder definiert werden. Die Idee der API war es hierbei eine Audio zu initialisieren, diese einmal zu starten und einmal zu stoppen. Für die pausierung, musste separat die Zeit gestoppt, die Audio neu initialisiert und ab dem letzten Zeitpunkt neu abgespielt werden. 
+
+Im Vergleich zu den vorherigen Versionen verzichtete ich durch die Web Audio API auf die Audio-Tags lud die Dateien direkt von der JavaScript-Datei aus.
+
+Als das Laden der Audiodateien entlich funktionierte, fiel mir auf, dass dieser Prozess viel Rechenleitung in anspruch nahm und somit die Website erst 1-2 Sekunden brauchte, um alles zu verarbeiten. Aus diesem Grund habe ich die Anzahl der Songs auf 6 limitiert. Aus Performance und auch ästethischen Gründen, habe ich im Anschluss eine Ladeanimation eingebaut, somit sollte die Website erst dargestellt werden sobald alles geladen wurde.
+
+## Ladeanimation
+Für die Ladeanimation etwas schon von Anfang an klar: Es muss auf das Laden des gesamten Inhalts gewartet werden und anschliessend sollte der sichtbare Breich (die Balken und die Schallplatten) in das Bild animiert werden. Die erste herausforderung war hierbei, dass die Seite immer von ganz oben Startete und nicht an der letzten Position. Zudem wollte ich, dass nicht bereis gescrollt werden kann, wenn die Website noch in der Ladeanimation ist. Diese herausforderung habe ich so gelöst, dass alle Scrollmöglichkeiten ausgeschaltete werden und auch die Höhe der Website auf maximal 100vh zu beschrenken. Nach dem laden werden diese Anpasungen zurückgesetzt und die Animation der Balken und Schallplatten konnte starten.
+
+Ich habe mit mehreren Animationen herumprobiert welche beim Laden erscheinen, bevor der Inhalt geladen wurde. Diese habe ich als Feedback erstellt, um zu zeigen, dass die Seite geladen wird. Jedoch war mir diese Animation nach einiger Zeit zu viel und der Inahlt wurde grundsätzlich schnell geladen, was zu keiner verwirrenden Wartezeit führte. Dadurch habe ich diese wieder entfernt.
+
+# Meine Erkentnisse
+- JS, Aufbau, Architektur, üben
+- Web Audio API
+- Draggin per Maus und Touch
+- Rotationsbewegungen / Berechnungen
+- Konteptionell
+- Github
+- kann nicht alles erwähnt werden, viel repetition, wiederholung, Startschwierigkeiten, welche mir andere Blickwinkel ermöglichten
 
 
 <!---
@@ -372,8 +409,12 @@ Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich
 
 TODO:
 - Change redirect.html location
-- create and rotate vinyl background layer
-- hight pitch scratch
-- links page
+- rotate vinyl background layer
+- change hover on links page
+- Ausopplayer learnings auflisten?
+
+Future changes:
+- Change pitch on scratch
+- animate bars based on analyser
 
 -->
