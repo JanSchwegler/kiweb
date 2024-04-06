@@ -1,21 +1,22 @@
 Diese Dokumentation zeigt meinen Arbeitsprozess bei der Entwicklung meines Semesterprojekts auf und bietet Einblicke in Herausforderungen, Erfolge und Fortschritte während des gesamten Moduls.
 
-[Hier geht es direkt zum Semesterprojekt](../v2_radiohead/){:target="_blank"}
+[Hier geht es zur Übersicht](../dokumentation/dokumentation){:target="_blank"}
+[Hier geht es direkt zum Semesterprojekt](../v2.2.2_radiohead/){:target="_blank"}
 
 # Auswahl Plakat
 Zu Beginn des Moduls habe ich mir die verschiedenen Plakate angesehen und folgende für mich interessante herausgesucht:
 
-![01](doku/posters/radiohead.jpeg) | ![02](doku/posters/02.jpg) | ![03](doku/posters/03.jpeg) | ![04](doku/posters/04.jpeg)
+![01](../dokumentation/posters/radiohead.jpeg) | ![02](../dokumentation/posters/02.jpg) | ![03](../dokumentation/posters/03.jpeg) | ![04](../dokumentation/posters/04.jpeg)
 ------------ | ------------- | ------------- | -------------
-![05](doku/posters/05.png) | ![06](doku/posters/06.png) | ![07](doku/posters/07.jpeg) | ![08](doku/posters/08.jpeg)
+![05](../dokumentation/posters/05.png) | ![06](../dokumentation/posters/06.png) | ![07](../dokumentation/posters/07.jpeg) | ![08](../dokumentation/posters/08.jpeg)
 
 Aus den 8 vorausgewählten Plakaten habe ich mich für folgendes Plakat für Radiohead entschieden:
 
-![Radiohead Plakat](doku/posters/radiohead.jpeg)
+![Radiohead Plakat](../dokumentation/posters/radiohead.jpeg)
 
 # Umsetzung 1
 
-[Zur Umsetzung 1](radiohead/){:target="_blank"}
+[Zur Umsetzung 1](../v1_radiohead/){:target="_blank"}
 
 ## Planung & Vorarbeit
 ### Schrift
@@ -127,7 +128,8 @@ Beim Konzet habe ich mich an den visuellen Elementen wie den Balken und den Text
 
 # Unsetzung 2
 
-[Zur Umsetzung 2](v2_radiohead/){:target="_blank"}
+[Zur Umsetzung 2.1](../v2.1_radiohead/){:target="_blank"}
+[Zur Umsetzung 2.2 (finale Umsetzung)](../v2.2.2_radiohead/){:target="_blank"}
 
 Ich habe mich dazu entschieden, die die zweite Umsetzung bzw. die Weiterentwicklung in einem neuen und leeren HTML-Dokument zu beginnen. Aus dem Grund, dass die zweite Umsetzung strukturell anders aufgebaut werden muss, als die Erste.
 
@@ -361,7 +363,7 @@ Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. Hier
 
 Bis ich diese Problematik tiefer verstand und die Funktionsweise der Web Audio API teilweise verstehen konnte habe ich einige Stunden recherchiert und viele Test durchgeführt. Leider konnte auch ChatGPT 3.5 nicht zuverlässig mit dem Problem und mit der komplexen situation umgehen.
 
-## überarbeitung Konzept
+## überarbeitung Konzept (2.2)
 Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich mir erneut gedanken zu meinem Konzept gemacht um die Wirkung zu optimieren. 
 - Aufgrund der Funktion mit der Verschiebung des Inhalt habe ich, im Gegensatz zur ersten Version, einen Abstand vom Bildschrimrand zum Inahlt erstellt. Dieser Abstand diente dazu, dass der Inhalt verschoben werden konnte, jedoch dieser nicht abgeschnitten wurde. Die Website verlohr durch diesen Abstand jedoch an Wirkung. Dieser Abstand soll nun entfernt werden. Somit wird ebenfalls die dazugehörige Funktion entfernt.
 - Wie bei der ersten Version und auch dem Plakat, soll der Inhalt den gesamten Platz ausfüllen. Dadurch soll auch die Schallplatte am Seitenrand entfernt werden. Der Player wird nun in die Seite eingebaut, anstatt in einem Popup über der Website zu schweben.
@@ -370,7 +372,7 @@ Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich
 
 [Konzept für Mobile](https://www.figma.com/proto/Jf3XwwHms7cNMmfXE3pFYC/kiweb-radioheaed?type=design&node-id=0-1&t=mkVTFhbNLKPSuHVB-0&scaling=min-zoom&starting-point-node-id=116%3A56&show-proto-sidebar=1){:target="_blank"}
 
-Für eine saubere Umgebeung habe ich für das überarbeitet Konzept einen neuen leeren Ordner erstellt und alle notwendigen Dateien neu erstellt. In diesem Zug habe ich auch den Aufbau meiner JavaScript-Dateien neu strukturiert und aufgebaut. Da dieses wahrscheinlich mein grösstes JavaScript-Projekt beisher ist, ist mir erst jetzt bewusst geworden, dass funktionen wie "onload" ("DOMContentLoaded") und "resize" nur einmal und gut geplant eingesetzt werden. Aus diesen Erkentnissen, habe ich eine Hauptdatei "main.js" erstellt. Diese Datei verwaltet diese Funktionen und weitere zentrale und häufig verwendete variablen. Beispielsweise wird auch in dieser Datei die Variablen der Mausposition gesetzt und laufend aktualisiert. 
+Für eine saubere Umgebeung habe ich für das überarbeitet Konzept (Umsetzung 2.2) einen neuen leeren Ordner erstellt und alle notwendigen Dateien neu erstellt. In diesem Zug habe ich auch den Aufbau meiner JavaScript-Dateien neu strukturiert und aufgebaut. Da dieses wahrscheinlich mein grösstes JavaScript-Projekt beisher ist, ist mir erst jetzt bewusst geworden, dass funktionen wie "onload" ("DOMContentLoaded") und "resize" nur einmal und gut geplant eingesetzt werden. Aus diesen Erkentnissen, habe ich eine Hauptdatei "main.js" erstellt. Diese Datei verwaltet diese Funktionen und weitere zentrale und häufig verwendete variablen. Beispielsweise wird auch in dieser Datei die Variablen der Mausposition gesetzt und laufend aktualisiert. 
 
 ## Text als Maus
 Mithilfe von JavaScript habe ich ein div-Tag mit position absolut an die Mausposition fixiert und den Cursor ausgeblendet. In diesem wird ein Text angezeigt, welcher sich verändert, je nachdem auf welchem Bereich sich die Maus befindet. Damit der Text nicht vom Briwserfenster abgeschnitten werden kann, habe ich jeweils ein Maximum und ein Minimum in der Höhe und Breite definiert. Somit bleibt der Text am Fensterrand kleben, anstatt der Maus weiter nach Aussen zu folgen.
