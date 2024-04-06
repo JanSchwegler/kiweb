@@ -137,10 +137,7 @@ section#audioplayer .slider-container {
     flex-wrap: nowrap;
     justify-content: start;
     padding-left: 30vw; /* width calc */
-    -webkit-transition: -webkit-transform 0.3s ease-out;
-    transition: -webkit-transform 0.3s ease-out;
-    transition: transform 0.3s ease-out;
-    transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+    transition: transform 0.7s ease-in-out;
 }
 
 section#audioplayer .slider-container .slide {

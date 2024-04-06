@@ -18,24 +18,16 @@
     <style>
         input { width: 350px; display: block; }
     </style>
-    <audio id="audio1"><source src="../v2_radiohead/assets/audio/01_Creep.mp3" type="audio/mpeg"></audio>
-    <audio id="audio2"><source src="../v2_radiohead/assets/audio/02_No Surprises.mp3" type="audio/mpeg"></audio>
-    <audio id="audio3"><source src="../v2_radiohead/assets/audio/03_Karma Police.mp3" type="audio/mpeg"></audio>
-    
-    <!-- Play/pause button for the first audio -->
-    <button id="playPauseButton1">Play</button>
+    <audio id="audio1"><source src="../v2.1_radiohead/assets/audio/01_Creep.mp3" type="audio/mpeg"></audio>
+    <audio id="audio2"><source src="../v2.1_radiohead/assets/audio/02_No Surprises.mp3" type="audio/mpeg"></audio>
+    <audio id="audio3"><source src="../v2.1_radiohead/assets/audio/03_Karma Police.mp3" type="audio/mpeg"></audio>
+
     <input type="range" id="slider1" min="0" max="1" step="0.005">
-    
-    <!-- Play/pause button for the second audio -->
-    <button id="playPauseButton2">Play</button>
     <input type="range" id="slider2" min="0" max="1" step="0.005">
-    
-    <!-- Play/pause button for the third audio -->
-    <button id="playPauseButton3">Play</button>
     <input type="range" id="slider3" min="0" max="1" step="0.005">
 
     <script>
-        /*
+        
         const audioCtx1 = new AudioContext();
         const audioCtx2 = new AudioContext();
         const audioCtx3 = new AudioContext();
@@ -70,13 +62,9 @@
             .catch(console.error);
         }
 
-        document.getElementById('playPauseButton1').onclick = () => {
-            console.log(sources);
-        };
+        console.log(sources);
 
-        console.log(sources);*/
-
-        
+        /*
         
 
         const audioCtx1 = new AudioContext();
@@ -126,7 +114,7 @@
             .catch(console.error);
         }
 
-        console.log(sources);
+        console.log(sources);*/
 
     </script>
 </body>
