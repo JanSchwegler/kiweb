@@ -1,6 +1,7 @@
 Diese Dokumentation zeigt meinen Arbeitsprozess bei der Entwicklung meines Semesterprojekts auf und bietet Einblicke in Herausforderungen, Erfolge und Fortschritte während des gesamten Moduls.
 
 [Hier geht es zur Übersicht](../dokumentation/dokumentation){:target="_blank"}
+
 [Hier geht es direkt zum Semesterprojekt](../v2.2.2_radiohead/){:target="_blank"}
 
 # Auswahl Plakat
@@ -129,6 +130,7 @@ Beim Konzet habe ich mich an den visuellen Elementen wie den Balken und den Text
 # Unsetzung 2
 
 [Zur Umsetzung 2.1](../v2.1_radiohead/){:target="_blank"}
+
 [Zur Umsetzung 2.2 (finale Umsetzung)](../v2.2.2_radiohead/){:target="_blank"}
 
 Ich habe mich dazu entschieden, die die zweite Umsetzung bzw. die Weiterentwicklung in einem neuen und leeren HTML-Dokument zu beginnen. Aus dem Grund, dass die zweite Umsetzung strukturell anders aufgebaut werden muss, als die Erste.
@@ -363,7 +365,7 @@ Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. Hier
 
 Bis ich diese Problematik tiefer verstand und die Funktionsweise der Web Audio API teilweise verstehen konnte habe ich einige Stunden recherchiert und viele Test durchgeführt. Leider konnte auch ChatGPT 3.5 nicht zuverlässig mit dem Problem und mit der komplexen situation umgehen.
 
-## überarbeitung Konzept (2.2)
+## Überarbeitung Konzept (2.2)
 Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich mir erneut gedanken zu meinem Konzept gemacht um die Wirkung zu optimieren. 
 - Aufgrund der Funktion mit der Verschiebung des Inhalt habe ich, im Gegensatz zur ersten Version, einen Abstand vom Bildschrimrand zum Inahlt erstellt. Dieser Abstand diente dazu, dass der Inhalt verschoben werden konnte, jedoch dieser nicht abgeschnitten wurde. Die Website verlohr durch diesen Abstand jedoch an Wirkung. Dieser Abstand soll nun entfernt werden. Somit wird ebenfalls die dazugehörige Funktion entfernt.
 - Wie bei der ersten Version und auch dem Plakat, soll der Inhalt den gesamten Platz ausfüllen. Dadurch soll auch die Schallplatte am Seitenrand entfernt werden. Der Player wird nun in die Seite eingebaut, anstatt in einem Popup über der Website zu schweben.
@@ -393,7 +395,7 @@ Als das Laden der Audiodateien endlich funktionierte, fiel mir auf, dass dieser 
 
 Für die Berechnung der Rotationsbewegung werden 4 Variablen verwendet. Mit den ersten beiden wird wird die aktuelle und die letzte Position festgehalten verglichen und als dritte Varbiale gespeichert, somit enthällt diese Varable die aktuelle Bewegung. Anschliessend wird geprüft ob die Gesamtbewegung + die aktuelle Bewegung grösser oder kleiner als die Limits sind. Falls das nicht der Fall ist wird die vierte Variable neu gesetzt und als neue Position defineirt. Es ist wichtig, dass diese Varable nur überschrieben wird, falls die aktuellen Limits eingehalten werden, somit kann diese nicht zuvor für die Berechnung verwendet werden.
 
-´´´
+```
 angleDiffrence = mouseAngle - scrubbMove;
     scrubbMove += angleDiffrence;
     // check limits
@@ -402,17 +404,17 @@ angleDiffrence = mouseAngle - scrubbMove;
     }
     // rotate scrubber
     scrubber.style.transform = `rotate(${scrubbAngle + initialScrubberAngle}deg)`;
-´´´
+```
 
 In diesem Codeabschnitt wird überprüft ob, die Mausposition über den Nullpunkt fährt, und rechnet minus oder plus eine volle Umdrehung. Da fürht dazu, dass der Code mehr als eine volle Umdrehung erkennt und nicht nur einen Bereich zwischen 0 und 360 abdeckt:
 
-´´´
+```
 if (mouseAngle - scrubbMove < -180) {
         scrubbMove -= 360;
     } else if (mouseAngle - scrubbMove > 180) {
         scrubbMove += 360;
     }
-´´´
+```
 
 ## Ladeanimation
 Für die Ladeanimation etwas schon von Anfang an klar: Es muss auf das Laden des gesamten Inhalts gewartet werden und anschliessend sollte der sichtbare Breich (die Balken und die Schallplatten) in das Bild animiert werden. Die erste herausforderung war hierbei, dass die Seite immer von ganz oben Startete und nicht an der letzten Position. Zudem wollte ich, dass nicht bereis gescrollt werden kann, wenn die Website noch in der Ladeanimation ist. Diese herausforderung habe ich so gelöst, dass alle Scrollmöglichkeiten ausgeschaltete werden und auch die Höhe der Website auf maximal 100vh zu beschrenken. Nach dem laden werden diese Anpasungen zurückgesetzt und die Animation der Balken und Schallplatten konnte starten.
@@ -455,11 +457,10 @@ Das Modul KIWEB hat mir viel Spass gemacht. Ich hatte die Moglichkeit mir viel n
 [Link in new Tab](radiohead/){:target="_blank"}
 
 TODO:
-- Change redirect.html location
 - rotate vinyl background layer -> done -> document
 - "Weitere Schritte" dokumentiere (Titel schon gesetzt)
-- Responsive
-- Compile CSS with sass compiler
+- Responsive -> done ?
+- 
 
 Future changes:
 - Change pitch on scratch
