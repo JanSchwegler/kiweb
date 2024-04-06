@@ -392,6 +392,7 @@ Im Vergleich zu den vorherigen Versionen verzichtete ich durch die Web Audio API
 Als das Laden der Audiodateien endlich funktionierte, fiel mir auf, dass dieser Prozess viel Rechenleitung in anspruch nahm und somit die Website erst 1-2 Sekunden brauchte, um alles zu verarbeiten. Aus diesem Grund habe ich die Anzahl der Songs auf 6 limitiert. Aus Performance und auch ästethischen Gründen, habe ich im Anschluss eine Ladeanimation eingebaut, somit sollte die Website erst dargestellt werden sobald alles geladen wurde.
 
 Für die Berechnung der Rotationsbewegung werden 4 Variablen verwendet. Mit den ersten beiden wird wird die aktuelle und die letzte Position festgehalten verglichen und als dritte Varbiale gespeichert, somit enthällt diese Varable die aktuelle Bewegung. Anschliessend wird geprüft ob die Gesamtbewegung + die aktuelle Bewegung grösser oder kleiner als die Limits sind. Falls das nicht der Fall ist wird die vierte Variable neu gesetzt und als neue Position defineirt. Es ist wichtig, dass diese Varable nur überschrieben wird, falls die aktuellen Limits eingehalten werden, somit kann diese nicht zuvor für die Berechnung verwendet werden.
+
 ´´´
 angleDiffrence = mouseAngle - scrubbMove;
     scrubbMove += angleDiffrence;
@@ -404,6 +405,7 @@ angleDiffrence = mouseAngle - scrubbMove;
 ´´´
 
 In diesem Codeabschnitt wird überprüft ob, die Mausposition über den Nullpunkt fährt, und rechnet minus oder plus eine volle Umdrehung. Da fürht dazu, dass der Code mehr als eine volle Umdrehung erkennt und nicht nur einen Bereich zwischen 0 und 360 abdeckt:
+
 ´´´
 if (mouseAngle - scrubbMove < -180) {
         scrubbMove -= 360;
