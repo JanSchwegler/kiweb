@@ -1,6 +1,6 @@
 Diese Dokumentation zeigt meinen Arbeitsprozess bei der Entwicklung meines Semesterprojekts auf und bietet Einblicke in Herausforderungen, Erfolge und Fortschritte während des gesamten Moduls.
 
-[Hier geht es direkt zum Semesterprojekt](v2_radiohead/){:target="_blank"}
+[Hier geht es direkt zum Semesterprojekt](../v2_radiohead/){:target="_blank"}
 
 # Auswahl Plakat
 Zu Beginn des Moduls habe ich mir die verschiedenen Plakate angesehen und folgende für mich interessante herausgesucht:
@@ -357,7 +357,7 @@ function hoverText (event) {
 ```
 
 ## Visualisierung der Audio
-Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. Jedoch habe ich mich mit dem Code erst zu diesem Zeitpunkt tiefer auseinandergesetzt. Dabei wurde mir bewusst, dass die Visualisierung und Analyse der Audios mittels der "Web Audio API" durchgeführt wird. Schon früh habe ich bemerkt, wenn ich meine Audio-Tags mit der Web Audio API verbinde, diese nicht mehr als nomrale Audio-Tags funktionieren und somit meine bisher erstellten Scripts nicht mehr funktionierten. Auch wenn ich separate Audiodateien mit der Web Audio API laden würde, besteht das Problem, dass diese zwei Instanzen den aktuellen Zustand voneinander nicht kennen und nicht miteinander kommunizieren können. 
+Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. Hierfür habe ich mir dieses [Video](https://www.youtube.com/watch?v=uPztDeHWhn8){:target="_blank"} herausgesucht. Jedoch habe ich mich mit dem Code erst zu diesem Zeitpunkt tiefer auseinandergesetzt. Dabei wurde mir bewusst, dass die Visualisierung und Analyse der Audios mittels der "Web Audio API" durchgeführt wird. Schon früh habe ich bemerkt, wenn ich meine Audio-Tags mit der Web Audio API verbinde, diese nicht mehr als nomrale Audio-Tags funktionieren und somit meine bisher erstellten Scripts nicht mehr funktionierten. Auch wenn ich separate Audiodateien mit der Web Audio API laden würde, besteht das Problem, dass diese zwei Instanzen den aktuellen Zustand voneinander nicht kennen und nicht miteinander kommunizieren können. 
 
 Bis ich diese Problematik tiefer verstand und die Funktionsweise der Web Audio API teilweise verstehen konnte habe ich einige Stunden recherchiert und viele Test durchgeführt. Leider konnte auch ChatGPT 3.5 nicht zuverlässig mit dem Problem und mit der komplexen situation umgehen.
 
@@ -383,7 +383,7 @@ Für diese Funktionsweise habe ich ein Script erstellt "bars.js" welche basieren
 Die Anzahl der Balken habe ich im Anschluss noch so angepasst, dass beim zweiten Abschnitt mit Balken die gesamte Bildschirmhöhe gefüllt wird.
 
 ## Audioplayer
-Ich habe diese Gelegenheit vom Neuaufbau genutzt um mein Script für den Audioplayer neu mit der Web Audio API aufzubauen. Die grundlegende Logik habe ich zuvor bereits erstellt, jedoch war es herausfordernd die Grundlagen der Web Audio API zu verstehen und anzuwenden. Es stellte sich als wesentlich aufweniger heraus, eine Audio abzuspielen, zu pausieren, weiter abzuspielen und die  aktuelle Abspielzeit anzupassen. Denn eine Audio, so wie ich diese augebaut habe, konnte nicht pasiert und weiter abgespielt werden. Die Idee der API war es hierbei eine Audio zu initialisieren, diese einmal zu starten und einmal zu stoppen. Für die pausierung, musste separat die Zeit festgehalten, die Audio neu initialisiert und ab dem letzten Zeitpunkt neu gestartet werden.
+Ich habe diese Gelegenheit vom Neuaufbau genutzt um mein Script für den Audioplayer neu mit der Web Audio API aufzubauen. Neben den anderen Vorteilen sollte auch das "Scrubbing" besser funktionieren, da die Audiodatei vorgeladen wird und somit sofort die gewünsche position abspielt. Hierfür habe ich [diesen Code von Stackoverflow](https://stackoverflow.com/questions/60099350/how-can-i-hear-sound-playing-while-scrubbing-the-audio-from-an-audio-tag){:target="_blank"} gefunden. Die grundlegende Logik habe ich zuvor bereits erstellt, jedoch war es herausfordernd die Grundlagen der Web Audio API zu verstehen und anzuwenden. Es stellte sich als wesentlich aufweniger heraus, eine Audio abzuspielen, zu pausieren, weiter abzuspielen und die  aktuelle Abspielzeit anzupassen. Denn eine Audio, so wie ich diese augebaut habe, konnte nicht pasiert und weiter abgespielt werden. Die Idee der API war es hierbei eine Audio zu initialisieren, diese einmal zu starten und einmal zu stoppen. Für die pausierung, musste separat die Zeit festgehalten, die Audio neu initialisiert und ab dem letzten Zeitpunkt neu gestartet werden.
 
 Im Vergleich zu den vorherigen Versionen verzichtete ich durch die Web Audio API auf die Audio-Tags lud die Dateien direkt von der JavaScript-Datei aus.
 
