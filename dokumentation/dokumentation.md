@@ -458,6 +458,7 @@ TODO:
 - Change redirect.html location
 - rotate vinyl background layer -> done -> document
 - "Weitere Schritte" dokumentiere (Titel schon gesetzt)
+- Responsive
 - Compile CSS with sass compiler
 
 Future changes:
