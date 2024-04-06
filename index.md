@@ -383,11 +383,32 @@ Für diese Funktionsweise habe ich ein Script erstellt "bars.js" welche basieren
 Die Anzahl der Balken habe ich im Anschluss noch so angepasst, dass beim zweiten Abschnitt mit Balken die gesamte Bildschirmhöhe gefüllt wird.
 
 ## Audioplayer
-Ich habe diese Gelegenheit vom Neuaufbau genutzt um mein Script für den Audioplayer neu mit der Web Audio API aufzubauen. Die grundlegende Logik habe ich zuvor bereits erstellt, jedoch war es herausfordernd die Grundlagen der Web Audio API zu verstehen und anzuwenden. Es stellte sich als wesentlich aufweniger heraus, eine Audio abzuspielen, zu pausieren, weiter abzuspielen und die  aktuelle Abspielzeit anzupassen. Denn eine Audio, so wie ich diese augebaut habe, konnte nicht pasiert und weiter abgespielt werden, genauso konnte die aktuelle Zeit nicht gelesen oder definiert werden. Die Idee der API war es hierbei eine Audio zu initialisieren, diese einmal zu starten und einmal zu stoppen. Für die pausierung, musste separat die Zeit gestoppt, die Audio neu initialisiert und ab dem letzten Zeitpunkt neu abgespielt werden. 
+Ich habe diese Gelegenheit vom Neuaufbau genutzt um mein Script für den Audioplayer neu mit der Web Audio API aufzubauen. Die grundlegende Logik habe ich zuvor bereits erstellt, jedoch war es herausfordernd die Grundlagen der Web Audio API zu verstehen und anzuwenden. Es stellte sich als wesentlich aufweniger heraus, eine Audio abzuspielen, zu pausieren, weiter abzuspielen und die  aktuelle Abspielzeit anzupassen. Denn eine Audio, so wie ich diese augebaut habe, konnte nicht pasiert und weiter abgespielt werden. Die Idee der API war es hierbei eine Audio zu initialisieren, diese einmal zu starten und einmal zu stoppen. Für die pausierung, musste separat die Zeit festgehalten, die Audio neu initialisiert und ab dem letzten Zeitpunkt neu gestartet werden.
 
 Im Vergleich zu den vorherigen Versionen verzichtete ich durch die Web Audio API auf die Audio-Tags lud die Dateien direkt von der JavaScript-Datei aus.
 
-Als das Laden der Audiodateien entlich funktionierte, fiel mir auf, dass dieser Prozess viel Rechenleitung in anspruch nahm und somit die Website erst 1-2 Sekunden brauchte, um alles zu verarbeiten. Aus diesem Grund habe ich die Anzahl der Songs auf 6 limitiert. Aus Performance und auch ästethischen Gründen, habe ich im Anschluss eine Ladeanimation eingebaut, somit sollte die Website erst dargestellt werden sobald alles geladen wurde.
+Als das Laden der Audiodateien endlich funktionierte, fiel mir auf, dass dieser Prozess viel Rechenleitung in anspruch nahm und somit die Website erst 1-2 Sekunden brauchte, um alles zu verarbeiten. Aus diesem Grund habe ich die Anzahl der Songs auf 6 limitiert. Aus Performance und auch ästethischen Gründen, habe ich im Anschluss eine Ladeanimation eingebaut, somit sollte die Website erst dargestellt werden sobald alles geladen wurde.
+
+Für die Berechnung der Rotationsbewegung werden 4 Variablen verwendet. Mit den ersten beiden wird wird die aktuelle und die letzte Position festgehalten verglichen und als dritte Varbiale gespeichert, somit enthällt diese Varable die aktuelle Bewegung. Anschliessend wird geprüft ob die Gesamtbewegung + die aktuelle Bewegung grösser oder kleiner als die Limits sind. Falls das nicht der Fall ist wird die vierte Variable neu gesetzt und als neue Position defineirt. Es ist wichtig, dass diese Varable nur überschrieben wird, falls die aktuellen Limits eingehalten werden, somit kann diese nicht zuvor für die Berechnung verwendet werden.
+´´´
+angleDiffrence = mouseAngle - scrubbMove;
+    scrubbMove += angleDiffrence;
+    // check limits
+    if (scrubbAngle + angleDiffrence + initialScrubberAngle > 0 && scrubbAngle + angleDiffrence + initialScrubberAngle < maxSrubberAngle) {
+        scrubbAngle += angleDiffrence;
+    }
+    // rotate scrubber
+    scrubber.style.transform = `rotate(${scrubbAngle + initialScrubberAngle}deg)`;
+´´´
+
+In diesem Codeabschnitt wird überprüft ob, die Mausposition über den Nullpunkt fährt, und rechnet minus oder plus eine volle Umdrehung. Da fürht dazu, dass der Code mehr als eine volle Umdrehung erkennt und nicht nur einen Bereich zwischen 0 und 360 abdeckt:
+´´´
+if (mouseAngle - scrubbMove < -180) {
+        scrubbMove -= 360;
+    } else if (mouseAngle - scrubbMove > 180) {
+        scrubbMove += 360;
+    }
+´´´
 
 ## Ladeanimation
 Für die Ladeanimation etwas schon von Anfang an klar: Es muss auf das Laden des gesamten Inhalts gewartet werden und anschliessend sollte der sichtbare Breich (die Balken und die Schallplatten) in das Bild animiert werden. Die erste herausforderung war hierbei, dass die Seite immer von ganz oben Startete und nicht an der letzten Position. Zudem wollte ich, dass nicht bereis gescrollt werden kann, wenn die Website noch in der Ladeanimation ist. Diese herausforderung habe ich so gelöst, dass alle Scrollmöglichkeiten ausgeschaltete werden und auch die Höhe der Website auf maximal 100vh zu beschrenken. Nach dem laden werden diese Anpasungen zurückgesetzt und die Animation der Balken und Schallplatten konnte starten.
@@ -395,13 +416,33 @@ Für die Ladeanimation etwas schon von Anfang an klar: Es muss auf das Laden des
 Ich habe mit mehreren Animationen herumprobiert welche beim Laden erscheinen, bevor der Inhalt geladen wurde. Diese habe ich als Feedback erstellt, um zu zeigen, dass die Seite geladen wird. Jedoch war mir diese Animation nach einiger Zeit zu viel und der Inahlt wurde grundsätzlich schnell geladen, was zu keiner verwirrenden Wartezeit führte. Dadurch habe ich diese wieder entfernt.
 
 # Meine Erkentnisse
-- JS, Aufbau, Architektur, üben
-- Web Audio API
-- Draggin per Maus und Touch
-- Rotationsbewegungen / Berechnungen
-- Konteptionell
-- Github
-- kann nicht alles erwähnt werden, viel repetition, wiederholung, Startschwierigkeiten, welche mir andere Blickwinkel ermöglichten
+Im Verlauf des Moduls KIWEB habe ich viele verschiedene Skills erlehrnt. Diese können hier nicht alle genant werden. Biepisleweise habe ich neue Details gennengelernt, vieles Repetiert und durch meine Mitstudierenden mit unterschiedlichen Niveaus neue Blickwinkel auf das Thema sehen können, welche mich für die Zukunft begleiten werden. 
+
+## Konzept
+Im Verlauf des Moduls habe ich mir gedanken zu einem Bestimmten Plakat gemacht. Wie beispielsweise:
+- Was sind die Charakteristiken des Plakats? 
+- Was macht dieses Plakat aus?
+- Wie können die Kernpunkt adaptiert werden?
+Aus diese Fragestellungen entstanden Konzeptideen um ein festes Format auf einer Website abzubilden. Daraus habe ich gelernt die wirtigen Eigenschaten zu erkennen und diese in einer abgewandelten Form in ein neues Konzept einfliessen zu lassen. Sowie auch zu hinterfragen, was macht die Website Spannend. Welche Elemente platziere ich in meinem Konzept wo, um eine gewünschte wirkung zu erzielen. Und wie kann ich den Benutzenden Emotional erreichen um das Interesse zu vertärken.
+
+In meinem zweiten Konzept wollte ich mich zuerst zu weit von meinem Plakat entfernen und mehr bewegende und Interesse weckende Elemente einbauen. Diese Ideen stimmten jedoch nicht mehr mit der Grundidee des Plakates überein. Was mir erneut zeigte, wie ich meine Ideen hinterfrgen und auf das Konzept abstimmen sollte.
+
+## Github
+In diesem Modul habe ich das erste mal Github umfänglich verwendet. Was zu einem grossen Wissenszuwachs zu Github führte. Ich habe beispielsweise das Erste mal Markdown verwendet und auch mit Github Pages gearbeitet.
+
+## JavaScript
+Ich kannte schon zuvor JavaScript und habe kleinere Umsetzung durchgeführt. Während des Moduls konnte ich viel Übung sammeln beim erstellen von Interaktion mit JavaScript. Mit der Übung habe ich mehr Erfahrungen im Aufbau und der Architektur gesammelt. Diese Erfahrung sind für mich sehr wichtig, denn mit diesen werde ich in Zukunft meinen Aufbau von JavaScript optimieren. Was die den zeitaufwand reduziert und auch die Leistung verbessert.
+
+## Ziehen von Elementen & Rotation
+Während des Moduls habe ich das erste mal Elemente erstellt welche mit JavaScript verschoben werden konnten. Zudem Befasste ich mich eine lange Zeit mit Rotationsbewegungen und Rotaionsberechnungen. Zusätzlich war auch die Architektur des Codes sehr relevant. Ich lernte wie ich Limiten in meiner Rotationsbewegung einbauen kann, welche sehr bestimmte Auswirkungen haben sollten. In diesem Schritt setzte ich mich intensiv damit auseinander, welche Werte für was verwendet werden sollten. Und lernte kennen wann welche Werte aktualisiert werden sollten oder eben nicht.
+
+## Web Audio API
+Die Web Audio API lernte ich das erste Mal in diesem Modul kennen. Ich wusste zuvor nicht, dass diese existiert. Gegen Ende des Moduls habe ich mich intensiv mit dieser auseinandergesetzt. Trotz meiner erfolgreichen Umsetzung und dem Erlernen des Basiswissens, kann ich nicht von mit behaupten, dass ich diese voll verstanden habe. 
+
+Nach meinem Verständniss muss eine Audiodatei zu Beginn geladen und in einem "AudioCOntext"-Objekt dekodiert und zwischengespiechert werden. Somit ist diese Audiodatei für den Einsatz bereit. Jetzt kann die Datei beispielsweise in den "Buffer" geladen werden, um ein sofortiges abspielen sicherzustellen und auch mit verschiedenen Elementen verknüpft werden. Jede Verwendung der Audiodatei fungiert nun als eigene Instanz und kann nicht mit den anderen instanzen kommuizieren. Durch dieses Verhalten kann, im Vergleich zum Audio-Tag, eine Audiodatei mehrere Male verwendet und somit gleichzeitig abgespielt werden. Diese FUnktionsweise verwirrte mich zu Beginn sehr. In meinem Fall wird nur die aktuelle Datei in den Buffer geladen, der Buffer anschliessend in den Analyser und der Analyzer mit dem Output (dem Lautsprecher). Diese Audio kann nun 1 Mal gestartet und gestoppt werden. Dadurch muss nach einem Stop die genannte Verkettung gelöscht und neu initialisert werden. Für den nächsten Start muss separat die abgespielte Zeit festgehelten werden und somit vom gleichen Zeitpunkt aus gestartet werden.
+
+# Fazit
+Das Modul KIWEB hat mir viel Spass gemacht. Ich hatte die Moglichkeit mir viel neues Wissen anzueignen und Neues Auszuprobieren. Hanna Züllig motivierte mich laufend mein Konzept zu verbessern und unterstützte mich bestmöglich. Aus diesem Modul nehme ich viele für mich sehr relevante Erkenntnisse, Erfahrungen und Wissen mit.
 
 
 <!---
@@ -409,9 +450,8 @@ Ich habe mit mehreren Animationen herumprobiert welche beim Laden erscheinen, be
 
 TODO:
 - Change redirect.html location
-- rotate vinyl background layer
+- rotate vinyl background layer -> done -> document
 - change hover on links page
-- Ausopplayer learnings auflisten?
 
 Future changes:
 - Change pitch on scratch

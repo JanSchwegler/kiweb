@@ -37,12 +37,15 @@ let isDragging = false,
     scrubber, // current vinyl
     scrubbing = false, // bool to tell if currently scrubbing
     initialScrubberAngle = 0, // initial angle of div / reset at audio change
+    initialSlideBackgroundAngle = 0, // initial angle of background div
     scrubbMove = 0, // Used to track every movment and calc the current offset / reset at scrubb start to initial mouse angle
     scrubbAngle = 0, // current scrubb movement in the allowed range / reset at scrubb start
     maxSrubberAngle = 0, // reset at audio change
     centerX,
     centerY,
-    audioCurrentTime = 0;
+    audioCurrentTime = 0,
+    currentTouch = [0, 0],
+    slideBackground;
 
 // functions - initialising --------------------------------------------------------------------------------
 async function initialisingAudioFiles() {
@@ -71,7 +74,8 @@ function initialisingAudioBufferSources () {
 
 function initialisingSlider () {
     slider = document.querySelector('.slider-container'),
-    slides = Array.from(document.querySelectorAll('.slide'))
+    slides = Array.from(document.querySelectorAll('.slide'));
+    slideBackground = document.getElementById('slide-background');
     sliderArrowLeft = document.getElementById('audioplayer-arrow-left');
     sliderArrowRight = document.getElementById('audioplayer-arrow-right');
 
@@ -255,15 +259,24 @@ function scrubbingDisc(event) {
         initialScrubberAngle = parseFloat(transformValue[1]);
       }
     }
+    // initialSlideBackgroundAngle
+    let transformValueSlideBackground = slideBackground.style.transform;
+    if (transformValueSlideBackground && transformValueSlideBackground !== 'none') {
+        transformValueSlideBackground = transformValueSlideBackground.match(/rotate\(([-\d.]+)deg\)/);
+      if (transformValueSlideBackground && transformValueSlideBackground.length > 1) {
+        initialSlideBackgroundAngle = parseFloat(transformValueSlideBackground[1]);
+      }
+    }
     if (event.type === 'touchstart') {
         let touch = event.touches[0];
         let clickStartPosition = [touch.clientX, touch.clientY];
+        currentTouch = clickStartPosition;
         scrubbMove = ((Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
         document.addEventListener('touchmove', rotate);
         document.addEventListener('touchend', (event) => {
             document.removeEventListener('touchmove', rotate);
             scrubbing = false;
-            if (clickStartPosition[0] == touch.clientX && clickStartPosition[1] == touch.clientY) {
+            if (clickStartPosition[0] == currentTouch && clickStartPosition[1] == currentTouch) {
                 playBuffer(initialScrubberAngle / 360 * secondsPerRotate);
             } else {
                 playBuffer(audioCurrentTime);
@@ -291,6 +304,7 @@ function rotate(event) {
     let angleDiffrence;
     if (event.type === 'touchmove') {
         let touch = event.touches[0];
+        currentTouch = [touch.clientX, touch.clientY];
         mouseAngle = ((Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
     } else {
         mouseAngle = ((Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
@@ -308,6 +322,7 @@ function rotate(event) {
     }
     // rotate scrubber
     scrubber.style.transform = `rotate(${scrubbAngle + initialScrubberAngle}deg)`;
+    slideBackground.style.transform = `rotate(${scrubbAngle + initialSlideBackgroundAngle}deg)`;
     // play audio
     initialisingAudioBufferSources();
     audioCurrentTime = (scrubbAngle + initialScrubberAngle) / 360 * secondsPerRotate;
@@ -349,6 +364,24 @@ function easeOut(t) {
 
 function updateScrubber() {
     let currentTime = audioContext.currentTime - audioStartTime;
+    // Rotate Backgorund
+    let currentScrubberAngle = scrubber.style.transform;
+    if (currentScrubberAngle && currentScrubberAngle !== 'none') {
+        currentScrubberAngle = currentScrubberAngle.match(/rotate\(([-\d.]+)deg\)/);
+      if (currentScrubberAngle && currentScrubberAngle.length > 1) {
+        currentScrubberAngle = parseFloat(currentScrubberAngle[1]);
+      }
+    }
+    let currentBackgroundAngle = slideBackground.style.transform;
+    if (currentBackgroundAngle && currentBackgroundAngle !== 'none') {
+        currentBackgroundAngle = currentBackgroundAngle.match(/rotate\(([-\d.]+)deg\)/);
+      if (currentBackgroundAngle && currentBackgroundAngle.length > 1) {
+        currentBackgroundAngle = parseFloat(currentBackgroundAngle[1]);
+      }
+    }
+    slideBackground.style.transform = `rotate(${currentBackgroundAngle + ((360 / secondsPerRotate) * currentTime) - currentScrubberAngle}deg)`;
+
+    // Rotate Scrubber
     scrubber.style.transform = `rotate(${(360 / secondsPerRotate) * currentTime}deg)`;
     if (!scrubbing && currentTime < audioBuffers[currentIndex].duration) {
         requestAnimationFrame(updateScrubber);
