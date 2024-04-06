@@ -415,6 +415,8 @@ Für die Ladeanimation etwas schon von Anfang an klar: Es muss auf das Laden des
 
 Ich habe mit mehreren Animationen herumprobiert welche beim Laden erscheinen, bevor der Inhalt geladen wurde. Diese habe ich als Feedback erstellt, um zu zeigen, dass die Seite geladen wird. Jedoch war mir diese Animation nach einiger Zeit zu viel und der Inahlt wurde grundsätzlich schnell geladen, was zu keiner verwirrenden Wartezeit führte. Dadurch habe ich diese wieder entfernt.
 
+## Weitere Schritte
+
 # Meine Erkentnisse
 Im Verlauf des Moduls KIWEB habe ich viele verschiedene Skills erlehrnt. Diese können hier nicht alle genant werden. Biepisleweise habe ich neue Details gennengelernt, vieles Repetiert und durch meine Mitstudierenden mit unterschiedlichen Niveaus neue Blickwinkel auf das Thema sehen können, welche mich für die Zukunft begleiten werden. 
 
@@ -442,7 +444,7 @@ Die Web Audio API lernte ich das erste Mal in diesem Modul kennen. Ich wusste zu
 Nach meinem Verständniss muss eine Audiodatei zu Beginn geladen und in einem "AudioCOntext"-Objekt dekodiert und zwischengespiechert werden. Somit ist diese Audiodatei für den Einsatz bereit. Jetzt kann die Datei beispielsweise in den "Buffer" geladen werden, um ein sofortiges abspielen sicherzustellen und auch mit verschiedenen Elementen verknüpft werden. Jede Verwendung der Audiodatei fungiert nun als eigene Instanz und kann nicht mit den anderen instanzen kommuizieren. Durch dieses Verhalten kann, im Vergleich zum Audio-Tag, eine Audiodatei mehrere Male verwendet und somit gleichzeitig abgespielt werden. Diese FUnktionsweise verwirrte mich zu Beginn sehr. In meinem Fall wird nur die aktuelle Datei in den Buffer geladen, der Buffer anschliessend in den Analyser und der Analyzer mit dem Output (dem Lautsprecher). Diese Audio kann nun 1 Mal gestartet und gestoppt werden. Dadurch muss nach einem Stop die genannte Verkettung gelöscht und neu initialisert werden. Für den nächsten Start muss separat die abgespielte Zeit festgehelten werden und somit vom gleichen Zeitpunkt aus gestartet werden.
 
 # Fazit
-Das Modul KIWEB hat mir viel Spass gemacht. Ich hatte die Moglichkeit mir viel neues Wissen anzueignen und Neues Auszuprobieren. Hanna Züllig motivierte mich laufend mein Konzept zu verbessern und unterstützte mich bestmöglich. Aus diesem Modul nehme ich viele für mich sehr relevante Erkenntnisse, Erfahrungen und Wissen mit.
+Das Modul KIWEB hat mir viel Spass gemacht. Ich hatte die Moglichkeit mir viel neues Wissen anzueignen und Neues Auszuprobieren. Hanna Züllig motivierte mich laufend mein Konzept zu verbessern und unterstützte mich bestmöglich. Aus diesem Modul nehme ich viele für mich sehr relevante Erkenntnisse, Erfahrungen und Wissen mit.****
 
 
 <!---
@@ -452,6 +454,7 @@ TODO:
 - Change redirect.html location
 - rotate vinyl background layer -> done -> document
 - change hover on links page
+- Weitere Schritte dokumentiere (Titel schon gesetzt)
 
 Future changes:
 - Change pitch on scratch
