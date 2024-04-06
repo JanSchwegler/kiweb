@@ -272,9 +272,9 @@ function scrubbingDisc(event) {
         let clickStartPosition = [touch.clientX, touch.clientY];
         currentTouch = clickStartPosition;
         scrubbMove = ((Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
-        document.addEventListener('touchmove', rotate);
-        document.addEventListener('touchend', (event) => {
-            document.removeEventListener('touchmove', rotate);
+        slides[currentIndex].addEventListener('touchmove', rotate);
+        slides[currentIndex].addEventListener('touchend', (event) => {
+            slides[currentIndex].removeEventListener('touchmove', rotate);
             scrubbing = false;
             if (clickStartPosition[0] == currentTouch && clickStartPosition[1] == currentTouch) {
                 playBuffer(initialScrubberAngle / 360 * secondsPerRotate);

@@ -453,8 +453,9 @@ Das Modul KIWEB hat mir viel Spass gemacht. Ich hatte die Moglichkeit mir viel n
 TODO:
 - Change redirect.html location
 - rotate vinyl background layer -> done -> document
-- change hover on links page
-- Weitere Schritte dokumentiere (Titel schon gesetzt)
+- change hover on links page ?
+- "Weitere Schritte" dokumentiere (Titel schon gesetzt)
+- Resize / scroll bug mobile
 
 Future changes:
 - Change pitch on scratch
