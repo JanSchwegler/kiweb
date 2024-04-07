@@ -285,9 +285,9 @@ function scrubbingDisc(event) {
     } else {
         let clickStartPosition = [event.clientX, event.clientY];
         scrubbMove = ((Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90) + 360) % 360;
-        document.addEventListener('mousemove', rotate);
-        document.addEventListener('mouseup', (event) => {
-            document.removeEventListener('mousemove', rotate);
+        slides[currentIndex].addEventListener('mousemove', rotate);
+        slides[currentIndex].addEventListener('mouseup', (event) => {
+            slides[currentIndex].removeEventListener('mousemove', rotate);
             scrubbing = false;
             if (clickStartPosition[0] == event.clientX && clickStartPosition[1] == event.clientY) {
                 playBuffer(initialScrubberAngle / 360 * secondsPerRotate);
