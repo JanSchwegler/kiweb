@@ -86,7 +86,7 @@ function setText (e, index = null) {
         if (index == currentIndex && !audioPlaying) {
             hoverTextElement.innerHTML = "play";
         } else if (index == currentIndex && audioPlaying) {
-            hoverTextElement.innerHTML = "scrubb me";
+            hoverTextElement.innerHTML = "scratch me";
         } else if (index > currentIndex) {
             hoverTextElement.innerHTML = "next";
         } else if (index < currentIndex) {
