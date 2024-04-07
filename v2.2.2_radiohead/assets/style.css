@@ -220,7 +220,12 @@ section .title {
 
 /* Responsive - Tablet */
 @media screen and (max-width: 991px) {
-    
+    section#audioplayer #slide-background { /* change from 20px border to 10px */
+        width: calc(40vw + 20px);
+        height: calc(100% - 80px); /* 100px - 20px */
+        top: 40px;  /* -10 offset + 50 padding */
+        left: calc(30vw - 10px);
+    }
 }
   
 /* Responsive - Mobile */
