@@ -220,10 +220,14 @@ Zu Beginn startete ich mit einem Slider mit welchem durch die Schallplatten gewe
 Während des Aufbaus habe ich darauf geachtet, dass die Slides-Div problemlos um die eigene Achse rotierbar sind, da somit die rotierenden Schallplatten entstehen sollten. Schon zu Beginn habe ich mir überlegt wie ich das Bild der Schallplatte einfügen werde. Dazu habe ich ein Hintergrundbild mit der grösse "contain" verwendet. Da die SChallplatte normalerweise mit einem Boden des Schallplattenspielers rotiert wird, habe ich zusätzlich unter den Slider ein Div erstellt, welches später für diesen Boden verwendet werden kann.
 
 ### Rotation der Schallplatten
-Die rotation der Schallplatten mit der Maus oder per Touch stellte sich als wesentlich anspruchsvoller und nervenaufreibender heraus als zuvor gedacht. Der Start funktionierte noch relativ angenehm. Ich konnte mit JavaScript die Elemente auswählen und spezifisch mit translate rotieren. Auch die Verbindung mit der Maus und dem Touch funktionierten relativ rasch. Wodurch die Platten manuell gedreht werden konnten. Der ersten Herausvorderung musste ich mich somit rasch stellen - dem neu setzen des Rotationsmittelpunktes. Da sich die Werte durch Screengrössenveränderungen und dem Slidwechsel dauernt veränderten, mussten diese stehts neu gesetzt werden. Diesen musste ich im richtigen moment setzen. Ich analysierte den Slider-Code erneut, um zu sehen wann sich welche Werte verändern um in diesem Moment der Ritationsmittelpunkt zu setzen. Etwas schwerer wurde es noch, als ich zudem bei jedem Slidewechsel die alte Schallplatte auf den 0-Punkt zurücksetzte. Das habe ich am Ende mit einer asynchronen FUnktion erstellt welche beim Wechsel aufgerufen wird, auf das Ende aller Touches und Mouseclicks wartet und zum Schluss die Schallplatte animiert zurücksetzen soll. Diese Animation konnte ich jedoch nicht mit css translate lösen und musste mit js erstellt werden. Wollte ich, dass sich die Schallplatte immer in dieselbe richtung dreht und unterschiedlich schnell, je nach Distanz welche rotiert werden muss.
+Der Start funktionierte noch relativ angenehm. Ich konnte mit JavaScript die Elemente auswählen und spezifisch mit translate rotieren. Auch die Verbindung mit der Maus und dem Touch funktionierten relativ rasch. Wodurch die Platten manuell gedreht werden konnten. Vor der Umsetzung mit mehreren Schallplatten und dem Slider, habe ich eine Testseite entwickelt. Auf dieser habe ich die Funktionsweise untersucht und überprüft.
+
+[Test 01 - Scratch Audio](../test/test_01_scrubb.html){:target="_blank"}
+
+Der ersten Herausvorderung musste ich mich somit rasch stellen - dem neu setzen des Rotationsmittelpunktes. Da sich die Werte durch Screengrössenveränderungen und dem Slidwechsel dauernt veränderten, mussten diese stehts neu gesetzt werden. Diesen musste ich im richtigen moment setzen. Ich analysierte den Slider-Code erneut, um zu sehen wann sich welche Werte verändern um in diesem Moment der Ritationsmittelpunkt zu setzen. Etwas schwerer wurde es noch, als ich zudem bei jedem Slidewechsel die alte Schallplatte auf den 0-Punkt zurücksetzte. Das habe ich am Ende mit einer asynchronen Funktion erstellt welche beim Wechsel aufgerufen wird, auf das Ende aller Touches und Mouseclicks wartet und zum Schluss die Schallplatte animiert zurücksetzen soll. Diese Animation konnte ich jedoch nicht mit css translate lösen und musste mit js erstellt werden. Wollte ich, dass sich die Schallplatte immer in dieselbe richtung dreht und unterschiedlich schnell, je nach Distanz welche rotiert werden muss.
 
 ### Rotation synchron mit der Musik
-Die synchronisation der Schallplatten mit der Musik stellte sich als wesentlich anspruchsvoller und nervenaufreibender heraus als zuvor gedacht. Das Einfügen und Abspielen von AUdiodateien funkionierte problemlos. Auch die Erste Verbindung von Audio zu Schallplatte funkionierte zuverlässig. Das erste und Hauptproblem war nun, dass die länge der Audiodatei nur eine Rotation der Schallplatte abbildete. Ich habe nun in viele Stunden auf verschiedenste Arten versucht dieses Problem zu lösen. Relativ zu Beginn habe ich erkannt, dass durch das verbinden mit der Audio, viel Code von meinem scrubbing (das Bewegen der Schallplatte mit der Maus oder oer Touch. Auf der Website wird scratch statt scrubb verwendet) nicht mehr verwendet werden kann auch Teils auch nicht mehr benötigt wird. Die erste Herausvorderung war es, in einer Variable die aktuelle Rotation in mehr als 360 Grad zu speichern. Denn durch das Tracking der Maus position wurde das immer auf 0 zurückgesetzt. Ich startete damit, diese zurücksetzungen bzw. vollen Rotationen zu wählen und diesen als Multiplikator für die gesamte Rotation zu verwenden. 
+Die synchronisation der Schallplatten mit der Musik stellte sich als wesentlich anspruchsvoller und nervenaufreibender heraus als zuvor gedacht. Das Einfügen und Abspielen von Audiodateien funkionierte problemlos. Auch die Erste Verbindung von Audio zu Schallplatte funkionierte zuverlässig. Das erste und Hauptproblem war nun, dass die länge der Audiodatei nur eine Rotation der Schallplatte abbildete. Ich habe nun in viele Stunden auf verschiedenste Arten versucht dieses Problem zu lösen. Relativ zu Beginn habe ich erkannt, dass durch das verbinden mit der Audio, viel Code von meinem scrubbing (das Bewegen der Schallplatte mit der Maus oder oer Touch. Auf der Website wird scratch statt scrubb verwendet) nicht mehr verwendet werden kann auch Teils auch nicht mehr benötigt wird. Die erste Herausvorderung war es, in einer Variable die aktuelle Rotation in mehr als 360 Grad zu speichern. Denn durch das Tracking der Maus position wurde das immer auf 0 zurückgesetzt. Ich startete damit, diese Zurücksetzungen bzw. vollen Rotationen zu zählen und als Multiplikator für die gesamte Rotation zu verwenden. 
 
 Beispiel mit aktueller Rotation von 180 Grad und 4 vollen Drehungen:
 
@@ -231,9 +235,25 @@ Beispiel mit aktueller Rotation von 180 Grad und 4 vollen Drehungen:
 
 `(360 * 4) + 180`
 
-Zu diesem Zeitpunkt wurde jedoch die Schallplatte noch mit einer Spanne von 0 bis 360 Grad bewegt. Um die Sprung von 360 zu 0 zu meistern ohne zurück zu drehen wurde eeine funktion verwendet um den kürzesten Weg zu berechnen und diese Rotation zu nehmen. 
+Zu diesem Zeitpunkt wurde jedoch die Schallplatte noch mit einer Spanne von 0 bis 360 Grad bewegt. Der Wechsel von 0 auf 360 Grad kreierte somit einen Sprung und die Platte drehte an diesem Punkt nicht mehr in die gewünsche Richtung, sondern drehte zurück. Um diesen Sprung zu meistern, wird der kürzere Weg Berechnet und diesen verwendet:
 
-Die noch grössere Herausvorderung stelle sich jedoch erst jetzt, als ein Maximum und Minimum an Rotation eingefügt werden sollte. Mir war hierbei wichtig, dass während des Scrubbings beim Erreichen des Starts und des Ende der Audio die Schallplatte stehen bleibt und nicht weiter dreht. Ein if-Statment einzufügen welches vor der Rotation die Werte prüft, war meine erste Idee. Hier war das Problem, dass im Hintergrund die Rotationen fortgesetzt wurden, was das zurückdrehen sehr unschön erscheinen lies. Ich wollte, dass die Schallplatte beim erreichen des Limits stehen bleibt. Während in diese Richtung gedreht wurd, passiert visuell nichts und auch die Werte im Hintergrund sollten unbeinflusst werden. Sobald eine Gegenrotaion ausgeführt wird, soll die Schallplatte sofort gedreht werden. Das zurücksetzen bzw. stehen lassen des Zählers der vollen Rotationen verursachte Probleme bei der Berechnung der aktuellen ROtation. Auch das Nicht-Aktualisieren der Rotationsposition funktionierte nicht, da somit die Refferenz für die nächste Rotationsdifferenz fehlte. Auch mit einer weiteren Variable löste sich das Problem nicht, denn mensch müsste mit der Maus bis zur entsprechenden Position zurück fahren, um die Schallplatte aufzugreiffen. Da die Schallplatte z.B. nur bis 4 Rotationen und 180 Grad fährt. falls ich nun bei 360 Grad mit der Maus umkehren würde, müsste ich bis 180 zurück rotieren, bis der Wert der Mausposition kleiner wird als die der Schallplatte. Dieses verhalten wollte ich umbedingt vermeiden. Die Schallplatte sollte direkt zurückgedreht werden. Da wurde es mir klar, es reicht nicht, die aktuelle Mausrotation und die vorherige Mausrotation für eine Differenz abzufragen. Ich musste unabhängig von der Rotation und jeglichen Limits, die Differenz der vorherigen und aktuellen Mausposition berechnen und separat abspeiuchern. Sobald die aktuelle Rotation + diese Differenz zu gross bzw. zu klein wird, darf die Schallplatte nicht bewegt werden. 
+```
+if (mouseAngle - scrubbMove < -180) {
+    scrubbMove -= 360;
+} else if (mouseAngle - scrubbMove > 180) {
+    scrubbMove += 360;
+}
+```
+
+Die noch grössere Herausvorderung stelle sich jedoch erst jetzt, als ein Maximum und Minimum an Rotation eingefügt werden sollte. Mir war hierbei wichtig, dass während des Scrubbings beim Erreichen des Starts und des Ende der Audio die Schallplatte stehen bleibt und nicht weiter dreht. Ein if-Statment einzufügen welches vor der Rotation die Werte prüft, war meine erste Idee. Hier war das Problem, dass im Hintergrund die Rotationen fortgesetzt wurden, was das zurückdrehen sehr unschön erscheinen lies. Ich wollte, dass die Schallplatte beim erreichen des Limits stehen bleibt. Während in diese Richtung gedreht wurd, passiert visuell nichts und auch die Werte im Hintergrund sollten unbeinflusst werden. Sobald eine Gegenrotaion ausgeführt wird, soll die Schallplatte sofort gedreht werden. Das zurücksetzen bzw. stehen lassen des Zählers der vollen Rotationen verursachte Probleme bei der Berechnung der aktuellen ROtation. Auch das Nicht-Aktualisieren der Rotationsposition funktionierte nicht, da somit die Refferenz für die nächste Rotationsdifferenz fehlte. Auch mit einer weiteren Variable löste sich das Problem nicht, denn mensch müsste mit der Maus bis zur entsprechenden Position zurück fahren, um die Schallplatte aufzugreiffen. Da die Schallplatte z.B. nur bis 4 Rotationen und 180 Grad fährt. falls ich nun bei 360 Grad mit der Maus umkehren würde, müsste ich bis 180 zurück rotieren, bis der Wert der Mausposition kleiner wird als die der Schallplatte. Dieses verhalten wollte ich umbedingt vermeiden. Die Schallplatte sollte direkt zurückgedreht werden. Da wurde es mir klar, es reicht nicht, die aktuelle Mausrotation und die vorherige Mausrotation für eine Differenz abzufragen. Ich musste unabhängig von der Rotation und jeglichen Limits, die Differenz der vorherigen und aktuellen Mausposition berechnen und separat abspeiuchern. Sobald die aktuelle Rotation + diese Differenz zu gross bzw. zu klein wird, darf die Schallplatte nicht bewegt werden.
+
+Die Entwicklung dieser funktionen fand unter anderem auf folgenden drei Testseiten statt. Auf diesen habe ich verschiedenste Möglichkeiten und Ansätze ausprobiert, kombiniert und Probleme behoben.
+
+[Test 02 - Div rotieren](../test/test_02_rotation.html){:target="_blank"}
+
+[Test 03 - Div rotieren mit Limits](../test/test_03_rotationlimits.html){:target="_blank"}
+
+[Test 04 - Rotation über 360 Grad auslesen](../test/test_04_readAngle.html){:target="_blank"}
 
 In diesem Abschnitt wird bei jeder Bewegung des Scrubbings die Differenz des Winkels (angleDiffrence) berechnet:
 
@@ -400,6 +420,16 @@ Schon im Vorfeld habe ich hierzu die Umsetzbarkeit angeschaut und geprüft. Hier
 
 Bis ich diese Problematik tiefer verstand und die Funktionsweise der Web Audio API teilweise verstehen konnte habe ich einige Stunden recherchiert und viele Test durchgeführt. Leider konnte auch ChatGPT 3.5 nicht zuverlässig mit dem Problem und mit der komplexen situation umgehen.
 
+Folgend sind zwei Testseiten mit welchen ich das Laden und Scrubbing der Audiodateien ausprobierte:
+
+Auf folgenden drei Testseiten habe ich versucht das Laden und Scrubbing der Audiodateien zu verstehen, umzusetzen und zu implementieren. Das separate Laden und Scrubbing konnte ich umsetzen. Beim versuch die Web Audio API zu implementieren bin ich gescheitert. Ich erkannte die Problematik mit mit der Kompatibilität von Audio-Tags und der Web Audio API und untersuchte diese auf der dritten Testseite.
+
+[Test 05 - Web Audio API](../test/test_05_webAudioAPI.html){:target="_blank"}
+
+[Test 06 - Mehrere Audiodateien](../test/test_06_multipleTracks.html){:target="_blank"}
+
+[Test 07 - Kompatibilität & Implementation](../test/v7_radiohead_slidertest/){:target="_blank"}
+
 ## Überarbeitung Konzept (2.2)
 Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich mir erneut gedanken zu meinem Konzept gemacht um die Wirkung zu optimieren. 
 - Aufgrund der Funktion mit der Verschiebung des Inhalt habe ich, im Gegensatz zur ersten Version, einen Abstand vom Bildschrimrand zum Inahlt erstellt. Dieser Abstand diente dazu, dass der Inhalt verschoben werden konnte, jedoch dieser nicht abgeschnitten wurde. Die Website verlohr durch diesen Abstand jedoch an Wirkung. Dieser Abstand soll nun entfernt werden. Somit wird ebenfalls die dazugehörige Funktion entfernt.
@@ -495,14 +525,8 @@ Das Modul KIWEB hat mir viel Spass gemacht. Ich hatte die Moglichkeit mir viel n
 
 
 <!---
-[Link in new Tab](radiohead/){:target="_blank"}
 
 TODO:
-- Responsive -> done ?
 - Inhaltsverzeichnis in doku aktualisieren
-
-Future changes:
-- Change pitch on scratch
-- animate bars based on analyser
 
 -->
