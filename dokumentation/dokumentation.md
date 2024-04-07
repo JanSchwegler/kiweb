@@ -1,16 +1,22 @@
+Diese Dokumentation zeigt meinen Arbeitsprozess bei der Entwicklung meines Semesterprojekts auf und bietet Einblicke in Herausforderungen, Erfolge und Fortschritte während des gesamten Moduls.
+
+[Hier geht es zur Übersicht](../dokumentation/dokumentation){:target="_blank"}
+
+[Hier geht es direkt zum Semesterprojekt](../v2.2.2_radiohead/){:target="_blank"}
+
 - [Auswahl Plakat](#auswahl-plakat)
-- [Umsetzung 1](#umsetzung-1)
-  - [Planung \& Vorarbeit](#planung--vorarbeit)
+- [Sprint 1](#sprint-1)
+  - [Planung und Vorarbeit](#planung-und-vorarbeit)
     - [Schrift](#schrift)
     - [Konzept](#konzept)
     - [Github](#github)
-  - [Erster Nachbau mit HTML \& CSS](#erster-nachbau-mit-html--css)
+  - [Erster Nachbau mit HTML und CSS](#erster-nachbau-mit-html-und-css)
   - [Adaptive generierung der Balken mit JavaScript](#adaptive-generierung-der-balken-mit-javascript)
   - [Responsive](#responsive)
   - [Erste CSS Animationen](#erste-css-animationen)
   - [Reaktiv zur Mauposition](#reaktiv-zur-mauposition)
   - [Überarbeitung Konzept](#überarbeitung-konzept)
-- [Unsetzung 2](#unsetzung-2)
+- [Sprint 2](#sprint-2)
   - [Grundstruktur](#grundstruktur)
   - [Audioplayer](#audioplayer)
     - [Slider](#slider)
@@ -29,15 +35,9 @@
   - [Konzept](#konzept-1)
   - [Github](#github-1)
   - [JavaScript](#javascript)
-  - [Ziehen von Elementen \& Rotation](#ziehen-von-elementen--rotation)
+  - [Ziehen von Elementen und Rotation](#ziehen-von-elementen-und-rotation)
   - [Web Audio API](#web-audio-api)
 - [Fazit](#fazit)
-
-Diese Dokumentation zeigt meinen Arbeitsprozess bei der Entwicklung meines Semesterprojekts auf und bietet Einblicke in Herausforderungen, Erfolge und Fortschritte während des gesamten Moduls.
-
-[Hier geht es zur Übersicht](../dokumentation/dokumentation){:target="_blank"}
-
-[Hier geht es direkt zum Semesterprojekt](../v2.2.2_radiohead/){:target="_blank"}
 
 # Auswahl Plakat
 Zu Beginn des Moduls habe ich mir die verschiedenen Plakate angesehen und folgende für mich interessante herausgesucht:
@@ -50,11 +50,11 @@ Aus den 8 vorausgewählten Plakaten habe ich mich für folgendes Plakat für Rad
 
 ![Radiohead Plakat](../dokumentation/posters/radiohead.jpeg)
 
-# Umsetzung 1
+# Sprint 1
 
 [Zur Umsetzung 1](../v1_radiohead/){:target="_blank"}
 
-## Planung & Vorarbeit
+## Planung und Vorarbeit
 ### Schrift
 Bevor ich mit der Umsetzung startete, brauchte ich eine passende Schrift, um das Plakat umzusetzen. Die im Plakat verwendete Schrift ist nicht gratis verfügbar und ich habe mich somit für eine Alternative umgesehen. Nach ein paar Vergleichen, habe ich mich für die Schrift ["Roboto"](https://fonts.google.com/specimen/Roboto){:target="_blank"} entschieden. Diese konnte ich später mit Google Fonts sehr simpel einbinden.
 
@@ -68,7 +68,7 @@ Für Animationen, Interaktionen und den detailliertem Mobileaufbau habe ich mich
 ### Github
 Von Anfang an habe ich ein GitHub-Repository für das Modul erstellt, um sicherzustellen, dass der neuste Stand meines Codes stets auf allen Geräten verfügbar ist. Zudem habe ich jedoch ebenfalls einen Google Drive Ordner für weitere Inhalte wie die Dokumentation erstellt. Denn zuerst habe ich diese in Google Drive geschrieben, da ich sehr wenig Erfahrung mit GitHub habe und auch die verschiedenen Möglichkeiten nicht kenne. Im Verlauf des Moduls konnte ich mich auch etwas mehr mit GitHub auseinandersetzen und habe somit versucht, GitHub Pages zu verwenden und auch meine Seite direkt mit GitHub onlinezustellen.
 
-## Erster Nachbau mit HTML & CSS
+## Erster Nachbau mit HTML und CSS
 Für den Aufbau in HTML habe ich den Inhalt in zwei Teile unterteilt. Den Bereich mit dem Bandnamen sowie den Informationen am unteren Bildrand und die schwarzen Balken darüber. Zuerst habe ich den Bandnamen auf allen Gerätdimensionen mithilfe von "vw" über die gesamte Breite gestreckt und mit "position: absolute" am unteren Bildrand platziert. Auch den Abstand nach unten habe ich von der Breite abhängig gemacht, damit dieser visuell immer identisch wirkt. Im Anschluss habe ich mithilfe von "Flexbox" die drei Informationsblöcke wie auf dem Poster über dem Bandnamen verteilt. Hier war es eher schwer, die richtigen Abstände und Breiten zu wählen, damit die Inhaltsblöcke auch bei unterschiedlichen Bildschirmbreiten so wie auf dem Plakat aussehen. Die Schwierigkeit kam davon, dass der Bandname mit der Breite mitskaliert, die Schriftgrösse der Informationen jedoch nicht, damit diese auf jeder Breite lesbar sind.
 
 Neben den genannten Positionierungen habe ich in CSS ebenfalls die Schriftfamilie, Schriftschnitt, Schriftfarbe, Hintergrundfarben und Browserrests definiert.
@@ -162,7 +162,7 @@ Das entdecken der Website sollte angenehm, interessant und immersive sein. Das i
 
 Beim Konzet habe ich mich an den visuellen Elementen wie den Balken und den Texten orientiert. Zudem war mir die horizontale Bewegung sehr wichtig, ich habe versucht diese oft und passend in das Konzept einzuflechten und nicht mir einer vertikalen Bewegung zu stören. Der Auditive war ebenfalls relavant, wodurch der Audioplayer entstand. Die Informationen und der Bandname habe ich absichtlich erst am Ende der Webseite klar und gross platziert. Diese sollten von der benutzdenen Person entdekckt werden un diesen zuvor durch ein kleines Erlebnis führen, wie es auch das Konzert machen sollte.
 
-# Unsetzung 2
+# Sprint 2
 
 [Zur Umsetzung 2.1](../v2.1_radiohead/){:target="_blank"}
 
@@ -451,12 +451,17 @@ if (mouseAngle - scrubbMove < -180) {
     }
 ```
 
+Nach der erfolgreichen Umsetzung der Schallplatten, habe ich ein plattenteller eingefügt. Dieses bleibt fortlaufend in der Mitte stehen und symbolisiert somnit die aktive Schallplatte. Beim Abspielen und beim Scrubbing einer Schallplatte, rotiert das Plattenteller mit dieser mit.
+
 ## Ladeanimation
 Für die Ladeanimation etwas schon von Anfang an klar: Es muss auf das Laden des gesamten Inhalts gewartet werden und anschliessend sollte der sichtbare Breich (die Balken und die Schallplatten) in das Bild animiert werden. Die erste herausforderung war hierbei, dass die Seite immer von ganz oben Startete und nicht an der letzten Position. Zudem wollte ich, dass nicht bereis gescrollt werden kann, wenn die Website noch in der Ladeanimation ist. Diese herausforderung habe ich so gelöst, dass alle Scrollmöglichkeiten ausgeschaltete werden und auch die Höhe der Website auf maximal 100vh zu beschrenken. Nach dem laden werden diese Anpasungen zurückgesetzt und die Animation der Balken und Schallplatten konnte starten.
 
 Ich habe mit mehreren Animationen herumprobiert welche beim Laden erscheinen, bevor der Inhalt geladen wurde. Diese habe ich als Feedback erstellt, um zu zeigen, dass die Seite geladen wird. Jedoch war mir diese Animation nach einiger Zeit zu viel und der Inahlt wurde grundsätzlich schnell geladen, was zu keiner verwirrenden Wartezeit führte. Dadurch habe ich diese wieder entfernt.
 
 ## Weitere Schritte
+Während des Moduls konnte ich nicht alle Ideen umsetzen und testen. Wenn ich noch mehr Zeit für weitere Umsetzungen hätte, würde ich mich mehr mit der Web Audio API beschäftigen. Unter anderem, hätte ich folgende zwei Ideen gerne noch umgesetzt:
+- Anpassung des Tones während des Scrubbings: Da mit der Web Audio API der Ton angepasst werden kann, könnte ein authentischeres Scrubbing-Geräusch erzeugt werden. Zum Beispiel mit der Tonhöhe oder auch mit deim Einfügen einer zusätzlichen Tonspur.
+- Balken nach dem Ton animieren: Mit dem Analyser von der Web Audio API können die verschiedenen Tonhöhen gelesen und die Balken anhand dieser animiert werden. Leider hat es für diese Umsetzung zeitlich nicht mehr ausgereicht.
 
 # Meine Erkentnisse
 Im Verlauf des Moduls KIWEB habe ich viele verschiedene Skills erlehrnt. Diese können hier nicht alle genant werden. Biepisleweise habe ich neue Details gennengelernt, vieles Repetiert und durch meine Mitstudierenden mit unterschiedlichen Niveaus neue Blickwinkel auf das Thema sehen können, welche mich für die Zukunft begleiten werden. 
@@ -466,6 +471,7 @@ Im Verlauf des Moduls habe ich mir gedanken zu einem Bestimmten Plakat gemacht. 
 - Was sind die Charakteristiken des Plakats? 
 - Was macht dieses Plakat aus?
 - Wie können die Kernpunkt adaptiert werden?
+
 Aus diese Fragestellungen entstanden Konzeptideen um ein festes Format auf einer Website abzubilden. Daraus habe ich gelernt die wirtigen Eigenschaten zu erkennen und diese in einer abgewandelten Form in ein neues Konzept einfliessen zu lassen. Sowie auch zu hinterfragen, was macht die Website Spannend. Welche Elemente platziere ich in meinem Konzept wo, um eine gewünschte wirkung zu erzielen. Und wie kann ich den Benutzenden Emotional erreichen um das Interesse zu vertärken.
 
 In meinem zweiten Konzept wollte ich mich zuerst zu weit von meinem Plakat entfernen und mehr bewegende und Interesse weckende Elemente einbauen. Diese Ideen stimmten jedoch nicht mehr mit der Grundidee des Plakates überein. Was mir erneut zeigte, wie ich meine Ideen hinterfrgen und auf das Konzept abstimmen sollte.
@@ -476,7 +482,7 @@ In diesem Modul habe ich das erste mal Github umfänglich verwendet. Was zu eine
 ## JavaScript
 Ich kannte schon zuvor JavaScript und habe kleinere Umsetzung durchgeführt. Während des Moduls konnte ich viel Übung sammeln beim erstellen von Interaktion mit JavaScript. Mit der Übung habe ich mehr Erfahrungen im Aufbau und der Architektur gesammelt. Diese Erfahrung sind für mich sehr wichtig, denn mit diesen werde ich in Zukunft meinen Aufbau von JavaScript optimieren. Was die den zeitaufwand reduziert und auch die Leistung verbessert.
 
-## Ziehen von Elementen & Rotation
+## Ziehen von Elementen und Rotation
 Während des Moduls habe ich das erste mal Elemente erstellt welche mit JavaScript verschoben werden konnten. Zudem Befasste ich mich eine lange Zeit mit Rotationsbewegungen und Rotaionsberechnungen. Zusätzlich war auch die Architektur des Codes sehr relevant. Ich lernte wie ich Limiten in meiner Rotationsbewegung einbauen kann, welche sehr bestimmte Auswirkungen haben sollten. In diesem Schritt setzte ich mich intensiv damit auseinander, welche Werte für was verwendet werden sollten. Und lernte kennen wann welche Werte aktualisiert werden sollten oder eben nicht.
 
 ## Web Audio API
@@ -492,10 +498,8 @@ Das Modul KIWEB hat mir viel Spass gemacht. Ich hatte die Moglichkeit mir viel n
 [Link in new Tab](radiohead/){:target="_blank"}
 
 TODO:
-- rotate vinyl background layer -> done -> document
-- "Weitere Schritte" dokumentiere (Titel schon gesetzt)
 - Responsive -> done ?
-- Inhaltsverzeichnis in doku
+- Inhaltsverzeichnis in doku aktualisieren
 
 Future changes:
 - Change pitch on scratch
