@@ -44,7 +44,7 @@ let isDragging = false,
     centerX,
     centerY,
     audioCurrentTime = 0,
-    currentTouch = [0, 0],
+    currentTouch = [0, 0], // save current touch to have the last position for touchend
     slideBackground;
 
 // functions - initialising --------------------------------------------------------------------------------

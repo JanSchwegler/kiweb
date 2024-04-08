@@ -1,0 +1,12 @@
+- Titelfolie: KIWEB, etc.
+- Plakat -> Eigenschaften, Merkmale
+- Umsetzung zeigen
+  - Eigenschaften aufgreiffen
+  - Balkengenerierung
+  - Schallplatten
+  - Ende / Informationen
+- Codeausschnitte (Auswahl)
+  - Text to Mouse
+  - bars generation
+  - Audioplayer: rotation / move vinyl
+- Reflexion?
