@@ -1,6 +1,6 @@
 Diese Dokumentation zeigt meinen Arbeitsprozess bei der Entwicklung meines Semesterprojekts auf und bietet Einblicke in Herausforderungen, Erfolge und Fortschritte während des gesamten Moduls.
 
-[Hier geht es zur Übersicht](../dokumentation/dokumentation){:target="_blank"}
+[Hier geht es zur Übersicht](../){:target="_blank"}
 
 [Hier geht es direkt zum Semesterprojekt](../v2.2.2_radiohead/){:target="_blank"}
 
@@ -139,7 +139,7 @@ document.addEventListener('mouseleave', function(event) {
 ```
 
 ## Überarbeitung Konzept
-[Zum Figma-Konzept](https://www.figma.com/proto/Jf3XwwHms7cNMmfXE3pFYC/Untitled?type=design&node-id=15-2&t=LuxFAy5mCFoXrwBJ-1&scaling=min-zoom&starting-point-node-id=15%3A2&mode=design){:target="_blank"}
+[Zum Figma-Konzept](https://www.figma.com/proto/Jf3XwwHms7cNMmfXE3pFYC/kiweb-radioheaed?type=design&node-id=15-2&t=LuxFAy5mCFoXrwBJ-1&scaling=scale-down-width&starting-point-node-id=15%3A2){:target="_blank"}
 
 Bis jetzt habe ich das Plakat auf einer Bildschirmhöhe und -breite umgesetzt. Um mehr entdecken und erleben zu können, wollte ich mehr Inhalt erstellen und hauptsächlich die Website scrollbar machen. Somit habe ich damit begonnen, ein neues Konzept zu entwickeln.
 
@@ -430,9 +430,9 @@ Nach der Besprechung am 26.03.2024 mit Hanna Züllig und ihrem Feedback habe ich
 - Aufgrund der Funktion mit der Verschiebung des Inhalts habe ich im Gegensatz zur ersten Version einen Abstand vom Bildschirmrand zum Inhalt erstellt. Dieser Abstand diente dazu, dass der Inhalt verschoben werden konnte, jedoch dieser nicht abgeschnitten wurde. Die Website verlor durch diesen Abstand jedoch an Wirkung. Dieser Abstand soll nun entfernt werden. Somit wird ebenfalls die dazugehörige Funktion entfernt.
 - Wie bei der ersten Version und auch dem Plakat soll der Inhalt den gesamten Platz ausfüllen. Dadurch soll auch die Schallplatte am Seitenrand entfernt werden. Der Player wird nun in die Seite eingebaut, anstatt in einem Pop-up über der Website zu schweben.
 
-[Konzept für Desktop](https://www.figma.com/proto/Jf3XwwHms7cNMmfXE3pFYC/kiweb-radioheaed?type=design&node-id=0-1&t=mkVTFhbNLKPSuHVB-0&scaling=min-zoom&starting-point-node-id=116%3A2&show-proto-sidebar=1){:target="_blank"}
+[Konzept für Desktop](https://www.figma.com/proto/Jf3XwwHms7cNMmfXE3pFYC/kiweb-radioheaed?type=design&node-id=116-2&t=mkVTFhbNLKPSuHVB-0&scaling=scale-down-width&starting-point-node-id=116%3A2){:target="_blank"}
 
-[Konzept für Mobile](https://www.figma.com/proto/Jf3XwwHms7cNMmfXE3pFYC/kiweb-radioheaed?type=design&node-id=0-1&t=mkVTFhbNLKPSuHVB-0&scaling=min-zoom&starting-point-node-id=116%3A56&show-proto-sidebar=1){:target="_blank"}
+[Konzept für Mobile](https://www.figma.com/proto/Jf3XwwHms7cNMmfXE3pFYC/kiweb-radioheaed?type=design&node-id=116-56&t=mkVTFhbNLKPSuHVB-0&scaling=min-zoom&starting-point-node-id=116%3A56){:target="_blank"}
 
 Für eine saubere Umgebung habe ich für das überarbeitete Konzept (Umsetzung 2.2) einen neuen leeren Ordner erstellt und alle notwendigen Dateien neu erstellt. In diesem Zug habe ich auch den Aufbau meiner JavaScript-Dateien neu strukturiert und aufgebaut. Da dieses Projekt wahrscheinlich mein grösstes JavaScript-Projekt Bisher ist, ist mir erst jetzt bewusst geworden, dass Funktionen wie "onload" ("DOMContentLoaded") und "resize" nur einmal und gut geplant eingesetzt werden. Aus diesen Erkenntnissen habe ich eine Hauptdatei "main.js" erstellt. Diese Datei verwaltet die genannten Funktionen und weitere zentrale und häufig verwendete Variablen. Beispielsweise werden auch in dieser Datei die Variablen der Mausposition gesetzt und laufend aktualisiert.
 
